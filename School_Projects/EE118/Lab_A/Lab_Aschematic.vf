@@ -1,0 +1,48 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+////////////////////////////////////////////////////////////////////////////////
+//   ____  ____ 
+//  /   /\/   / 
+// /___/  \  /    Vendor: Xilinx 
+// \   \   \/     Version : 14.7
+//  \   \         Application : sch2hdl
+//  /   /         Filename : Lab_Aschematic.vf
+// /___/   /\     Timestamp : 09/16/2015 23:13:38
+// \   \  /  \ 
+//  \___\/\___\ 
+//
+//Command: sch2hdl -intstyle ise -family artix7 -verilog C:/Users/Justin/Lab_A/Lab_Aschematic.vf -w C:/Users/Justin/Lab_A/Lab_Aschematic.sch
+//Design Name: Lab_Aschematic
+//Device: artix7
+//Purpose:
+//    This verilog netlist is translated from an ECS schematic.It can be 
+//    synthesized and simulated, but it should not be modified. 
+//
+`timescale 1ns / 1ps
+
+module Lab_Aschematic(A, 
+                      B, 
+                      C, 
+                      Y);
+
+    input A;
+    input B;
+    input C;
+   output Y;
+   
+   wire XLXN_2;
+   wire XLXN_3;
+   wire XLXN_8;
+   
+   OR2  XLXI_1 (.I0(XLXN_2), 
+               .I1(XLXN_3), 
+               .O(Y));
+   AND2  XLXI_2 (.I0(XLXN_8), 
+                .I1(A), 
+                .O(XLXN_3));
+   AND2  XLXI_4 (.I0(C), 
+                .I1(B), 
+                .O(XLXN_2));
+   INV  XLXI_5 (.I(B), 
+               .O(XLXN_8));
+endmodule

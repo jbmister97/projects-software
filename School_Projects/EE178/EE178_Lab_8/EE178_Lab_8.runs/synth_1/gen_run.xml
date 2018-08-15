@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1481605515">
+  <File Type="PA-TCL" Name="project.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="project_drc_synth.rpt"/>
+  <File Type="RDS-RDS" Name="project.vds"/>
+  <File Type="RDS-UTIL" Name="project_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="project_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="project.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="project_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="project_timing_summary_synth.pb"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/imports/Lab #6 Files/vga_timing.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../Lab #6 Files/vga_timing.v"/>
+        <Attr Name="ImportTime" Val="1445830480"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/Lab #6 Files/linedraw.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../Lab #6 Files/linedraw.v"/>
+        <Attr Name="ImportTime" Val="1445830750"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/Lab #8 Files/vga_example.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../Lab #8 Files/vga_example.v"/>
+        <Attr Name="ImportTime" Val="1449453442"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/Lab #8 Files/kcpsm6.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../Lab #8 Files/kcpsm6.v"/>
+        <Attr Name="ImportTime" Val="1449453366"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/software/software.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/new/quad_seven_seg.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../EE178_Lab_2/EE178_Lab_2.srcs/sources_1/new/quad_seven_seg.v"/>
+        <Attr Name="ImportTime" Val="1473993144"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/Lab #8 Files/project.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../Lab #8 Files/project.v"/>
+        <Attr Name="ImportTime" Val="1449453378"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="project"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <File Path="$PSRCDIR/constrs_1/imports/Lab #8 Files/project.xdc">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../Lab #8 Files/project.xdc"/>
+        <Attr Name="ImportTime" Val="1449453394"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+    <Step Id="synth_design"/>
+  </Strategy>
+  <BlockFileSet Type="BlockSrcs" Name="framebuffer"/>
+</GenRun>

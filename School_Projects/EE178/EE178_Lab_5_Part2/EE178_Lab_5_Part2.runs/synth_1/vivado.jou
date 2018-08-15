@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2016.2 (64-bit)
+# SW Build 1577090 on Thu Jun  2 16:32:40 MDT 2016
+# IP Build 1577682 on Fri Jun  3 12:00:54 MDT 2016
+# Start of session at: Tue Oct 25 16:39:10 2016
+# Process ID: 7488
+# Current directory: C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_5_Part2/EE178_Lab_5_Part2.runs/synth_1
+# Command line: vivado.exe -log sort.vds -mode batch -messageDb vivado.pb -notrace -source sort.tcl
+# Log file: C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_5_Part2/EE178_Lab_5_Part2.runs/synth_1/sort.vds
+# Journal file: C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_5_Part2/EE178_Lab_5_Part2.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source sort.tcl -notrace

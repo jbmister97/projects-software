@@ -1,0 +1,2026 @@
+
+EE_138_Lab_1_Part2.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000b6c  00000000  00000000  00010000  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .relocate     00000000  20000000  20000000  00010b6c  2**0
+                  CONTENTS
+  2 .bss          00000044  20000000  20000000  00020000  2**2
+                  ALLOC
+  3 .stack        00002004  20000044  20000044  00020000  2**0
+                  ALLOC
+  4 .ARM.attributes 00000028  00000000  00000000  00010b6c  2**0
+                  CONTENTS, READONLY
+  5 .comment      00000059  00000000  00000000  00010b94  2**0
+                  CONTENTS, READONLY
+  6 .debug_info   000033b4  00000000  00000000  00010bed  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000004b2  00000000  00000000  00013fa1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    000000e8  00000000  00000000  00014453  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_aranges 00000088  00000000  00000000  0001453b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000068  00000000  00000000  000145c3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_macro  000007d9  00000000  00000000  0001462b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_line   000012e3  00000000  00000000  00014e04  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_str    0005ab99  00000000  00000000  000160e7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 14 .debug_frame  0000013c  00000000  00000000  00070c80  2**2
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <_sfixed>:
+   0:	20002048 	.word	0x20002048
+   4:	00000109 	.word	0x00000109
+   8:	00000105 	.word	0x00000105
+   c:	00000105 	.word	0x00000105
+	...
+  2c:	00000105 	.word	0x00000105
+	...
+  38:	00000105 	.word	0x00000105
+  3c:	00000105 	.word	0x00000105
+  40:	00000105 	.word	0x00000105
+  44:	00000105 	.word	0x00000105
+  48:	00000105 	.word	0x00000105
+  4c:	00000105 	.word	0x00000105
+  50:	00000105 	.word	0x00000105
+  54:	00000105 	.word	0x00000105
+  58:	00000105 	.word	0x00000105
+  5c:	00000105 	.word	0x00000105
+  60:	00000105 	.word	0x00000105
+  64:	00000105 	.word	0x00000105
+  68:	00000105 	.word	0x00000105
+  6c:	00000105 	.word	0x00000105
+  70:	00000105 	.word	0x00000105
+  74:	00000105 	.word	0x00000105
+  78:	00000105 	.word	0x00000105
+  7c:	00000105 	.word	0x00000105
+  80:	00000105 	.word	0x00000105
+  84:	00000105 	.word	0x00000105
+  88:	00000105 	.word	0x00000105
+  8c:	00000105 	.word	0x00000105
+  90:	00000105 	.word	0x00000105
+  94:	00000105 	.word	0x00000105
+  98:	00000105 	.word	0x00000105
+  9c:	00000105 	.word	0x00000105
+  a0:	00000105 	.word	0x00000105
+
+000000a4 <__do_global_dtors_aux>:
+  a4:	b510      	push	{r4, lr}
+  a6:	4c06      	ldr	r4, [pc, #24]	; (c0 <__do_global_dtors_aux+0x1c>)
+  a8:	7823      	ldrb	r3, [r4, #0]
+  aa:	2b00      	cmp	r3, #0
+  ac:	d107      	bne.n	be <__do_global_dtors_aux+0x1a>
+  ae:	4b05      	ldr	r3, [pc, #20]	; (c4 <__do_global_dtors_aux+0x20>)
+  b0:	2b00      	cmp	r3, #0
+  b2:	d002      	beq.n	ba <__do_global_dtors_aux+0x16>
+  b4:	4804      	ldr	r0, [pc, #16]	; (c8 <__do_global_dtors_aux+0x24>)
+  b6:	e000      	b.n	ba <__do_global_dtors_aux+0x16>
+  b8:	bf00      	nop
+  ba:	2301      	movs	r3, #1
+  bc:	7023      	strb	r3, [r4, #0]
+  be:	bd10      	pop	{r4, pc}
+  c0:	20000000 	.word	0x20000000
+  c4:	00000000 	.word	0x00000000
+  c8:	00000b6c 	.word	0x00000b6c
+
+000000cc <frame_dummy>:
+  cc:	4b08      	ldr	r3, [pc, #32]	; (f0 <frame_dummy+0x24>)
+  ce:	b510      	push	{r4, lr}
+  d0:	2b00      	cmp	r3, #0
+  d2:	d003      	beq.n	dc <frame_dummy+0x10>
+  d4:	4907      	ldr	r1, [pc, #28]	; (f4 <frame_dummy+0x28>)
+  d6:	4808      	ldr	r0, [pc, #32]	; (f8 <frame_dummy+0x2c>)
+  d8:	e000      	b.n	dc <frame_dummy+0x10>
+  da:	bf00      	nop
+  dc:	4807      	ldr	r0, [pc, #28]	; (fc <frame_dummy+0x30>)
+  de:	6803      	ldr	r3, [r0, #0]
+  e0:	2b00      	cmp	r3, #0
+  e2:	d100      	bne.n	e6 <frame_dummy+0x1a>
+  e4:	bd10      	pop	{r4, pc}
+  e6:	4b06      	ldr	r3, [pc, #24]	; (100 <frame_dummy+0x34>)
+  e8:	2b00      	cmp	r3, #0
+  ea:	d0fb      	beq.n	e4 <frame_dummy+0x18>
+  ec:	4798      	blx	r3
+  ee:	e7f9      	b.n	e4 <frame_dummy+0x18>
+  f0:	00000000 	.word	0x00000000
+  f4:	20000004 	.word	0x20000004
+  f8:	00000b6c 	.word	0x00000b6c
+  fc:	00000b6c 	.word	0x00000b6c
+ 100:	00000000 	.word	0x00000000
+
+00000104 <Dummy_Handler>:
+
+/**
+ * \brief Default interrupt handler for unused IRQs.
+ */
+void Dummy_Handler(void)
+{
+ 104:	e7fe      	b.n	104 <Dummy_Handler>
+ 106:	46c0      	nop			; (mov r8, r8)
+
+00000108 <Reset_Handler>:
+/**
+ * \brief This is the code that gets called on processor reset.
+ * To initialize the device, and call the main() routine.
+ */
+void Reset_Handler(void)
+{
+ 108:	b510      	push	{r4, lr}
+
+        /* Initialize the relocate segment */
+        pSrc = &_etext;
+        pDest = &_srelocate;
+
+        if (pSrc != pDest) {
+ 10a:	4b1d      	ldr	r3, [pc, #116]	; (180 <Reset_Handler+0x78>)
+ 10c:	4a1d      	ldr	r2, [pc, #116]	; (184 <Reset_Handler+0x7c>)
+ 10e:	429a      	cmp	r2, r3
+ 110:	d003      	beq.n	11a <Reset_Handler+0x12>
+                for (; pDest < &_erelocate;) {
+ 112:	4b1d      	ldr	r3, [pc, #116]	; (188 <Reset_Handler+0x80>)
+ 114:	4a1a      	ldr	r2, [pc, #104]	; (180 <Reset_Handler+0x78>)
+ 116:	429a      	cmp	r2, r3
+ 118:	d304      	bcc.n	124 <Reset_Handler+0x1c>
+                        *pDest++ = *pSrc++;
+                }
+        }
+
+        /* Clear the zero segment */
+        for (pDest = &_szero; pDest < &_ezero;) {
+ 11a:	4b1c      	ldr	r3, [pc, #112]	; (18c <Reset_Handler+0x84>)
+ 11c:	4a1c      	ldr	r2, [pc, #112]	; (190 <Reset_Handler+0x88>)
+ 11e:	429a      	cmp	r2, r3
+ 120:	d310      	bcc.n	144 <Reset_Handler+0x3c>
+ 122:	e01e      	b.n	162 <Reset_Handler+0x5a>
+ 124:	4a1b      	ldr	r2, [pc, #108]	; (194 <Reset_Handler+0x8c>)
+ 126:	4b18      	ldr	r3, [pc, #96]	; (188 <Reset_Handler+0x80>)
+ 128:	3303      	adds	r3, #3
+ 12a:	1a9b      	subs	r3, r3, r2
+ 12c:	089b      	lsrs	r3, r3, #2
+ 12e:	3301      	adds	r3, #1
+ 130:	009b      	lsls	r3, r3, #2
+        /* Initialize the relocate segment */
+        pSrc = &_etext;
+        pDest = &_srelocate;
+
+        if (pSrc != pDest) {
+                for (; pDest < &_erelocate;) {
+ 132:	2200      	movs	r2, #0
+                        *pDest++ = *pSrc++;
+ 134:	4812      	ldr	r0, [pc, #72]	; (180 <Reset_Handler+0x78>)
+ 136:	4913      	ldr	r1, [pc, #76]	; (184 <Reset_Handler+0x7c>)
+ 138:	588c      	ldr	r4, [r1, r2]
+ 13a:	5084      	str	r4, [r0, r2]
+ 13c:	3204      	adds	r2, #4
+        /* Initialize the relocate segment */
+        pSrc = &_etext;
+        pDest = &_srelocate;
+
+        if (pSrc != pDest) {
+                for (; pDest < &_erelocate;) {
+ 13e:	429a      	cmp	r2, r3
+ 140:	d1fa      	bne.n	138 <Reset_Handler+0x30>
+ 142:	e7ea      	b.n	11a <Reset_Handler+0x12>
+ 144:	4a14      	ldr	r2, [pc, #80]	; (198 <Reset_Handler+0x90>)
+ 146:	4b11      	ldr	r3, [pc, #68]	; (18c <Reset_Handler+0x84>)
+ 148:	3303      	adds	r3, #3
+ 14a:	1a9b      	subs	r3, r3, r2
+ 14c:	089b      	lsrs	r3, r3, #2
+ 14e:	3301      	adds	r3, #1
+ 150:	009b      	lsls	r3, r3, #2
+                        *pDest++ = *pSrc++;
+                }
+        }
+
+        /* Clear the zero segment */
+        for (pDest = &_szero; pDest < &_ezero;) {
+ 152:	2200      	movs	r2, #0
+                *pDest++ = 0;
+ 154:	480e      	ldr	r0, [pc, #56]	; (190 <Reset_Handler+0x88>)
+ 156:	2100      	movs	r1, #0
+ 158:	1814      	adds	r4, r2, r0
+ 15a:	6021      	str	r1, [r4, #0]
+ 15c:	3204      	adds	r2, #4
+                        *pDest++ = *pSrc++;
+                }
+        }
+
+        /* Clear the zero segment */
+        for (pDest = &_szero; pDest < &_ezero;) {
+ 15e:	429a      	cmp	r2, r3
+ 160:	d1fa      	bne.n	158 <Reset_Handler+0x50>
+                *pDest++ = 0;
+        }
+
+        /* Set the vector table base address */
+        pSrc = (uint32_t *) & _sfixed;
+        SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
+ 162:	4a0e      	ldr	r2, [pc, #56]	; (19c <Reset_Handler+0x94>)
+ 164:	21ff      	movs	r1, #255	; 0xff
+ 166:	4b0e      	ldr	r3, [pc, #56]	; (1a0 <Reset_Handler+0x98>)
+ 168:	438b      	bics	r3, r1
+ 16a:	6093      	str	r3, [r2, #8]
+
+        /* Overwriting the default value of the NVMCTRL.CTRLB.MANW bit (errata reference 13134) */
+        NVMCTRL->CTRLB.bit.MANW = 1;
+ 16c:	4a0d      	ldr	r2, [pc, #52]	; (1a4 <Reset_Handler+0x9c>)
+ 16e:	6851      	ldr	r1, [r2, #4]
+ 170:	2380      	movs	r3, #128	; 0x80
+ 172:	430b      	orrs	r3, r1
+ 174:	6053      	str	r3, [r2, #4]
+
+        /* Initialize the C library */
+        __libc_init_array();
+ 176:	4b0c      	ldr	r3, [pc, #48]	; (1a8 <Reset_Handler+0xa0>)
+ 178:	4798      	blx	r3
+
+        /* Branch to main function */
+        main();
+ 17a:	4b0c      	ldr	r3, [pc, #48]	; (1ac <Reset_Handler+0xa4>)
+ 17c:	4798      	blx	r3
+ 17e:	e7fe      	b.n	17e <Reset_Handler+0x76>
+ 180:	20000000 	.word	0x20000000
+ 184:	00000b6c 	.word	0x00000b6c
+ 188:	20000000 	.word	0x20000000
+ 18c:	20000044 	.word	0x20000044
+ 190:	20000000 	.word	0x20000000
+ 194:	20000004 	.word	0x20000004
+ 198:	20000004 	.word	0x20000004
+ 19c:	e000ed00 	.word	0xe000ed00
+ 1a0:	00000000 	.word	0x00000000
+ 1a4:	41004000 	.word	0x41004000
+ 1a8:	00000b01 	.word	0x00000b01
+ 1ac:	000008fd 	.word	0x000008fd
+
+000001b0 <verify_release>:
+
+void verify_release(void){
+	Port *ports = PORT_INSTS;
+	PortGroup *porA = &(ports->Group[0]);
+	PortGroup *porB = &(ports->Group[1]);
+	porA -> DIRCLR.reg = PORT_PA19 | PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 1b0:	4b26      	ldr	r3, [pc, #152]	; (24c <verify_release+0x9c>)
+ 1b2:	22f0      	movs	r2, #240	; 0xf0
+ 1b4:	0312      	lsls	r2, r2, #12
+ 1b6:	605a      	str	r2, [r3, #4]
+	porA -> PINCFG[19].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 1b8:	2206      	movs	r2, #6
+ 1ba:	2153      	movs	r1, #83	; 0x53
+ 1bc:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[18].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 1be:	3901      	subs	r1, #1
+ 1c0:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[17].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 1c2:	3901      	subs	r1, #1
+ 1c4:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[16].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 1c6:	3901      	subs	r1, #1
+ 1c8:	545a      	strb	r2, [r3, r1]
+
+	a = 0; // zero out checking variable a
+ 1ca:	2100      	movs	r1, #0
+ 1cc:	4a20      	ldr	r2, [pc, #128]	; (250 <verify_release+0xa0>)
+ 1ce:	6011      	str	r1, [r2, #0]
+	
+	porA -> OUTSET.reg = PORT_PA19;
+ 1d0:	2280      	movs	r2, #128	; 0x80
+ 1d2:	0312      	lsls	r2, r2, #12
+ 1d4:	619a      	str	r2, [r3, #24]
+	porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 1d6:	21e0      	movs	r1, #224	; 0xe0
+ 1d8:	02c9      	lsls	r1, r1, #11
+ 1da:	6159      	str	r1, [r3, #20]
+	if (porA -> IN.reg & PORT_PA19) {  // check that button is still pressed
+ 1dc:	6a1b      	ldr	r3, [r3, #32]
+ 1de:	4213      	tst	r3, r2
+ 1e0:	d002      	beq.n	1e8 <verify_release+0x38>
+		a = 1; // if button is pressed change checking variable a to 1
+ 1e2:	2201      	movs	r2, #1
+ 1e4:	4b1a      	ldr	r3, [pc, #104]	; (250 <verify_release+0xa0>)
+ 1e6:	601a      	str	r2, [r3, #0]
+	}
+	porA -> OUTSET.reg = PORT_PA18;
+ 1e8:	4b18      	ldr	r3, [pc, #96]	; (24c <verify_release+0x9c>)
+ 1ea:	2280      	movs	r2, #128	; 0x80
+ 1ec:	02d2      	lsls	r2, r2, #11
+ 1ee:	619a      	str	r2, [r3, #24]
+	porA -> OUTCLR.reg = PORT_PA19 | PORT_PA17 | PORT_PA16;
+ 1f0:	21b0      	movs	r1, #176	; 0xb0
+ 1f2:	0309      	lsls	r1, r1, #12
+ 1f4:	6159      	str	r1, [r3, #20]
+	if (porA -> IN.reg & PORT_PA18) {  // check that button is still pressed
+ 1f6:	6a1b      	ldr	r3, [r3, #32]
+ 1f8:	4213      	tst	r3, r2
+ 1fa:	d002      	beq.n	202 <verify_release+0x52>
+		a = 1;
+ 1fc:	2201      	movs	r2, #1
+ 1fe:	4b14      	ldr	r3, [pc, #80]	; (250 <verify_release+0xa0>)
+ 200:	601a      	str	r2, [r3, #0]
+	}
+	porA -> OUTSET.reg = PORT_PA17;
+ 202:	4b12      	ldr	r3, [pc, #72]	; (24c <verify_release+0x9c>)
+ 204:	2280      	movs	r2, #128	; 0x80
+ 206:	0292      	lsls	r2, r2, #10
+ 208:	619a      	str	r2, [r3, #24]
+	porA -> OUTCLR.reg = PORT_PA18 | PORT_PA19 | PORT_PA16;
+ 20a:	21d0      	movs	r1, #208	; 0xd0
+ 20c:	0309      	lsls	r1, r1, #12
+ 20e:	6159      	str	r1, [r3, #20]
+	if (porA -> IN.reg & PORT_PA17) {  // check that button is still pressed
+ 210:	6a1b      	ldr	r3, [r3, #32]
+ 212:	4213      	tst	r3, r2
+ 214:	d002      	beq.n	21c <verify_release+0x6c>
+		a = 1;
+ 216:	2201      	movs	r2, #1
+ 218:	4b0d      	ldr	r3, [pc, #52]	; (250 <verify_release+0xa0>)
+ 21a:	601a      	str	r2, [r3, #0]
+	}
+	porA -> OUTSET.reg = PORT_PA16;
+ 21c:	4b0b      	ldr	r3, [pc, #44]	; (24c <verify_release+0x9c>)
+ 21e:	2280      	movs	r2, #128	; 0x80
+ 220:	0252      	lsls	r2, r2, #9
+ 222:	619a      	str	r2, [r3, #24]
+	porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA19;
+ 224:	21e0      	movs	r1, #224	; 0xe0
+ 226:	0309      	lsls	r1, r1, #12
+ 228:	6159      	str	r1, [r3, #20]
+	if (porA -> IN.reg & PORT_PA16) {  // check that button is still pressed
+ 22a:	6a1b      	ldr	r3, [r3, #32]
+ 22c:	4213      	tst	r3, r2
+ 22e:	d003      	beq.n	238 <verify_release+0x88>
+		a = 1;
+ 230:	2201      	movs	r2, #1
+ 232:	4b07      	ldr	r3, [pc, #28]	; (250 <verify_release+0xa0>)
+ 234:	601a      	str	r2, [r3, #0]
+ 236:	e007      	b.n	248 <verify_release+0x98>
+	}
+	if (a == 0){ // if checking variable a is 0 then no buttons were pressed so increment checking variable b
+ 238:	4b05      	ldr	r3, [pc, #20]	; (250 <verify_release+0xa0>)
+ 23a:	681b      	ldr	r3, [r3, #0]
+ 23c:	2b00      	cmp	r3, #0
+ 23e:	d103      	bne.n	248 <verify_release+0x98>
+		b++;
+ 240:	4a04      	ldr	r2, [pc, #16]	; (254 <verify_release+0xa4>)
+ 242:	6813      	ldr	r3, [r2, #0]
+ 244:	3301      	adds	r3, #1
+ 246:	6013      	str	r3, [r2, #0]
+	}
+}
+ 248:	4770      	bx	lr
+ 24a:	46c0      	nop			; (mov r8, r8)
+ 24c:	41004400 	.word	0x41004400
+ 250:	20000040 	.word	0x20000040
+ 254:	20000038 	.word	0x20000038
+
+00000258 <verify_press>:
+
+void verify_press(void){
+	Port *ports = PORT_INSTS;
+	PortGroup *porA = &(ports->Group[0]);
+	PortGroup *porB = &(ports->Group[1]);
+	porA -> DIRCLR.reg = PORT_PA19 | PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 258:	4b31      	ldr	r3, [pc, #196]	; (320 <verify_press+0xc8>)
+ 25a:	22f0      	movs	r2, #240	; 0xf0
+ 25c:	0312      	lsls	r2, r2, #12
+ 25e:	605a      	str	r2, [r3, #4]
+	porA -> PINCFG[19].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 260:	2206      	movs	r2, #6
+ 262:	2153      	movs	r1, #83	; 0x53
+ 264:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[18].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 266:	3901      	subs	r1, #1
+ 268:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[17].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 26a:	3901      	subs	r1, #1
+ 26c:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[16].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 26e:	3901      	subs	r1, #1
+ 270:	545a      	strb	r2, [r3, r1]
+
+	a = 0; // zero out checking variable a
+ 272:	2100      	movs	r1, #0
+ 274:	4a2b      	ldr	r2, [pc, #172]	; (324 <verify_press+0xcc>)
+ 276:	6011      	str	r1, [r2, #0]
+	
+		porA -> OUTSET.reg = PORT_PA19;
+ 278:	2280      	movs	r2, #128	; 0x80
+ 27a:	0312      	lsls	r2, r2, #12
+ 27c:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 27e:	21e0      	movs	r1, #224	; 0xe0
+ 280:	02c9      	lsls	r1, r1, #11
+ 282:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA19) {  // check that button is still pressed
+ 284:	6a1b      	ldr	r3, [r3, #32]
+ 286:	4213      	tst	r3, r2
+ 288:	d006      	beq.n	298 <verify_press+0x40>
+			dcount++;
+ 28a:	4a27      	ldr	r2, [pc, #156]	; (328 <verify_press+0xd0>)
+ 28c:	6813      	ldr	r3, [r2, #0]
+ 28e:	3301      	adds	r3, #1
+ 290:	6013      	str	r3, [r2, #0]
+			a = 1;		// if button is pressed change checking variable a to 1
+ 292:	2201      	movs	r2, #1
+ 294:	4b23      	ldr	r3, [pc, #140]	; (324 <verify_press+0xcc>)
+ 296:	601a      	str	r2, [r3, #0]
+		}
+		porA -> OUTSET.reg = PORT_PA18;
+ 298:	4b21      	ldr	r3, [pc, #132]	; (320 <verify_press+0xc8>)
+ 29a:	2280      	movs	r2, #128	; 0x80
+ 29c:	02d2      	lsls	r2, r2, #11
+ 29e:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA19 | PORT_PA17 | PORT_PA16;
+ 2a0:	21b0      	movs	r1, #176	; 0xb0
+ 2a2:	0309      	lsls	r1, r1, #12
+ 2a4:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA18) {  // check that button is still pressed
+ 2a6:	6a1b      	ldr	r3, [r3, #32]
+ 2a8:	4213      	tst	r3, r2
+ 2aa:	d006      	beq.n	2ba <verify_press+0x62>
+			dcount++;
+ 2ac:	4a1e      	ldr	r2, [pc, #120]	; (328 <verify_press+0xd0>)
+ 2ae:	6813      	ldr	r3, [r2, #0]
+ 2b0:	3301      	adds	r3, #1
+ 2b2:	6013      	str	r3, [r2, #0]
+			a = 1;
+ 2b4:	2201      	movs	r2, #1
+ 2b6:	4b1b      	ldr	r3, [pc, #108]	; (324 <verify_press+0xcc>)
+ 2b8:	601a      	str	r2, [r3, #0]
+		}
+		porA -> OUTSET.reg = PORT_PA17;
+ 2ba:	4b19      	ldr	r3, [pc, #100]	; (320 <verify_press+0xc8>)
+ 2bc:	2280      	movs	r2, #128	; 0x80
+ 2be:	0292      	lsls	r2, r2, #10
+ 2c0:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA19 | PORT_PA16;
+ 2c2:	21d0      	movs	r1, #208	; 0xd0
+ 2c4:	0309      	lsls	r1, r1, #12
+ 2c6:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA17) {  // check that button is still pressed
+ 2c8:	6a1b      	ldr	r3, [r3, #32]
+ 2ca:	4213      	tst	r3, r2
+ 2cc:	d006      	beq.n	2dc <verify_press+0x84>
+			dcount++;
+ 2ce:	4a16      	ldr	r2, [pc, #88]	; (328 <verify_press+0xd0>)
+ 2d0:	6813      	ldr	r3, [r2, #0]
+ 2d2:	3301      	adds	r3, #1
+ 2d4:	6013      	str	r3, [r2, #0]
+			a = 1;
+ 2d6:	2201      	movs	r2, #1
+ 2d8:	4b12      	ldr	r3, [pc, #72]	; (324 <verify_press+0xcc>)
+ 2da:	601a      	str	r2, [r3, #0]
+		}
+		porA -> OUTSET.reg = PORT_PA16;
+ 2dc:	4b10      	ldr	r3, [pc, #64]	; (320 <verify_press+0xc8>)
+ 2de:	2280      	movs	r2, #128	; 0x80
+ 2e0:	0252      	lsls	r2, r2, #9
+ 2e2:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA19;
+ 2e4:	21e0      	movs	r1, #224	; 0xe0
+ 2e6:	0309      	lsls	r1, r1, #12
+ 2e8:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA16) {  // check that button is still pressed
+ 2ea:	6a1b      	ldr	r3, [r3, #32]
+ 2ec:	4213      	tst	r3, r2
+ 2ee:	d007      	beq.n	300 <verify_press+0xa8>
+			dcount++;
+ 2f0:	4a0d      	ldr	r2, [pc, #52]	; (328 <verify_press+0xd0>)
+ 2f2:	6813      	ldr	r3, [r2, #0]
+ 2f4:	3301      	adds	r3, #1
+ 2f6:	6013      	str	r3, [r2, #0]
+			a = 1;
+ 2f8:	2201      	movs	r2, #1
+ 2fa:	4b0a      	ldr	r3, [pc, #40]	; (324 <verify_press+0xcc>)
+ 2fc:	601a      	str	r2, [r3, #0]
+ 2fe:	e007      	b.n	310 <verify_press+0xb8>
+		}
+		if (a == 0){ // if no buttons were pressed in this row increment checking variable b
+ 300:	4b08      	ldr	r3, [pc, #32]	; (324 <verify_press+0xcc>)
+ 302:	681b      	ldr	r3, [r3, #0]
+ 304:	2b00      	cmp	r3, #0
+ 306:	d103      	bne.n	310 <verify_press+0xb8>
+			b++;
+ 308:	4a08      	ldr	r2, [pc, #32]	; (32c <verify_press+0xd4>)
+ 30a:	6813      	ldr	r3, [r2, #0]
+ 30c:	3301      	adds	r3, #1
+ 30e:	6013      	str	r3, [r2, #0]
+		}
+		if (dcount > 10){ // counter for how long a button must be pressed
+ 310:	4b05      	ldr	r3, [pc, #20]	; (328 <verify_press+0xd0>)
+ 312:	681b      	ldr	r3, [r3, #0]
+ 314:	2b0a      	cmp	r3, #10
+ 316:	dd02      	ble.n	31e <verify_press+0xc6>
+			state = 2;
+ 318:	2202      	movs	r2, #2
+ 31a:	4b05      	ldr	r3, [pc, #20]	; (330 <verify_press+0xd8>)
+ 31c:	601a      	str	r2, [r3, #0]
+		}
+	
+	return;
+}
+ 31e:	4770      	bx	lr
+ 320:	41004400 	.word	0x41004400
+ 324:	20000040 	.word	0x20000040
+ 328:	20000034 	.word	0x20000034
+ 32c:	20000038 	.word	0x20000038
+ 330:	2000001c 	.word	0x2000001c
+
+00000334 <key_press>:
+
+void key_press(void){
+	Port *ports = PORT_INSTS;
+	PortGroup *porA = &(ports->Group[0]);
+	PortGroup *porB = &(ports->Group[1]);
+	porA -> DIRCLR.reg = PORT_PA19 | PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 334:	4b22      	ldr	r3, [pc, #136]	; (3c0 <key_press+0x8c>)
+ 336:	22f0      	movs	r2, #240	; 0xf0
+ 338:	0312      	lsls	r2, r2, #12
+ 33a:	605a      	str	r2, [r3, #4]
+	porA -> PINCFG[19].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 33c:	2206      	movs	r2, #6
+ 33e:	2153      	movs	r1, #83	; 0x53
+ 340:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[18].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 342:	3901      	subs	r1, #1
+ 344:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[17].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 346:	3901      	subs	r1, #1
+ 348:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[16].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 34a:	3901      	subs	r1, #1
+ 34c:	545a      	strb	r2, [r3, r1]
+
+	porA -> OUTSET.reg = PORT_PA19;
+ 34e:	2280      	movs	r2, #128	; 0x80
+ 350:	0312      	lsls	r2, r2, #12
+ 352:	619a      	str	r2, [r3, #24]
+	porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 354:	21e0      	movs	r1, #224	; 0xe0
+ 356:	02c9      	lsls	r1, r1, #11
+ 358:	6159      	str	r1, [r3, #20]
+	if (porA -> IN.reg & PORT_PA19){ //change state to 1 if any button is pressed
+ 35a:	6a1b      	ldr	r3, [r3, #32]
+ 35c:	4213      	tst	r3, r2
+ 35e:	d002      	beq.n	366 <key_press+0x32>
+		state = 1;
+ 360:	2201      	movs	r2, #1
+ 362:	4b18      	ldr	r3, [pc, #96]	; (3c4 <key_press+0x90>)
+ 364:	601a      	str	r2, [r3, #0]
+	}
+	porA -> OUTSET.reg = PORT_PA18;
+ 366:	4b16      	ldr	r3, [pc, #88]	; (3c0 <key_press+0x8c>)
+ 368:	2280      	movs	r2, #128	; 0x80
+ 36a:	02d2      	lsls	r2, r2, #11
+ 36c:	619a      	str	r2, [r3, #24]
+	porA -> OUTCLR.reg = PORT_PA19 | PORT_PA17 | PORT_PA16;
+ 36e:	21b0      	movs	r1, #176	; 0xb0
+ 370:	0309      	lsls	r1, r1, #12
+ 372:	6159      	str	r1, [r3, #20]
+	if (porA -> IN.reg & PORT_PA18){ //change state to 1 if any button is pressed
+ 374:	6a1b      	ldr	r3, [r3, #32]
+ 376:	4213      	tst	r3, r2
+ 378:	d002      	beq.n	380 <key_press+0x4c>
+		state = 1;
+ 37a:	2201      	movs	r2, #1
+ 37c:	4b11      	ldr	r3, [pc, #68]	; (3c4 <key_press+0x90>)
+ 37e:	601a      	str	r2, [r3, #0]
+	}
+	porA -> OUTSET.reg = PORT_PA17;
+ 380:	4b0f      	ldr	r3, [pc, #60]	; (3c0 <key_press+0x8c>)
+ 382:	2280      	movs	r2, #128	; 0x80
+ 384:	0292      	lsls	r2, r2, #10
+ 386:	619a      	str	r2, [r3, #24]
+	porA -> OUTCLR.reg = PORT_PA18 | PORT_PA19 | PORT_PA16;
+ 388:	21d0      	movs	r1, #208	; 0xd0
+ 38a:	0309      	lsls	r1, r1, #12
+ 38c:	6159      	str	r1, [r3, #20]
+	if (porA -> IN.reg & PORT_PA17){ //change state to 1 if any button is pressed
+ 38e:	6a1b      	ldr	r3, [r3, #32]
+ 390:	4213      	tst	r3, r2
+ 392:	d002      	beq.n	39a <key_press+0x66>
+		state = 1;
+ 394:	2201      	movs	r2, #1
+ 396:	4b0b      	ldr	r3, [pc, #44]	; (3c4 <key_press+0x90>)
+ 398:	601a      	str	r2, [r3, #0]
+	}
+	porA -> OUTSET.reg = PORT_PA16;
+ 39a:	4b09      	ldr	r3, [pc, #36]	; (3c0 <key_press+0x8c>)
+ 39c:	2280      	movs	r2, #128	; 0x80
+ 39e:	0252      	lsls	r2, r2, #9
+ 3a0:	619a      	str	r2, [r3, #24]
+	porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA19;
+ 3a2:	21e0      	movs	r1, #224	; 0xe0
+ 3a4:	0309      	lsls	r1, r1, #12
+ 3a6:	6159      	str	r1, [r3, #20]
+	if (porA -> IN.reg & PORT_PA16){ //change state to 1 if any button is pressed
+ 3a8:	6a1b      	ldr	r3, [r3, #32]
+ 3aa:	4213      	tst	r3, r2
+ 3ac:	d003      	beq.n	3b6 <key_press+0x82>
+		state = 1;
+ 3ae:	2201      	movs	r2, #1
+ 3b0:	4b04      	ldr	r3, [pc, #16]	; (3c4 <key_press+0x90>)
+ 3b2:	601a      	str	r2, [r3, #0]
+ 3b4:	e002      	b.n	3bc <key_press+0x88>
+	}
+	else{
+		dcount = 0; // zero out counter
+ 3b6:	2200      	movs	r2, #0
+ 3b8:	4b03      	ldr	r3, [pc, #12]	; (3c8 <key_press+0x94>)
+ 3ba:	601a      	str	r2, [r3, #0]
+	}
+	return;
+}
+ 3bc:	4770      	bx	lr
+ 3be:	46c0      	nop			; (mov r8, r8)
+ 3c0:	41004400 	.word	0x41004400
+ 3c4:	2000001c 	.word	0x2000001c
+ 3c8:	20000034 	.word	0x20000034
+
+000003cc <seg_display>:
+}
+
+void seg_display(int display){
+	Port *ports = PORT_INSTS;
+	PortGroup *porB = &(ports->Group[1]);
+	porB -> DIRSET.reg = PORT_PB06 | PORT_PB05 | PORT_PB04 | PORT_PB03 | PORT_PB02 | PORT_PB01 | PORT_PB00;
+ 3cc:	227f      	movs	r2, #127	; 0x7f
+ 3ce:	4b27      	ldr	r3, [pc, #156]	; (46c <seg_display+0xa0>)
+ 3d0:	609a      	str	r2, [r3, #8]
+	if (display == 0){ // port outputs to display 0 on the 7-segment display
+ 3d2:	2800      	cmp	r0, #0
+ 3d4:	d104      	bne.n	3e0 <seg_display+0x14>
+		porB -> OUTCLR.reg = PORT_PB00 | PORT_PB01 | PORT_PB02 | PORT_PB03 | PORT_PB04 | PORT_PB05;
+ 3d6:	3a40      	subs	r2, #64	; 0x40
+ 3d8:	615a      	str	r2, [r3, #20]
+		porB -> OUTSET.reg = PORT_PB06;
+ 3da:	3201      	adds	r2, #1
+ 3dc:	619a      	str	r2, [r3, #24]
+ 3de:	e00f      	b.n	400 <seg_display+0x34>
+	}
+	if (display == 1){
+ 3e0:	2801      	cmp	r0, #1
+ 3e2:	d105      	bne.n	3f0 <seg_display+0x24>
+		porB -> OUTCLR.reg = PORT_PB01 | PORT_PB02 ;
+ 3e4:	4b21      	ldr	r3, [pc, #132]	; (46c <seg_display+0xa0>)
+ 3e6:	2206      	movs	r2, #6
+ 3e8:	615a      	str	r2, [r3, #20]
+		porB -> OUTSET.reg = PORT_PB00 | PORT_PB03| PORT_PB04 | PORT_PB05 | PORT_PB06;
+ 3ea:	3273      	adds	r2, #115	; 0x73
+ 3ec:	619a      	str	r2, [r3, #24]
+ 3ee:	e00f      	b.n	410 <seg_display+0x44>
+	}
+	if (display == 2){
+ 3f0:	2802      	cmp	r0, #2
+ 3f2:	d105      	bne.n	400 <seg_display+0x34>
+		porB -> OUTCLR.reg = PORT_PB00 | PORT_PB01 | PORT_PB03 | PORT_PB04 | PORT_PB06;
+ 3f4:	4b1d      	ldr	r3, [pc, #116]	; (46c <seg_display+0xa0>)
+ 3f6:	225b      	movs	r2, #91	; 0x5b
+ 3f8:	615a      	str	r2, [r3, #20]
+		porB -> OUTSET.reg = PORT_PB02 | PORT_PB05;
+ 3fa:	3a37      	subs	r2, #55	; 0x37
+ 3fc:	619a      	str	r2, [r3, #24]
+ 3fe:	e00f      	b.n	420 <seg_display+0x54>
+	}
+	if (display == 3){
+ 400:	2803      	cmp	r0, #3
+ 402:	d105      	bne.n	410 <seg_display+0x44>
+		porB -> OUTCLR.reg = PORT_PB00 | PORT_PB01 | PORT_PB02 | PORT_PB03 | PORT_PB06;
+ 404:	4b19      	ldr	r3, [pc, #100]	; (46c <seg_display+0xa0>)
+ 406:	224f      	movs	r2, #79	; 0x4f
+ 408:	615a      	str	r2, [r3, #20]
+		porB -> OUTSET.reg = PORT_PB04 | PORT_PB05;
+ 40a:	3a1f      	subs	r2, #31
+ 40c:	619a      	str	r2, [r3, #24]
+ 40e:	e00f      	b.n	430 <seg_display+0x64>
+	}
+	if (display == 4){
+ 410:	2804      	cmp	r0, #4
+ 412:	d105      	bne.n	420 <seg_display+0x54>
+		porB -> OUTCLR.reg = PORT_PB01 | PORT_PB02 | PORT_PB05 | PORT_PB06;
+ 414:	4b15      	ldr	r3, [pc, #84]	; (46c <seg_display+0xa0>)
+ 416:	2266      	movs	r2, #102	; 0x66
+ 418:	615a      	str	r2, [r3, #20]
+		porB -> OUTSET.reg = PORT_PB00 | PORT_PB03 | PORT_PB04;
+ 41a:	3a4d      	subs	r2, #77	; 0x4d
+ 41c:	619a      	str	r2, [r3, #24]
+ 41e:	e00f      	b.n	440 <seg_display+0x74>
+	}
+	if (display == 5){
+ 420:	2805      	cmp	r0, #5
+ 422:	d105      	bne.n	430 <seg_display+0x64>
+		porB -> OUTSET.reg = PORT_PB01 | PORT_PB04 | PORT_PB07;
+ 424:	4b11      	ldr	r3, [pc, #68]	; (46c <seg_display+0xa0>)
+ 426:	2292      	movs	r2, #146	; 0x92
+ 428:	619a      	str	r2, [r3, #24]
+		porB -> OUTCLR.reg = PORT_PB00 | PORT_PB02 | PORT_PB03 | PORT_PB05 | PORT_PB06;
+ 42a:	3a25      	subs	r2, #37	; 0x25
+ 42c:	615a      	str	r2, [r3, #20]
+ 42e:	e00f      	b.n	450 <seg_display+0x84>
+	}
+	if (display == 6){
+ 430:	2806      	cmp	r0, #6
+ 432:	d105      	bne.n	440 <seg_display+0x74>
+		porB -> OUTCLR.reg = PORT_PB00 | PORT_PB02 | PORT_PB03 | PORT_PB04 | PORT_PB05 | PORT_PB06;
+ 434:	4b0d      	ldr	r3, [pc, #52]	; (46c <seg_display+0xa0>)
+ 436:	227d      	movs	r2, #125	; 0x7d
+ 438:	615a      	str	r2, [r3, #20]
+		porB -> OUTSET.reg = PORT_PB01;
+ 43a:	3a7b      	subs	r2, #123	; 0x7b
+ 43c:	619a      	str	r2, [r3, #24]
+ 43e:	e00d      	b.n	45c <seg_display+0x90>
+	}
+	if (display == 7){
+ 440:	2807      	cmp	r0, #7
+ 442:	d105      	bne.n	450 <seg_display+0x84>
+		porB -> OUTCLR.reg = PORT_PB00 | PORT_PB01 | PORT_PB02;
+ 444:	4b09      	ldr	r3, [pc, #36]	; (46c <seg_display+0xa0>)
+ 446:	2207      	movs	r2, #7
+ 448:	615a      	str	r2, [r3, #20]
+		porB -> OUTSET.reg = PORT_PB03 | PORT_PB04 | PORT_PB05 | PORT_PB06;
+ 44a:	3271      	adds	r2, #113	; 0x71
+ 44c:	619a      	str	r2, [r3, #24]
+ 44e:	e00c      	b.n	46a <seg_display+0x9e>
+	}
+	if (display == 8){
+ 450:	2808      	cmp	r0, #8
+ 452:	d103      	bne.n	45c <seg_display+0x90>
+		porB -> OUTCLR.reg = PORT_PB00 | PORT_PB01 | PORT_PB02 | PORT_PB03 | PORT_PB04 | PORT_PB05 | PORT_PB06;
+ 454:	227f      	movs	r2, #127	; 0x7f
+ 456:	4b05      	ldr	r3, [pc, #20]	; (46c <seg_display+0xa0>)
+ 458:	615a      	str	r2, [r3, #20]
+ 45a:	e006      	b.n	46a <seg_display+0x9e>
+	}
+	if (display == 9){
+ 45c:	2809      	cmp	r0, #9
+ 45e:	d104      	bne.n	46a <seg_display+0x9e>
+		porB -> OUTCLR.reg = PORT_PB00 | PORT_PB01 | PORT_PB02 | PORT_PB05 | PORT_PB06;
+ 460:	4b02      	ldr	r3, [pc, #8]	; (46c <seg_display+0xa0>)
+ 462:	2267      	movs	r2, #103	; 0x67
+ 464:	615a      	str	r2, [r3, #20]
+		porB -> OUTSET.reg = PORT_PB03 | PORT_PB04;
+ 466:	3a4f      	subs	r2, #79	; 0x4f
+ 468:	619a      	str	r2, [r3, #24]
+	}
+	return;
+}
+ 46a:	4770      	bx	lr
+ 46c:	41004480 	.word	0x41004480
+
+00000470 <wait>:
+}
+
+//time delay function
+void wait(int t)
+{
+	count = 0;
+ 470:	4a07      	ldr	r2, [pc, #28]	; (490 <wait+0x20>)
+ 472:	2300      	movs	r3, #0
+ 474:	6013      	str	r3, [r2, #0]
+    while (count < t*1000)
+ 476:	23fa      	movs	r3, #250	; 0xfa
+ 478:	009b      	lsls	r3, r3, #2
+ 47a:	4358      	muls	r0, r3
+ 47c:	6813      	ldr	r3, [r2, #0]
+ 47e:	4298      	cmp	r0, r3
+ 480:	dd05      	ble.n	48e <wait+0x1e>
+	{
+		count++;
+ 482:	6813      	ldr	r3, [r2, #0]
+ 484:	3301      	adds	r3, #1
+ 486:	6013      	str	r3, [r2, #0]
+
+//time delay function
+void wait(int t)
+{
+	count = 0;
+    while (count < t*1000)
+ 488:	6813      	ldr	r3, [r2, #0]
+ 48a:	4283      	cmp	r3, r0
+ 48c:	dbf9      	blt.n	482 <wait+0x12>
+	{
+		count++;
+	}
+}
+ 48e:	4770      	bx	lr
+ 490:	20000020 	.word	0x20000020
+
+00000494 <display_idle>:
+		dcount = 0; // zero out counter
+	}
+	return;
+}
+
+void display_idle(void){
+ 494:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+	Port *ports = PORT_INSTS;
+	PortGroup *porA = &(ports->Group[0]);
+	PortGroup *porB = &(ports->Group[1]);
+	porA->DIRSET.reg = (1u << 4) | (1u << 5) | (1u << 6) | (1u << 7);
+ 496:	4c15      	ldr	r4, [pc, #84]	; (4ec <display_idle+0x58>)
+ 498:	23f0      	movs	r3, #240	; 0xf0
+ 49a:	60a3      	str	r3, [r4, #8]
+	porB->DIRSET.reg = (1u << 0) | (1u << 1) | (1u << 2) | (1u << 3) | (1u << 4) | (1u << 5) | (1u << 6);
+ 49c:	0023      	movs	r3, r4
+ 49e:	3380      	adds	r3, #128	; 0x80
+ 4a0:	227f      	movs	r2, #127	; 0x7f
+ 4a2:	609a      	str	r2, [r3, #8]
+
+	porA -> OUTCLR.reg = PORT_PA07;
+ 4a4:	2380      	movs	r3, #128	; 0x80
+ 4a6:	6163      	str	r3, [r4, #20]
+	porA -> OUTSET.reg = PORT_PA04 | PORT_PA05 | PORT_PA06;
+ 4a8:	3b10      	subs	r3, #16
+ 4aa:	61a3      	str	r3, [r4, #24]
+	seg_display(input[0]); // display most significant digit
+ 4ac:	4f10      	ldr	r7, [pc, #64]	; (4f0 <display_idle+0x5c>)
+ 4ae:	6838      	ldr	r0, [r7, #0]
+ 4b0:	4e10      	ldr	r6, [pc, #64]	; (4f4 <display_idle+0x60>)
+ 4b2:	47b0      	blx	r6
+	wait(5);
+ 4b4:	2005      	movs	r0, #5
+ 4b6:	4d10      	ldr	r5, [pc, #64]	; (4f8 <display_idle+0x64>)
+ 4b8:	47a8      	blx	r5
+	porA -> OUTCLR.reg = PORT_PA06;
+ 4ba:	2340      	movs	r3, #64	; 0x40
+ 4bc:	6163      	str	r3, [r4, #20]
+	porA -> OUTSET.reg = PORT_PA04 | PORT_PA05 | PORT_PA07;
+ 4be:	3370      	adds	r3, #112	; 0x70
+ 4c0:	61a3      	str	r3, [r4, #24]
+	seg_display(input[1]);
+ 4c2:	6878      	ldr	r0, [r7, #4]
+ 4c4:	47b0      	blx	r6
+	wait(5);
+ 4c6:	2005      	movs	r0, #5
+ 4c8:	47a8      	blx	r5
+	porA -> OUTCLR.reg = PORT_PA05;
+ 4ca:	2320      	movs	r3, #32
+ 4cc:	6163      	str	r3, [r4, #20]
+	porA -> OUTSET.reg = PORT_PA04 | PORT_PA07 | PORT_PA06;
+ 4ce:	33b0      	adds	r3, #176	; 0xb0
+ 4d0:	61a3      	str	r3, [r4, #24]
+	seg_display(input[2]);
+ 4d2:	68b8      	ldr	r0, [r7, #8]
+ 4d4:	47b0      	blx	r6
+	wait(5);
+ 4d6:	2005      	movs	r0, #5
+ 4d8:	47a8      	blx	r5
+	porA -> OUTCLR.reg = PORT_PA04;
+ 4da:	2310      	movs	r3, #16
+ 4dc:	6163      	str	r3, [r4, #20]
+	porA -> OUTSET.reg = PORT_PA07 | PORT_PA05 | PORT_PA06;
+ 4de:	33d0      	adds	r3, #208	; 0xd0
+ 4e0:	61a3      	str	r3, [r4, #24]
+	seg_display(input[3]);// display least significant digit
+ 4e2:	68f8      	ldr	r0, [r7, #12]
+ 4e4:	47b0      	blx	r6
+	wait(5); // add delay to lower frequency of display refreshes
+ 4e6:	2005      	movs	r0, #5
+ 4e8:	47a8      	blx	r5
+	return;
+}
+ 4ea:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+ 4ec:	41004400 	.word	0x41004400
+ 4f0:	20000024 	.word	0x20000024
+ 4f4:	000003cd 	.word	0x000003cd
+ 4f8:	00000471 	.word	0x00000471
+
+000004fc <get_input>:
+		porB -> OUTSET.reg = PORT_PB03 | PORT_PB04;
+	}
+	return;
+}
+
+void get_input(void){
+ 4fc:	b570      	push	{r4, r5, r6, lr}
+	Port *ports = PORT_INSTS; //command to use port registers
+	PortGroup *porA = &(ports->Group[0]); //introduce port groups A
+	PortGroup *porB = &(ports->Group[1]); //introduce port groups B
+
+	porA -> DIRSET.reg = PORT_PA07 | PORT_PA06 | PORT_PA05 | PORT_PA04;
+ 4fe:	4bd7      	ldr	r3, [pc, #860]	; (85c <get_input+0x360>)
+ 500:	22f0      	movs	r2, #240	; 0xf0
+ 502:	609a      	str	r2, [r3, #8]
+	porB -> DIRSET.reg = PORT_PB06 | PORT_PB05 | PORT_PB04 | PORT_PB03 | PORT_PB02 | PORT_PB01 | PORT_PB00;
+ 504:	001a      	movs	r2, r3
+ 506:	3280      	adds	r2, #128	; 0x80
+ 508:	217f      	movs	r1, #127	; 0x7f
+ 50a:	6091      	str	r1, [r2, #8]
+
+	porA -> DIRCLR.reg = PORT_PA19 | PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 50c:	22f0      	movs	r2, #240	; 0xf0
+ 50e:	0312      	lsls	r2, r2, #12
+ 510:	605a      	str	r2, [r3, #4]
+	porA -> PINCFG[19].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 512:	2206      	movs	r2, #6
+ 514:	392c      	subs	r1, #44	; 0x2c
+ 516:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[18].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 518:	3901      	subs	r1, #1
+ 51a:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[17].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 51c:	3901      	subs	r1, #1
+ 51e:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[16].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 520:	3901      	subs	r1, #1
+ 522:	545a      	strb	r2, [r3, r1]
+
+
+	while(1){
+		porA -> OUTSET.reg = PORT_PA06 | PORT_PA05 | PORT_PA04; //First row
+ 524:	326a      	adds	r2, #106	; 0x6a
+ 526:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA07;
+ 528:	3210      	adds	r2, #16
+ 52a:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA19;
+ 52c:	2280      	movs	r2, #128	; 0x80
+ 52e:	0312      	lsls	r2, r2, #12
+ 530:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 532:	21e0      	movs	r1, #224	; 0xe0
+ 534:	02c9      	lsls	r1, r1, #11
+ 536:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA19) { //Pushed 1
+ 538:	6a1b      	ldr	r3, [r3, #32]
+ 53a:	4213      	tst	r3, r2
+ 53c:	d01b      	beq.n	576 <get_input+0x7a>
+			if (i == 4) i = 0; // reset array pointer when max number is reached
+ 53e:	4bc8      	ldr	r3, [pc, #800]	; (860 <get_input+0x364>)
+ 540:	681b      	ldr	r3, [r3, #0]
+ 542:	2b04      	cmp	r3, #4
+ 544:	d102      	bne.n	54c <get_input+0x50>
+ 546:	2200      	movs	r2, #0
+ 548:	4bc5      	ldr	r3, [pc, #788]	; (860 <get_input+0x364>)
+ 54a:	601a      	str	r2, [r3, #0]
+			input[i] = 1; // sends pressed number to an input array that will be used in the seg_display function
+ 54c:	4bc4      	ldr	r3, [pc, #784]	; (860 <get_input+0x364>)
+ 54e:	681a      	ldr	r2, [r3, #0]
+ 550:	0092      	lsls	r2, r2, #2
+ 552:	2001      	movs	r0, #1
+ 554:	49c3      	ldr	r1, [pc, #780]	; (864 <get_input+0x368>)
+ 556:	5050      	str	r0, [r2, r1]
+			i++;
+ 558:	681a      	ldr	r2, [r3, #0]
+ 55a:	3201      	adds	r2, #1
+ 55c:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA19) {display_idle();} // waits until button is released and cycles through display in the meantime
+ 55e:	4bbf      	ldr	r3, [pc, #764]	; (85c <get_input+0x360>)
+ 560:	6a1b      	ldr	r3, [r3, #32]
+ 562:	031b      	lsls	r3, r3, #12
+ 564:	d507      	bpl.n	576 <get_input+0x7a>
+ 566:	4ec0      	ldr	r6, [pc, #768]	; (868 <get_input+0x36c>)
+ 568:	4dbc      	ldr	r5, [pc, #752]	; (85c <get_input+0x360>)
+ 56a:	2480      	movs	r4, #128	; 0x80
+ 56c:	0324      	lsls	r4, r4, #12
+ 56e:	47b0      	blx	r6
+ 570:	6a2b      	ldr	r3, [r5, #32]
+ 572:	4223      	tst	r3, r4
+ 574:	d1fb      	bne.n	56e <get_input+0x72>
+		}
+
+		porA -> OUTSET.reg = PORT_PA06 | PORT_PA05 | PORT_PA04; //First row
+ 576:	4bb9      	ldr	r3, [pc, #740]	; (85c <get_input+0x360>)
+ 578:	2270      	movs	r2, #112	; 0x70
+ 57a:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA07;
+ 57c:	3210      	adds	r2, #16
+ 57e:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA18;
+ 580:	2280      	movs	r2, #128	; 0x80
+ 582:	02d2      	lsls	r2, r2, #11
+ 584:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA17 | PORT_PA19 | PORT_PA16;
+ 586:	21b0      	movs	r1, #176	; 0xb0
+ 588:	0309      	lsls	r1, r1, #12
+ 58a:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA18){ //Pushed 2
+ 58c:	6a1b      	ldr	r3, [r3, #32]
+ 58e:	4213      	tst	r3, r2
+ 590:	d01b      	beq.n	5ca <get_input+0xce>
+			if (i == 4) i = 0;
+ 592:	4bb3      	ldr	r3, [pc, #716]	; (860 <get_input+0x364>)
+ 594:	681b      	ldr	r3, [r3, #0]
+ 596:	2b04      	cmp	r3, #4
+ 598:	d102      	bne.n	5a0 <get_input+0xa4>
+ 59a:	2200      	movs	r2, #0
+ 59c:	4bb0      	ldr	r3, [pc, #704]	; (860 <get_input+0x364>)
+ 59e:	601a      	str	r2, [r3, #0]
+			input[i] = 2;
+ 5a0:	4baf      	ldr	r3, [pc, #700]	; (860 <get_input+0x364>)
+ 5a2:	681a      	ldr	r2, [r3, #0]
+ 5a4:	0092      	lsls	r2, r2, #2
+ 5a6:	2002      	movs	r0, #2
+ 5a8:	49ae      	ldr	r1, [pc, #696]	; (864 <get_input+0x368>)
+ 5aa:	5050      	str	r0, [r2, r1]
+			i++;
+ 5ac:	681a      	ldr	r2, [r3, #0]
+ 5ae:	3201      	adds	r2, #1
+ 5b0:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA18) {display_idle();}
+ 5b2:	4baa      	ldr	r3, [pc, #680]	; (85c <get_input+0x360>)
+ 5b4:	6a1b      	ldr	r3, [r3, #32]
+ 5b6:	035b      	lsls	r3, r3, #13
+ 5b8:	d507      	bpl.n	5ca <get_input+0xce>
+ 5ba:	4eab      	ldr	r6, [pc, #684]	; (868 <get_input+0x36c>)
+ 5bc:	4da7      	ldr	r5, [pc, #668]	; (85c <get_input+0x360>)
+ 5be:	2480      	movs	r4, #128	; 0x80
+ 5c0:	02e4      	lsls	r4, r4, #11
+ 5c2:	47b0      	blx	r6
+ 5c4:	6a2b      	ldr	r3, [r5, #32]
+ 5c6:	4223      	tst	r3, r4
+ 5c8:	d1fb      	bne.n	5c2 <get_input+0xc6>
+		}
+
+		porA -> OUTSET.reg = PORT_PA06 | PORT_PA05 | PORT_PA04; //First row
+ 5ca:	4ba4      	ldr	r3, [pc, #656]	; (85c <get_input+0x360>)
+ 5cc:	2270      	movs	r2, #112	; 0x70
+ 5ce:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA07;
+ 5d0:	3210      	adds	r2, #16
+ 5d2:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA17;
+ 5d4:	2280      	movs	r2, #128	; 0x80
+ 5d6:	0292      	lsls	r2, r2, #10
+ 5d8:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA19 | PORT_PA16;
+ 5da:	21d0      	movs	r1, #208	; 0xd0
+ 5dc:	0309      	lsls	r1, r1, #12
+ 5de:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA17) { //Pushed 3
+ 5e0:	6a1b      	ldr	r3, [r3, #32]
+ 5e2:	4213      	tst	r3, r2
+ 5e4:	d01b      	beq.n	61e <get_input+0x122>
+			if (i == 4) i = 0;
+ 5e6:	4b9e      	ldr	r3, [pc, #632]	; (860 <get_input+0x364>)
+ 5e8:	681b      	ldr	r3, [r3, #0]
+ 5ea:	2b04      	cmp	r3, #4
+ 5ec:	d102      	bne.n	5f4 <get_input+0xf8>
+ 5ee:	2200      	movs	r2, #0
+ 5f0:	4b9b      	ldr	r3, [pc, #620]	; (860 <get_input+0x364>)
+ 5f2:	601a      	str	r2, [r3, #0]
+			input[i] = 3;
+ 5f4:	4b9a      	ldr	r3, [pc, #616]	; (860 <get_input+0x364>)
+ 5f6:	681a      	ldr	r2, [r3, #0]
+ 5f8:	0092      	lsls	r2, r2, #2
+ 5fa:	2003      	movs	r0, #3
+ 5fc:	4999      	ldr	r1, [pc, #612]	; (864 <get_input+0x368>)
+ 5fe:	5050      	str	r0, [r2, r1]
+			i++;
+ 600:	681a      	ldr	r2, [r3, #0]
+ 602:	3201      	adds	r2, #1
+ 604:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA17) {display_idle();}
+ 606:	4b95      	ldr	r3, [pc, #596]	; (85c <get_input+0x360>)
+ 608:	6a1b      	ldr	r3, [r3, #32]
+ 60a:	039b      	lsls	r3, r3, #14
+ 60c:	d507      	bpl.n	61e <get_input+0x122>
+ 60e:	4e96      	ldr	r6, [pc, #600]	; (868 <get_input+0x36c>)
+ 610:	4d92      	ldr	r5, [pc, #584]	; (85c <get_input+0x360>)
+ 612:	2480      	movs	r4, #128	; 0x80
+ 614:	02a4      	lsls	r4, r4, #10
+ 616:	47b0      	blx	r6
+ 618:	6a2b      	ldr	r3, [r5, #32]
+ 61a:	4223      	tst	r3, r4
+ 61c:	d1fb      	bne.n	616 <get_input+0x11a>
+		}
+
+
+		porA -> OUTSET.reg = PORT_PA07 | PORT_PA05 | PORT_PA04; //Second row
+ 61e:	4b8f      	ldr	r3, [pc, #572]	; (85c <get_input+0x360>)
+ 620:	22b0      	movs	r2, #176	; 0xb0
+ 622:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA06;
+ 624:	3a70      	subs	r2, #112	; 0x70
+ 626:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA19;
+ 628:	2280      	movs	r2, #128	; 0x80
+ 62a:	0312      	lsls	r2, r2, #12
+ 62c:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 62e:	21e0      	movs	r1, #224	; 0xe0
+ 630:	02c9      	lsls	r1, r1, #11
+ 632:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA19) { //Pushed 4
+ 634:	6a1b      	ldr	r3, [r3, #32]
+ 636:	4213      	tst	r3, r2
+ 638:	d01b      	beq.n	672 <get_input+0x176>
+			if (i == 4) i = 0;
+ 63a:	4b89      	ldr	r3, [pc, #548]	; (860 <get_input+0x364>)
+ 63c:	681b      	ldr	r3, [r3, #0]
+ 63e:	2b04      	cmp	r3, #4
+ 640:	d102      	bne.n	648 <get_input+0x14c>
+ 642:	2200      	movs	r2, #0
+ 644:	4b86      	ldr	r3, [pc, #536]	; (860 <get_input+0x364>)
+ 646:	601a      	str	r2, [r3, #0]
+			input[i] = 4;
+ 648:	4b85      	ldr	r3, [pc, #532]	; (860 <get_input+0x364>)
+ 64a:	681a      	ldr	r2, [r3, #0]
+ 64c:	0092      	lsls	r2, r2, #2
+ 64e:	2004      	movs	r0, #4
+ 650:	4984      	ldr	r1, [pc, #528]	; (864 <get_input+0x368>)
+ 652:	5050      	str	r0, [r2, r1]
+			i++;
+ 654:	681a      	ldr	r2, [r3, #0]
+ 656:	3201      	adds	r2, #1
+ 658:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA19) {display_idle();}
+ 65a:	4b80      	ldr	r3, [pc, #512]	; (85c <get_input+0x360>)
+ 65c:	6a1b      	ldr	r3, [r3, #32]
+ 65e:	031b      	lsls	r3, r3, #12
+ 660:	d507      	bpl.n	672 <get_input+0x176>
+ 662:	4e81      	ldr	r6, [pc, #516]	; (868 <get_input+0x36c>)
+ 664:	4d7d      	ldr	r5, [pc, #500]	; (85c <get_input+0x360>)
+ 666:	2480      	movs	r4, #128	; 0x80
+ 668:	0324      	lsls	r4, r4, #12
+ 66a:	47b0      	blx	r6
+ 66c:	6a2b      	ldr	r3, [r5, #32]
+ 66e:	4223      	tst	r3, r4
+ 670:	d1fb      	bne.n	66a <get_input+0x16e>
+		}
+
+		porA -> OUTSET.reg = PORT_PA07 | PORT_PA05 | PORT_PA04; //Second row
+ 672:	4b7a      	ldr	r3, [pc, #488]	; (85c <get_input+0x360>)
+ 674:	22b0      	movs	r2, #176	; 0xb0
+ 676:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA06;
+ 678:	3a70      	subs	r2, #112	; 0x70
+ 67a:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA18;
+ 67c:	2280      	movs	r2, #128	; 0x80
+ 67e:	02d2      	lsls	r2, r2, #11
+ 680:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA19 | PORT_PA17 | PORT_PA16;
+ 682:	21b0      	movs	r1, #176	; 0xb0
+ 684:	0309      	lsls	r1, r1, #12
+ 686:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA18) { //Pushed 5
+ 688:	6a1b      	ldr	r3, [r3, #32]
+ 68a:	4213      	tst	r3, r2
+ 68c:	d01b      	beq.n	6c6 <get_input+0x1ca>
+			if (i == 4) i = 0;
+ 68e:	4b74      	ldr	r3, [pc, #464]	; (860 <get_input+0x364>)
+ 690:	681b      	ldr	r3, [r3, #0]
+ 692:	2b04      	cmp	r3, #4
+ 694:	d102      	bne.n	69c <get_input+0x1a0>
+ 696:	2200      	movs	r2, #0
+ 698:	4b71      	ldr	r3, [pc, #452]	; (860 <get_input+0x364>)
+ 69a:	601a      	str	r2, [r3, #0]
+			input[i] = 5;
+ 69c:	4b70      	ldr	r3, [pc, #448]	; (860 <get_input+0x364>)
+ 69e:	681a      	ldr	r2, [r3, #0]
+ 6a0:	0092      	lsls	r2, r2, #2
+ 6a2:	2005      	movs	r0, #5
+ 6a4:	496f      	ldr	r1, [pc, #444]	; (864 <get_input+0x368>)
+ 6a6:	5050      	str	r0, [r2, r1]
+			i++;
+ 6a8:	681a      	ldr	r2, [r3, #0]
+ 6aa:	3201      	adds	r2, #1
+ 6ac:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA18) {display_idle();}
+ 6ae:	4b6b      	ldr	r3, [pc, #428]	; (85c <get_input+0x360>)
+ 6b0:	6a1b      	ldr	r3, [r3, #32]
+ 6b2:	035b      	lsls	r3, r3, #13
+ 6b4:	d507      	bpl.n	6c6 <get_input+0x1ca>
+ 6b6:	4e6c      	ldr	r6, [pc, #432]	; (868 <get_input+0x36c>)
+ 6b8:	4d68      	ldr	r5, [pc, #416]	; (85c <get_input+0x360>)
+ 6ba:	2480      	movs	r4, #128	; 0x80
+ 6bc:	02e4      	lsls	r4, r4, #11
+ 6be:	47b0      	blx	r6
+ 6c0:	6a2b      	ldr	r3, [r5, #32]
+ 6c2:	4223      	tst	r3, r4
+ 6c4:	d1fb      	bne.n	6be <get_input+0x1c2>
+		}
+
+		porA -> OUTSET.reg = PORT_PA07 | PORT_PA05 | PORT_PA04; //Second row
+ 6c6:	4b65      	ldr	r3, [pc, #404]	; (85c <get_input+0x360>)
+ 6c8:	22b0      	movs	r2, #176	; 0xb0
+ 6ca:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA06;
+ 6cc:	3a70      	subs	r2, #112	; 0x70
+ 6ce:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA17;
+ 6d0:	2280      	movs	r2, #128	; 0x80
+ 6d2:	0292      	lsls	r2, r2, #10
+ 6d4:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA19 | PORT_PA16;
+ 6d6:	21d0      	movs	r1, #208	; 0xd0
+ 6d8:	0309      	lsls	r1, r1, #12
+ 6da:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA17){ //Pushed 6
+ 6dc:	6a1b      	ldr	r3, [r3, #32]
+ 6de:	4213      	tst	r3, r2
+ 6e0:	d01b      	beq.n	71a <get_input+0x21e>
+			if (i == 4) i = 0;
+ 6e2:	4b5f      	ldr	r3, [pc, #380]	; (860 <get_input+0x364>)
+ 6e4:	681b      	ldr	r3, [r3, #0]
+ 6e6:	2b04      	cmp	r3, #4
+ 6e8:	d102      	bne.n	6f0 <get_input+0x1f4>
+ 6ea:	2200      	movs	r2, #0
+ 6ec:	4b5c      	ldr	r3, [pc, #368]	; (860 <get_input+0x364>)
+ 6ee:	601a      	str	r2, [r3, #0]
+			input[i] = 6;
+ 6f0:	4b5b      	ldr	r3, [pc, #364]	; (860 <get_input+0x364>)
+ 6f2:	681a      	ldr	r2, [r3, #0]
+ 6f4:	0092      	lsls	r2, r2, #2
+ 6f6:	2006      	movs	r0, #6
+ 6f8:	495a      	ldr	r1, [pc, #360]	; (864 <get_input+0x368>)
+ 6fa:	5050      	str	r0, [r2, r1]
+			i++;
+ 6fc:	681a      	ldr	r2, [r3, #0]
+ 6fe:	3201      	adds	r2, #1
+ 700:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA17) {display_idle();}
+ 702:	4b56      	ldr	r3, [pc, #344]	; (85c <get_input+0x360>)
+ 704:	6a1b      	ldr	r3, [r3, #32]
+ 706:	039b      	lsls	r3, r3, #14
+ 708:	d507      	bpl.n	71a <get_input+0x21e>
+ 70a:	4e57      	ldr	r6, [pc, #348]	; (868 <get_input+0x36c>)
+ 70c:	4d53      	ldr	r5, [pc, #332]	; (85c <get_input+0x360>)
+ 70e:	2480      	movs	r4, #128	; 0x80
+ 710:	02a4      	lsls	r4, r4, #10
+ 712:	47b0      	blx	r6
+ 714:	6a2b      	ldr	r3, [r5, #32]
+ 716:	4223      	tst	r3, r4
+ 718:	d1fb      	bne.n	712 <get_input+0x216>
+		}
+
+		porA -> OUTSET.reg = PORT_PA07 | PORT_PA06 | PORT_PA04; //Third row
+ 71a:	4b50      	ldr	r3, [pc, #320]	; (85c <get_input+0x360>)
+ 71c:	22d0      	movs	r2, #208	; 0xd0
+ 71e:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA05;
+ 720:	3ab0      	subs	r2, #176	; 0xb0
+ 722:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA19;
+ 724:	2280      	movs	r2, #128	; 0x80
+ 726:	0312      	lsls	r2, r2, #12
+ 728:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 72a:	21e0      	movs	r1, #224	; 0xe0
+ 72c:	02c9      	lsls	r1, r1, #11
+ 72e:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA19) { //Pushed 7
+ 730:	6a1b      	ldr	r3, [r3, #32]
+ 732:	4213      	tst	r3, r2
+ 734:	d01b      	beq.n	76e <get_input+0x272>
+			if (i == 4) i = 0;
+ 736:	4b4a      	ldr	r3, [pc, #296]	; (860 <get_input+0x364>)
+ 738:	681b      	ldr	r3, [r3, #0]
+ 73a:	2b04      	cmp	r3, #4
+ 73c:	d102      	bne.n	744 <get_input+0x248>
+ 73e:	2200      	movs	r2, #0
+ 740:	4b47      	ldr	r3, [pc, #284]	; (860 <get_input+0x364>)
+ 742:	601a      	str	r2, [r3, #0]
+			input[i] = 7;
+ 744:	4b46      	ldr	r3, [pc, #280]	; (860 <get_input+0x364>)
+ 746:	681a      	ldr	r2, [r3, #0]
+ 748:	0092      	lsls	r2, r2, #2
+ 74a:	2007      	movs	r0, #7
+ 74c:	4945      	ldr	r1, [pc, #276]	; (864 <get_input+0x368>)
+ 74e:	5050      	str	r0, [r2, r1]
+			i++;
+ 750:	681a      	ldr	r2, [r3, #0]
+ 752:	3201      	adds	r2, #1
+ 754:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA19) {display_idle();}
+ 756:	4b41      	ldr	r3, [pc, #260]	; (85c <get_input+0x360>)
+ 758:	6a1b      	ldr	r3, [r3, #32]
+ 75a:	031b      	lsls	r3, r3, #12
+ 75c:	d507      	bpl.n	76e <get_input+0x272>
+ 75e:	4e42      	ldr	r6, [pc, #264]	; (868 <get_input+0x36c>)
+ 760:	4d3e      	ldr	r5, [pc, #248]	; (85c <get_input+0x360>)
+ 762:	2480      	movs	r4, #128	; 0x80
+ 764:	0324      	lsls	r4, r4, #12
+ 766:	47b0      	blx	r6
+ 768:	6a2b      	ldr	r3, [r5, #32]
+ 76a:	4223      	tst	r3, r4
+ 76c:	d1fb      	bne.n	766 <get_input+0x26a>
+		}
+
+		porA -> OUTSET.reg = PORT_PA07 | PORT_PA06 | PORT_PA04; //Third row
+ 76e:	4b3b      	ldr	r3, [pc, #236]	; (85c <get_input+0x360>)
+ 770:	22d0      	movs	r2, #208	; 0xd0
+ 772:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA05;
+ 774:	3ab0      	subs	r2, #176	; 0xb0
+ 776:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA18;
+ 778:	2280      	movs	r2, #128	; 0x80
+ 77a:	02d2      	lsls	r2, r2, #11
+ 77c:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA19 | PORT_PA17 | PORT_PA16;
+ 77e:	21b0      	movs	r1, #176	; 0xb0
+ 780:	0309      	lsls	r1, r1, #12
+ 782:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA18) { //Pushed 8
+ 784:	6a1b      	ldr	r3, [r3, #32]
+ 786:	4213      	tst	r3, r2
+ 788:	d01b      	beq.n	7c2 <get_input+0x2c6>
+			if (i == 4) i = 0;
+ 78a:	4b35      	ldr	r3, [pc, #212]	; (860 <get_input+0x364>)
+ 78c:	681b      	ldr	r3, [r3, #0]
+ 78e:	2b04      	cmp	r3, #4
+ 790:	d102      	bne.n	798 <get_input+0x29c>
+ 792:	2200      	movs	r2, #0
+ 794:	4b32      	ldr	r3, [pc, #200]	; (860 <get_input+0x364>)
+ 796:	601a      	str	r2, [r3, #0]
+			input[i] = 8;
+ 798:	4b31      	ldr	r3, [pc, #196]	; (860 <get_input+0x364>)
+ 79a:	681a      	ldr	r2, [r3, #0]
+ 79c:	0092      	lsls	r2, r2, #2
+ 79e:	2008      	movs	r0, #8
+ 7a0:	4930      	ldr	r1, [pc, #192]	; (864 <get_input+0x368>)
+ 7a2:	5050      	str	r0, [r2, r1]
+			i++;
+ 7a4:	681a      	ldr	r2, [r3, #0]
+ 7a6:	3201      	adds	r2, #1
+ 7a8:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA18) {display_idle();}
+ 7aa:	4b2c      	ldr	r3, [pc, #176]	; (85c <get_input+0x360>)
+ 7ac:	6a1b      	ldr	r3, [r3, #32]
+ 7ae:	035b      	lsls	r3, r3, #13
+ 7b0:	d507      	bpl.n	7c2 <get_input+0x2c6>
+ 7b2:	4e2d      	ldr	r6, [pc, #180]	; (868 <get_input+0x36c>)
+ 7b4:	4d29      	ldr	r5, [pc, #164]	; (85c <get_input+0x360>)
+ 7b6:	2480      	movs	r4, #128	; 0x80
+ 7b8:	02e4      	lsls	r4, r4, #11
+ 7ba:	47b0      	blx	r6
+ 7bc:	6a2b      	ldr	r3, [r5, #32]
+ 7be:	4223      	tst	r3, r4
+ 7c0:	d1fb      	bne.n	7ba <get_input+0x2be>
+		}
+
+		porA -> OUTSET.reg = PORT_PA07 | PORT_PA06 | PORT_PA04; //Third row
+ 7c2:	4b26      	ldr	r3, [pc, #152]	; (85c <get_input+0x360>)
+ 7c4:	22d0      	movs	r2, #208	; 0xd0
+ 7c6:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA05;
+ 7c8:	3ab0      	subs	r2, #176	; 0xb0
+ 7ca:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA17;
+ 7cc:	2280      	movs	r2, #128	; 0x80
+ 7ce:	0292      	lsls	r2, r2, #10
+ 7d0:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA18 | PORT_PA19 | PORT_PA16;
+ 7d2:	21d0      	movs	r1, #208	; 0xd0
+ 7d4:	0309      	lsls	r1, r1, #12
+ 7d6:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA17) { //Pushed 9
+ 7d8:	6a1b      	ldr	r3, [r3, #32]
+ 7da:	4213      	tst	r3, r2
+ 7dc:	d01b      	beq.n	816 <get_input+0x31a>
+			if (i == 4) i = 0;
+ 7de:	4b20      	ldr	r3, [pc, #128]	; (860 <get_input+0x364>)
+ 7e0:	681b      	ldr	r3, [r3, #0]
+ 7e2:	2b04      	cmp	r3, #4
+ 7e4:	d102      	bne.n	7ec <get_input+0x2f0>
+ 7e6:	2200      	movs	r2, #0
+ 7e8:	4b1d      	ldr	r3, [pc, #116]	; (860 <get_input+0x364>)
+ 7ea:	601a      	str	r2, [r3, #0]
+			input[i] = 9;
+ 7ec:	4b1c      	ldr	r3, [pc, #112]	; (860 <get_input+0x364>)
+ 7ee:	681a      	ldr	r2, [r3, #0]
+ 7f0:	0092      	lsls	r2, r2, #2
+ 7f2:	2009      	movs	r0, #9
+ 7f4:	491b      	ldr	r1, [pc, #108]	; (864 <get_input+0x368>)
+ 7f6:	5050      	str	r0, [r2, r1]
+			i++;
+ 7f8:	681a      	ldr	r2, [r3, #0]
+ 7fa:	3201      	adds	r2, #1
+ 7fc:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA17) {display_idle();}
+ 7fe:	4b17      	ldr	r3, [pc, #92]	; (85c <get_input+0x360>)
+ 800:	6a1b      	ldr	r3, [r3, #32]
+ 802:	039b      	lsls	r3, r3, #14
+ 804:	d507      	bpl.n	816 <get_input+0x31a>
+ 806:	4e18      	ldr	r6, [pc, #96]	; (868 <get_input+0x36c>)
+ 808:	4d14      	ldr	r5, [pc, #80]	; (85c <get_input+0x360>)
+ 80a:	2480      	movs	r4, #128	; 0x80
+ 80c:	02a4      	lsls	r4, r4, #10
+ 80e:	47b0      	blx	r6
+ 810:	6a2b      	ldr	r3, [r5, #32]
+ 812:	4223      	tst	r3, r4
+ 814:	d1fb      	bne.n	80e <get_input+0x312>
+		}
+
+		porA -> OUTSET.reg = PORT_PA07 | PORT_PA06 | PORT_PA05; //Fourth row
+ 816:	4b11      	ldr	r3, [pc, #68]	; (85c <get_input+0x360>)
+ 818:	22e0      	movs	r2, #224	; 0xe0
+ 81a:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA04;
+ 81c:	3ad0      	subs	r2, #208	; 0xd0
+ 81e:	615a      	str	r2, [r3, #20]
+		porA -> OUTSET.reg = PORT_PA18;
+ 820:	2280      	movs	r2, #128	; 0x80
+ 822:	02d2      	lsls	r2, r2, #11
+ 824:	619a      	str	r2, [r3, #24]
+		porA -> OUTCLR.reg = PORT_PA19 | PORT_PA17 | PORT_PA16;
+ 826:	21b0      	movs	r1, #176	; 0xb0
+ 828:	0309      	lsls	r1, r1, #12
+ 82a:	6159      	str	r1, [r3, #20]
+		if (porA -> IN.reg & PORT_PA18) { //Pushed 0
+ 82c:	6a1b      	ldr	r3, [r3, #32]
+ 82e:	4213      	tst	r3, r2
+ 830:	d024      	beq.n	87c <get_input+0x380>
+			if (i == 4) i = 0;
+ 832:	4b0b      	ldr	r3, [pc, #44]	; (860 <get_input+0x364>)
+ 834:	681b      	ldr	r3, [r3, #0]
+ 836:	2b04      	cmp	r3, #4
+ 838:	d102      	bne.n	840 <get_input+0x344>
+ 83a:	2200      	movs	r2, #0
+ 83c:	4b08      	ldr	r3, [pc, #32]	; (860 <get_input+0x364>)
+ 83e:	601a      	str	r2, [r3, #0]
+			input[i] = 0;
+ 840:	4b07      	ldr	r3, [pc, #28]	; (860 <get_input+0x364>)
+ 842:	681a      	ldr	r2, [r3, #0]
+ 844:	0092      	lsls	r2, r2, #2
+ 846:	2000      	movs	r0, #0
+ 848:	4906      	ldr	r1, [pc, #24]	; (864 <get_input+0x368>)
+ 84a:	5050      	str	r0, [r2, r1]
+			i++;
+ 84c:	681a      	ldr	r2, [r3, #0]
+ 84e:	3201      	adds	r2, #1
+ 850:	601a      	str	r2, [r3, #0]
+			while (porA -> IN.reg & PORT_PA18) {display_idle();}
+ 852:	4b02      	ldr	r3, [pc, #8]	; (85c <get_input+0x360>)
+ 854:	6a1b      	ldr	r3, [r3, #32]
+ 856:	035b      	lsls	r3, r3, #13
+ 858:	d510      	bpl.n	87c <get_input+0x380>
+ 85a:	e007      	b.n	86c <get_input+0x370>
+ 85c:	41004400 	.word	0x41004400
+ 860:	2000003c 	.word	0x2000003c
+ 864:	20000024 	.word	0x20000024
+ 868:	00000495 	.word	0x00000495
+ 86c:	4e04      	ldr	r6, [pc, #16]	; (880 <get_input+0x384>)
+ 86e:	4d05      	ldr	r5, [pc, #20]	; (884 <get_input+0x388>)
+ 870:	2480      	movs	r4, #128	; 0x80
+ 872:	02e4      	lsls	r4, r4, #11
+ 874:	47b0      	blx	r6
+ 876:	6a2b      	ldr	r3, [r5, #32]
+ 878:	4223      	tst	r3, r4
+ 87a:	d1fb      	bne.n	874 <get_input+0x378>
+		}
+		break;
+	}
+	return;
+}
+ 87c:	bd70      	pop	{r4, r5, r6, pc}
+ 87e:	46c0      	nop			; (mov r8, r8)
+ 880:	00000495 	.word	0x00000495
+ 884:	41004400 	.word	0x41004400
+
+00000888 <Simple_Clk_Init>:
+void Simple_Clk_Init(void)
+{
+	/* Various bits in the INTFLAG register can be set to one at startup.
+	   This will ensure that these bits are cleared */
+	
+	SYSCTRL->INTFLAG.reg = SYSCTRL_INTFLAG_BOD33RDY | SYSCTRL_INTFLAG_BOD33DET |
+ 888:	4b16      	ldr	r3, [pc, #88]	; (8e4 <Simple_Clk_Init+0x5c>)
+ 88a:	22c2      	movs	r2, #194	; 0xc2
+ 88c:	00d2      	lsls	r2, r2, #3
+ 88e:	609a      	str	r2, [r3, #8]
+static inline void system_flash_set_waitstates(uint8_t wait_states)
+{
+	Assert(NVMCTRL_CTRLB_RWS((uint32_t)wait_states) ==
+			((uint32_t)wait_states << NVMCTRL_CTRLB_RWS_Pos));
+
+	NVMCTRL->CTRLB.bit.RWS = wait_states;
+ 890:	4915      	ldr	r1, [pc, #84]	; (8e8 <Simple_Clk_Init+0x60>)
+ 892:	684a      	ldr	r2, [r1, #4]
+ 894:	201e      	movs	r0, #30
+ 896:	4382      	bics	r2, r0
+ 898:	604a      	str	r2, [r1, #4]
+			SYSCTRL_INTFLAG_DFLLRDY;
+			
+	system_flash_set_waitstates(0);  		//Clock_flash wait state =0
+
+	SYSCTRL_OSC8M_Type temp = SYSCTRL->OSC8M;      	/* for OSC8M initialization  */
+ 89a:	6a1a      	ldr	r2, [r3, #32]
+
+	temp.bit.PRESC    = 0;    			// no divide, i.e., set clock=8Mhz  (see page 170)
+	temp.bit.ONDEMAND = 1;    			// On-demand is true
+	temp.bit.RUNSTDBY = 0;    			// Standby is false
+	
+	SYSCTRL->OSC8M = temp;
+ 89c:	2140      	movs	r1, #64	; 0x40
+ 89e:	438a      	bics	r2, r1
+ 8a0:	3140      	adds	r1, #64	; 0x40
+ 8a2:	430a      	orrs	r2, r1
+ 8a4:	4911      	ldr	r1, [pc, #68]	; (8ec <Simple_Clk_Init+0x64>)
+ 8a6:	400a      	ands	r2, r1
+ 8a8:	621a      	str	r2, [r3, #32]
+
+	SYSCTRL->OSC8M.reg |= 0x1u << 1;  		// SYSCTRL_OSC8M_ENABLE bit = bit-1 (page 170)
+ 8aa:	6a19      	ldr	r1, [r3, #32]
+ 8ac:	2202      	movs	r2, #2
+ 8ae:	430a      	orrs	r2, r1
+ 8b0:	621a      	str	r2, [r3, #32]
+	
+	PM->CPUSEL.reg = (uint32_t)0;    		// CPU and BUS clocks Divide by 1  (see page 110)
+ 8b2:	4b0f      	ldr	r3, [pc, #60]	; (8f0 <Simple_Clk_Init+0x68>)
+ 8b4:	2200      	movs	r2, #0
+ 8b6:	721a      	strb	r2, [r3, #8]
+	PM->APBASEL.reg = (uint32_t)0;     		// APBA clock 0= Divide by 1  (see page 110)
+ 8b8:	725a      	strb	r2, [r3, #9]
+	PM->APBBSEL.reg = (uint32_t)0;     		// APBB clock 0= Divide by 1  (see page 110)
+ 8ba:	729a      	strb	r2, [r3, #10]
+	PM->APBCSEL.reg = (uint32_t)0;     		// APBB clock 0= Divide by 1  (see page 110)
+ 8bc:	72da      	strb	r2, [r3, #11]
+
+	PM->APBAMASK.reg |= 01u<<3;   			// Enable Generic clock controller clock (page 127)
+ 8be:	6999      	ldr	r1, [r3, #24]
+ 8c0:	3208      	adds	r2, #8
+ 8c2:	430a      	orrs	r2, r1
+ 8c4:	619a      	str	r2, [r3, #24]
+
+	/* Software reset Generic clock to ensure it is re-initialized correctly */
+
+	GCLK->CTRL.reg = 0x1u << 0;   			// Reset gen. clock (see page 94)
+ 8c6:	2201      	movs	r2, #1
+ 8c8:	4b0a      	ldr	r3, [pc, #40]	; (8f4 <Simple_Clk_Init+0x6c>)
+ 8ca:	701a      	strb	r2, [r3, #0]
+	while (GCLK->CTRL.reg & 0x1u ) {  /* Wait for reset to complete */ }
+ 8cc:	0019      	movs	r1, r3
+ 8ce:	780b      	ldrb	r3, [r1, #0]
+ 8d0:	4213      	tst	r3, r2
+ 8d2:	d1fc      	bne.n	8ce <Simple_Clk_Init+0x46>
+	
+	// Initialization and enable generic clock #0
+
+	*((uint8_t*)&GCLK->GENDIV.reg) = 0;  		// Select GCLK0 (page 104, Table 14-10)
+
+	GCLK->GENDIV.reg  = 0x0100;   		 	// Divide by 1 for GCLK #0 (page 104)
+ 8d4:	4b07      	ldr	r3, [pc, #28]	; (8f4 <Simple_Clk_Init+0x6c>)
+ 8d6:	2280      	movs	r2, #128	; 0x80
+ 8d8:	0052      	lsls	r2, r2, #1
+ 8da:	609a      	str	r2, [r3, #8]
+
+	GCLK->GENCTRL.reg = 0x030600;  		 	// GCLK#0 enable, Source=6(OSC8M), IDC=1 (page 101)
+ 8dc:	4a06      	ldr	r2, [pc, #24]	; (8f8 <Simple_Clk_Init+0x70>)
+ 8de:	605a      	str	r2, [r3, #4]
+}
+ 8e0:	4770      	bx	lr
+ 8e2:	46c0      	nop			; (mov r8, r8)
+ 8e4:	40000800 	.word	0x40000800
+ 8e8:	41004000 	.word	0x41004000
+ 8ec:	fffffcff 	.word	0xfffffcff
+ 8f0:	40000400 	.word	0x40000400
+ 8f4:	40000c00 	.word	0x40000c00
+ 8f8:	00030600 	.word	0x00030600
+
+000008fc <main>:
+volatile int i;
+volatile int input[4] = {0, 0, 0, 0}; // array where user input is stored
+int a, b; // variables used 
+
+int main (void)
+{
+ 8fc:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8fe:	465f      	mov	r7, fp
+ 900:	4656      	mov	r6, sl
+ 902:	464d      	mov	r5, r9
+ 904:	4644      	mov	r4, r8
+ 906:	b4f0      	push	{r4, r5, r6, r7}
+	//set micro-controller clock to 8Mhz
+	Simple_Clk_Init();
+ 908:	4b71      	ldr	r3, [pc, #452]	; (ad0 <main+0x1d4>)
+ 90a:	4798      	blx	r3
+	// GroupA offset of 0x00				// GroupB offset of 0x80
+	PortGroup *porA = &(ports->Group[0]);
+	PortGroup *porB = &(ports->Group[1]);
+	
+	// Set the direction outputs for the 7-segment displays
+	porA->DIRSET.reg = (1u << 4) | (1u << 5) | (1u << 6) | (1u << 7);
+ 90c:	4b71      	ldr	r3, [pc, #452]	; (ad4 <main+0x1d8>)
+ 90e:	22f0      	movs	r2, #240	; 0xf0
+ 910:	609a      	str	r2, [r3, #8]
+	porB->DIRSET.reg = (1u << 0) | (1u << 1) | (1u << 2) | (1u << 3) | (1u << 4) | (1u << 5) | (1u << 6);
+ 912:	001a      	movs	r2, r3
+ 914:	3280      	adds	r2, #128	; 0x80
+ 916:	217f      	movs	r1, #127	; 0x7f
+ 918:	6091      	str	r1, [r2, #8]
+
+	porA -> DIRCLR.reg = PORT_PA19 | PORT_PA18 | PORT_PA17 | PORT_PA16;
+ 91a:	22f0      	movs	r2, #240	; 0xf0
+ 91c:	0312      	lsls	r2, r2, #12
+ 91e:	605a      	str	r2, [r3, #4]
+	porA -> PINCFG[19].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 920:	2206      	movs	r2, #6
+ 922:	392c      	subs	r1, #44	; 0x2c
+ 924:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[18].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 926:	3901      	subs	r1, #1
+ 928:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[17].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 92a:	3901      	subs	r1, #1
+ 92c:	545a      	strb	r2, [r3, r1]
+	porA -> PINCFG[16].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+ 92e:	3901      	subs	r1, #1
+ 930:	545a      	strb	r2, [r3, r1]
+
+	while (1){
+		switch(state){
+ 932:	4d69      	ldr	r5, [pc, #420]	; (ad8 <main+0x1dc>)
+
+						break;
+
+			case 2:		// processing state
+						get_input(); // gets input from key press
+						state = 3;
+ 934:	46aa      	mov	sl, r5
+	porA -> PINCFG[18].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+	porA -> PINCFG[17].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+	porA -> PINCFG[16].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+
+	while (1){
+		switch(state){
+ 936:	682b      	ldr	r3, [r5, #0]
+ 938:	2b01      	cmp	r3, #1
+ 93a:	d037      	beq.n	9ac <main+0xb0>
+ 93c:	dc02      	bgt.n	944 <main+0x48>
+ 93e:	2b00      	cmp	r3, #0
+ 940:	d005      	beq.n	94e <main+0x52>
+ 942:	e7f8      	b.n	936 <main+0x3a>
+ 944:	2b02      	cmp	r3, #2
+ 946:	d070      	beq.n	a2a <main+0x12e>
+ 948:	2b03      	cmp	r3, #3
+ 94a:	d074      	beq.n	a36 <main+0x13a>
+ 94c:	e7f3      	b.n	936 <main+0x3a>
+			case 0:		// idle state
+						// the displays are constantly refreshed so the numbers display while nothing is pressed
+						porA -> OUTCLR.reg = PORT_PA07; // activate top row of keys
+ 94e:	4c61      	ldr	r4, [pc, #388]	; (ad4 <main+0x1d8>)
+ 950:	2380      	movs	r3, #128	; 0x80
+ 952:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA05 | PORT_PA06; // disable bottom three rows
+ 954:	3b10      	subs	r3, #16
+ 956:	61a3      	str	r3, [r4, #24]
+						key_press(); // checks if a button is pressed along current activated row
+ 958:	4b60      	ldr	r3, [pc, #384]	; (adc <main+0x1e0>)
+ 95a:	4699      	mov	r9, r3
+ 95c:	4798      	blx	r3
+						seg_display(input[0]); // display most significant digit
+ 95e:	4b60      	ldr	r3, [pc, #384]	; (ae0 <main+0x1e4>)
+ 960:	4698      	mov	r8, r3
+ 962:	6818      	ldr	r0, [r3, #0]
+ 964:	4f5f      	ldr	r7, [pc, #380]	; (ae4 <main+0x1e8>)
+ 966:	47b8      	blx	r7
+						wait(5); // add delay to lower frequency of display refreshes
+ 968:	2005      	movs	r0, #5
+ 96a:	4e5f      	ldr	r6, [pc, #380]	; (ae8 <main+0x1ec>)
+ 96c:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA06;
+ 96e:	2340      	movs	r3, #64	; 0x40
+ 970:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA05 | PORT_PA07;
+ 972:	3370      	adds	r3, #112	; 0x70
+ 974:	61a3      	str	r3, [r4, #24]
+						key_press();
+ 976:	47c8      	blx	r9
+						seg_display(input[1]);
+ 978:	4643      	mov	r3, r8
+ 97a:	6858      	ldr	r0, [r3, #4]
+ 97c:	47b8      	blx	r7
+						wait(5);
+ 97e:	2005      	movs	r0, #5
+ 980:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA05;
+ 982:	2320      	movs	r3, #32
+ 984:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA07 | PORT_PA06;
+ 986:	33b0      	adds	r3, #176	; 0xb0
+ 988:	61a3      	str	r3, [r4, #24]
+						key_press();
+ 98a:	47c8      	blx	r9
+						seg_display(input[2]);
+ 98c:	4643      	mov	r3, r8
+ 98e:	6898      	ldr	r0, [r3, #8]
+ 990:	47b8      	blx	r7
+						wait(5);
+ 992:	2005      	movs	r0, #5
+ 994:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA04;
+ 996:	2310      	movs	r3, #16
+ 998:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA07 | PORT_PA05 | PORT_PA06;
+ 99a:	33d0      	adds	r3, #208	; 0xd0
+ 99c:	61a3      	str	r3, [r4, #24]
+						key_press();
+ 99e:	47c8      	blx	r9
+						seg_display(input[3]);// display least significant digit
+ 9a0:	4643      	mov	r3, r8
+ 9a2:	68d8      	ldr	r0, [r3, #12]
+ 9a4:	47b8      	blx	r7
+						wait(5); 
+ 9a6:	2005      	movs	r0, #5
+ 9a8:	47b0      	blx	r6
+
+						break;
+ 9aa:	e7c4      	b.n	936 <main+0x3a>
+
+			case 1:		// counting state to verify intended key press
+						b = 0; //zero out checking variable b (keeps track of how many rows do not have anything pressed)
+ 9ac:	4b4f      	ldr	r3, [pc, #316]	; (aec <main+0x1f0>)
+ 9ae:	469b      	mov	fp, r3
+ 9b0:	2300      	movs	r3, #0
+ 9b2:	465a      	mov	r2, fp
+ 9b4:	6013      	str	r3, [r2, #0]
+						// the displays are constantly refreshed so the numbers display while nothing is pressed
+						porA -> OUTCLR.reg = PORT_PA07; // activate top row of keys
+ 9b6:	4c47      	ldr	r4, [pc, #284]	; (ad4 <main+0x1d8>)
+ 9b8:	3380      	adds	r3, #128	; 0x80
+ 9ba:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA05 | PORT_PA06; // disable bottom three rows
+ 9bc:	3b10      	subs	r3, #16
+ 9be:	61a3      	str	r3, [r4, #24]
+						verify_press(); // checks if the pressed button is still pressed in current row and for how long
+ 9c0:	4b4b      	ldr	r3, [pc, #300]	; (af0 <main+0x1f4>)
+ 9c2:	4699      	mov	r9, r3
+ 9c4:	4798      	blx	r3
+						seg_display(input[0]); // display most significant digit
+ 9c6:	4b46      	ldr	r3, [pc, #280]	; (ae0 <main+0x1e4>)
+ 9c8:	4698      	mov	r8, r3
+ 9ca:	6818      	ldr	r0, [r3, #0]
+ 9cc:	4f45      	ldr	r7, [pc, #276]	; (ae4 <main+0x1e8>)
+ 9ce:	47b8      	blx	r7
+						wait(5); // add delay to lower frequency of display refreshes
+ 9d0:	2005      	movs	r0, #5
+ 9d2:	4e45      	ldr	r6, [pc, #276]	; (ae8 <main+0x1ec>)
+ 9d4:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA06;
+ 9d6:	2340      	movs	r3, #64	; 0x40
+ 9d8:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA05 | PORT_PA07;
+ 9da:	3370      	adds	r3, #112	; 0x70
+ 9dc:	61a3      	str	r3, [r4, #24]
+						verify_press();
+ 9de:	47c8      	blx	r9
+						seg_display(input[1]);
+ 9e0:	4643      	mov	r3, r8
+ 9e2:	6858      	ldr	r0, [r3, #4]
+ 9e4:	47b8      	blx	r7
+						wait(5);
+ 9e6:	2005      	movs	r0, #5
+ 9e8:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA05;
+ 9ea:	2320      	movs	r3, #32
+ 9ec:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA07 | PORT_PA06;
+ 9ee:	33b0      	adds	r3, #176	; 0xb0
+ 9f0:	61a3      	str	r3, [r4, #24]
+						verify_press();
+ 9f2:	47c8      	blx	r9
+						seg_display(input[2]);
+ 9f4:	4643      	mov	r3, r8
+ 9f6:	6898      	ldr	r0, [r3, #8]
+ 9f8:	47b8      	blx	r7
+						wait(5);
+ 9fa:	2005      	movs	r0, #5
+ 9fc:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA04;
+ 9fe:	2310      	movs	r3, #16
+ a00:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA07 | PORT_PA05 | PORT_PA06;
+ a02:	33d0      	adds	r3, #208	; 0xd0
+ a04:	61a3      	str	r3, [r4, #24]
+						verify_press();
+ a06:	47c8      	blx	r9
+						seg_display(input[3]);// display least significant digit
+ a08:	4643      	mov	r3, r8
+ a0a:	68d8      	ldr	r0, [r3, #12]
+ a0c:	47b8      	blx	r7
+						wait(5);
+ a0e:	2005      	movs	r0, #5
+ a10:	47b0      	blx	r6
+
+						if (b == 4){ // if b equals 4 then that means no buttons are pressed in any row and go back to idle state
+ a12:	465b      	mov	r3, fp
+ a14:	681b      	ldr	r3, [r3, #0]
+ a16:	2b04      	cmp	r3, #4
+ a18:	d18d      	bne.n	936 <main+0x3a>
+							state = 0;
+ a1a:	2300      	movs	r3, #0
+ a1c:	4a2e      	ldr	r2, [pc, #184]	; (ad8 <main+0x1dc>)
+ a1e:	6013      	str	r3, [r2, #0]
+							dcount = 0;
+ a20:	4a34      	ldr	r2, [pc, #208]	; (af4 <main+0x1f8>)
+ a22:	6013      	str	r3, [r2, #0]
+							b = 0;
+ a24:	4a31      	ldr	r2, [pc, #196]	; (aec <main+0x1f0>)
+ a26:	6013      	str	r3, [r2, #0]
+ a28:	e785      	b.n	936 <main+0x3a>
+						}
+
+						break;
+
+			case 2:		// processing state
+						get_input(); // gets input from key press
+ a2a:	4b33      	ldr	r3, [pc, #204]	; (af8 <main+0x1fc>)
+ a2c:	4798      	blx	r3
+						state = 3;
+ a2e:	2303      	movs	r3, #3
+ a30:	4652      	mov	r2, sl
+ a32:	6013      	str	r3, [r2, #0]
+						break;
+ a34:	e77f      	b.n	936 <main+0x3a>
+
+			case 3:		// counting state to check if button is released
+						b = 0; // zero out checking variable b (keeps track of how many rows do not have anything pressed)
+ a36:	4b2d      	ldr	r3, [pc, #180]	; (aec <main+0x1f0>)
+ a38:	469b      	mov	fp, r3
+ a3a:	2300      	movs	r3, #0
+ a3c:	465a      	mov	r2, fp
+ a3e:	6013      	str	r3, [r2, #0]
+						// the displays are constantly refreshed so the numbers display while nothing is pressed
+						porA -> OUTCLR.reg = PORT_PA07; // activate top row of keys
+ a40:	4c24      	ldr	r4, [pc, #144]	; (ad4 <main+0x1d8>)
+ a42:	3380      	adds	r3, #128	; 0x80
+ a44:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA05 | PORT_PA06; // disable bottom three rows
+ a46:	3b10      	subs	r3, #16
+ a48:	61a3      	str	r3, [r4, #24]
+						verify_release(); // checks if the pressed button is still pressed and for how long
+ a4a:	4b2c      	ldr	r3, [pc, #176]	; (afc <main+0x200>)
+ a4c:	4699      	mov	r9, r3
+ a4e:	4798      	blx	r3
+						seg_display(input[0]); // display most significant digit
+ a50:	4b23      	ldr	r3, [pc, #140]	; (ae0 <main+0x1e4>)
+ a52:	4698      	mov	r8, r3
+ a54:	6818      	ldr	r0, [r3, #0]
+ a56:	4f23      	ldr	r7, [pc, #140]	; (ae4 <main+0x1e8>)
+ a58:	47b8      	blx	r7
+						wait(5); // add delay to lower frequency of display refreshes
+ a5a:	2005      	movs	r0, #5
+ a5c:	4e22      	ldr	r6, [pc, #136]	; (ae8 <main+0x1ec>)
+ a5e:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA06;
+ a60:	2340      	movs	r3, #64	; 0x40
+ a62:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA05 | PORT_PA07;
+ a64:	3370      	adds	r3, #112	; 0x70
+ a66:	61a3      	str	r3, [r4, #24]
+						verify_release();
+ a68:	47c8      	blx	r9
+						seg_display(input[1]);
+ a6a:	4643      	mov	r3, r8
+ a6c:	6858      	ldr	r0, [r3, #4]
+ a6e:	47b8      	blx	r7
+						wait(5);
+ a70:	2005      	movs	r0, #5
+ a72:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA05;
+ a74:	2320      	movs	r3, #32
+ a76:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA04 | PORT_PA07 | PORT_PA06;
+ a78:	33b0      	adds	r3, #176	; 0xb0
+ a7a:	61a3      	str	r3, [r4, #24]
+						verify_release();
+ a7c:	47c8      	blx	r9
+						seg_display(input[2]);
+ a7e:	4643      	mov	r3, r8
+ a80:	6898      	ldr	r0, [r3, #8]
+ a82:	47b8      	blx	r7
+						wait(5);
+ a84:	2005      	movs	r0, #5
+ a86:	47b0      	blx	r6
+
+						porA -> OUTCLR.reg = PORT_PA04;
+ a88:	2310      	movs	r3, #16
+ a8a:	6163      	str	r3, [r4, #20]
+						porA -> OUTSET.reg = PORT_PA07 | PORT_PA05 | PORT_PA06;
+ a8c:	33d0      	adds	r3, #208	; 0xd0
+ a8e:	61a3      	str	r3, [r4, #24]
+						verify_release();
+ a90:	47c8      	blx	r9
+						seg_display(input[3]);// display least significant digit
+ a92:	4643      	mov	r3, r8
+ a94:	68d8      	ldr	r0, [r3, #12]
+ a96:	47b8      	blx	r7
+						wait(5);
+ a98:	2005      	movs	r0, #5
+ a9a:	47b0      	blx	r6
+
+						dcount++;
+ a9c:	4a15      	ldr	r2, [pc, #84]	; (af4 <main+0x1f8>)
+ a9e:	6813      	ldr	r3, [r2, #0]
+ aa0:	3301      	adds	r3, #1
+ aa2:	6013      	str	r3, [r2, #0]
+
+						if (b == 4){ // if b = 4 then no buttons were pressed in any of the 4 rows and increment release counter
+ aa4:	465b      	mov	r3, fp
+ aa6:	681b      	ldr	r3, [r3, #0]
+ aa8:	2b04      	cmp	r3, #4
+ aaa:	d103      	bne.n	ab4 <main+0x1b8>
+							dcount++;
+ aac:	6813      	ldr	r3, [r2, #0]
+ aae:	3301      	adds	r3, #1
+ ab0:	6013      	str	r3, [r2, #0]
+ ab2:	e002      	b.n	aba <main+0x1be>
+						}
+						else{
+							dcount = 0; // if be is anything but 4 then something is still pressed and reset count
+ ab4:	2200      	movs	r2, #0
+ ab6:	4b0f      	ldr	r3, [pc, #60]	; (af4 <main+0x1f8>)
+ ab8:	601a      	str	r2, [r3, #0]
+						}
+
+						if (dcount > 10){ // counter for how long a button must be released before going back to idle state
+ aba:	4b0e      	ldr	r3, [pc, #56]	; (af4 <main+0x1f8>)
+ abc:	681b      	ldr	r3, [r3, #0]
+ abe:	2b0a      	cmp	r3, #10
+ ac0:	dc00      	bgt.n	ac4 <main+0x1c8>
+ ac2:	e738      	b.n	936 <main+0x3a>
+							state = 0;
+ ac4:	2300      	movs	r3, #0
+ ac6:	4a04      	ldr	r2, [pc, #16]	; (ad8 <main+0x1dc>)
+ ac8:	6013      	str	r3, [r2, #0]
+							dcount = 0;
+ aca:	4a0a      	ldr	r2, [pc, #40]	; (af4 <main+0x1f8>)
+ acc:	6013      	str	r3, [r2, #0]
+ ace:	e732      	b.n	936 <main+0x3a>
+ ad0:	00000889 	.word	0x00000889
+ ad4:	41004400 	.word	0x41004400
+ ad8:	2000001c 	.word	0x2000001c
+ adc:	00000335 	.word	0x00000335
+ ae0:	20000024 	.word	0x20000024
+ ae4:	000003cd 	.word	0x000003cd
+ ae8:	00000471 	.word	0x00000471
+ aec:	20000038 	.word	0x20000038
+ af0:	00000259 	.word	0x00000259
+ af4:	20000034 	.word	0x20000034
+ af8:	000004fd 	.word	0x000004fd
+ afc:	000001b1 	.word	0x000001b1
+
+00000b00 <__libc_init_array>:
+ b00:	4b0e      	ldr	r3, [pc, #56]	; (b3c <__libc_init_array+0x3c>)
+ b02:	b570      	push	{r4, r5, r6, lr}
+ b04:	2500      	movs	r5, #0
+ b06:	001e      	movs	r6, r3
+ b08:	4c0d      	ldr	r4, [pc, #52]	; (b40 <__libc_init_array+0x40>)
+ b0a:	1ae4      	subs	r4, r4, r3
+ b0c:	10a4      	asrs	r4, r4, #2
+ b0e:	42a5      	cmp	r5, r4
+ b10:	d004      	beq.n	b1c <__libc_init_array+0x1c>
+ b12:	00ab      	lsls	r3, r5, #2
+ b14:	58f3      	ldr	r3, [r6, r3]
+ b16:	4798      	blx	r3
+ b18:	3501      	adds	r5, #1
+ b1a:	e7f8      	b.n	b0e <__libc_init_array+0xe>
+ b1c:	f000 f816 	bl	b4c <_init>
+ b20:	4b08      	ldr	r3, [pc, #32]	; (b44 <__libc_init_array+0x44>)
+ b22:	2500      	movs	r5, #0
+ b24:	001e      	movs	r6, r3
+ b26:	4c08      	ldr	r4, [pc, #32]	; (b48 <__libc_init_array+0x48>)
+ b28:	1ae4      	subs	r4, r4, r3
+ b2a:	10a4      	asrs	r4, r4, #2
+ b2c:	42a5      	cmp	r5, r4
+ b2e:	d004      	beq.n	b3a <__libc_init_array+0x3a>
+ b30:	00ab      	lsls	r3, r5, #2
+ b32:	58f3      	ldr	r3, [r6, r3]
+ b34:	4798      	blx	r3
+ b36:	3501      	adds	r5, #1
+ b38:	e7f8      	b.n	b2c <__libc_init_array+0x2c>
+ b3a:	bd70      	pop	{r4, r5, r6, pc}
+ b3c:	00000b58 	.word	0x00000b58
+ b40:	00000b58 	.word	0x00000b58
+ b44:	00000b58 	.word	0x00000b58
+ b48:	00000b5c 	.word	0x00000b5c
+
+00000b4c <_init>:
+ b4c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ b4e:	46c0      	nop			; (mov r8, r8)
+ b50:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ b52:	bc08      	pop	{r3}
+ b54:	469e      	mov	lr, r3
+ b56:	4770      	bx	lr
+
+00000b58 <__init_array_start>:
+ b58:	000000cd 	.word	0x000000cd
+
+00000b5c <_fini>:
+ b5c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ b5e:	46c0      	nop			; (mov r8, r8)
+ b60:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ b62:	bc08      	pop	{r3}
+ b64:	469e      	mov	lr, r3
+ b66:	4770      	bx	lr
+
+00000b68 <__fini_array_start>:
+ b68:	000000a5 	.word	0x000000a5

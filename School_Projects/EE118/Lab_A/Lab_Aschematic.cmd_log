@@ -1,0 +1,5 @@
+xst -intstyle ise -ifn "C:/Users/Justin/Lab_A/Lab_Aschematic.xst" -ofn "C:/Users/Justin/Lab_A/Lab_Aschematic.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -i -p xc7a100t-csg324-2L Lab_Aschematic.ngc Lab_Aschematic.ngd  
+map -intstyle ise -p xc7a100t-csg324-2L -w -logic_opt off -ol high -t 1 -xt 0 -register_duplication off -r 4 -mt off -ir off -pr off -lc off -power off -o Lab_Aschematic_map.ncd Lab_Aschematic.ngd Lab_Aschematic.pcf 
+par -w -intstyle ise -ol high -mt off Lab_Aschematic_map.ncd Lab_Aschematic.ncd Lab_Aschematic.pcf 
+trce -intstyle ise -v 3 -s 2L -n 3 -fastpaths -xml Lab_Aschematic.twx Lab_Aschematic.ncd -o Lab_Aschematic.twr Lab_Aschematic.pcf 

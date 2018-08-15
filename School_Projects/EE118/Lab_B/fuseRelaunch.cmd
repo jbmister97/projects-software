@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "unisims_ver" -lib "unimacro_ver" -lib "xilinxcorelib_ver" -lib "secureip" -o "C:/Users/Justin/Lab_B/Lab_B_Part2_Schematic_Lab_B_Part2_Schematic_sch_tb_isim_beh.exe" -prj "C:/Users/Justin/Lab_B/Lab_B_Part2_Schematic_Lab_B_Part2_Schematic_sch_tb_beh.prj" "work.Lab_B_Part2_Schematic_Lab_B_Part2_Schematic_sch_tb" "work.glbl" 

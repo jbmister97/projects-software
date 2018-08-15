@@ -1,0 +1,11 @@
+select figure at 376 1340 8 -branches -sn=1
+select figure at 363 1331 8 -branches -sn=1
+select figure at 418 1410 8 -branches -sn=1
+undo
+undo
+undo
+redo
+redo
+undo
+undo
+select figure at 118 1158 8 -branches -sn=1

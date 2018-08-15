@@ -1,0 +1,29 @@
+Command line:
+   Lab_Aschematic_Lab_Aschematic_sch_tb_isim_beh.exe
+     -simmode  gui
+     -simrunnum  0
+     -socket  55608
+
+Mon Sep 21 23:31:47 2015
+
+
+ Elaboration Time: 0.03125 sec
+
+ Current Memory Usage: 361.824 Meg
+
+ Total Signals          : 32
+ Total Nets             : 20
+ Total Signal Drivers   : 12
+ Total Blocks           : 7
+ Total Primitive Blocks : 5
+ Total Processes        : 14
+ Total Traceable Variables  : 21
+ Total Scalar Nets and Variables : 103
+Total Line Count : 23
+
+ Total Simulation Time: 0.109375 sec
+
+ Current Memory Usage: 361.824 Meg
+
+Mon Sep 21 23:43:50 2015
+

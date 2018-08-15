@@ -1,0 +1,94 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+////////////////////////////////////////////////////////////////////////////////
+//   ____  ____ 
+//  /   /\/   / 
+// /___/  \  /    Vendor: Xilinx 
+// \   \   \/     Version : 14.7
+//  \   \         Application : sch2hdl
+//  /   /         Filename : Lab_B_Part2_Schematic.vf
+// /___/   /\     Timestamp : 09/28/2015 22:29:54
+// \   \  /  \ 
+//  \___\/\___\ 
+//
+//Command: sch2hdl -intstyle ise -family artix7 -verilog C:/Users/Justin/Lab_B/Lab_B_Part2_Schematic.vf -w C:/Users/Justin/Lab_B/Lab_B_Part2_Schematic.sch
+//Design Name: Lab_B_Part2_Schematic
+//Device: artix7
+//Purpose:
+//    This verilog netlist is translated from an ECS schematic.It can be 
+//    synthesized and simulated, but it should not be modified. 
+//
+`timescale 1ns / 1ps
+
+module Lab_B_Part2_Schematic(A, 
+                             B, 
+                             C, 
+                             D, 
+                             M, 
+                             T, 
+                             U);
+
+    input A;
+    input B;
+    input C;
+    input D;
+   output M;
+   output T;
+   output U;
+   
+   wire XLXN_3;
+   wire XLXN_4;
+   wire XLXN_55;
+   wire XLXN_56;
+   wire XLXN_57;
+   wire XLXN_61;
+   wire XLXN_62;
+   wire XLXN_64;
+   wire XLXN_66;
+   wire XLXN_67;
+   wire XLXN_68;
+   
+   NAND3  XLXI_5 (.I0(D), 
+                 .I1(C), 
+                 .I2(A), 
+                 .O(XLXN_67));
+   NAND3  XLXI_6 (.I0(C), 
+                 .I1(D), 
+                 .I2(B), 
+                 .O(XLXN_66));
+   NAND2  XLXI_12 (.I0(XLXN_61), 
+                  .I1(XLXN_62), 
+                  .O(XLXN_3));
+   NAND2  XLXI_13 (.I0(C), 
+                  .I1(D), 
+                  .O(XLXN_4));
+   NAND2  XLXI_14 (.I0(XLXN_4), 
+                  .I1(XLXN_3), 
+                  .O(U));
+   INV  XLXI_24 (.I(A), 
+                .O(XLXN_62));
+   INV  XLXI_25 (.I(B), 
+                .O(XLXN_61));
+   INV  XLXI_26 (.I(C), 
+                .O(XLXN_64));
+   NAND3  XLXI_31 (.I0(XLXN_57), 
+                  .I1(XLXN_56), 
+                  .I2(XLXN_55), 
+                  .O(T));
+   NAND2  XLXI_32 (.I0(XLXN_64), 
+                  .I1(B), 
+                  .O(XLXN_55));
+   NAND2  XLXI_33 (.I0(C), 
+                  .I1(XLXN_62), 
+                  .O(XLXN_56));
+   NAND2  XLXI_34 (.I0(XLXN_61), 
+                  .I1(A), 
+                  .O(XLXN_57));
+   NAND2  XLXI_35 (.I0(B), 
+                  .I1(A), 
+                  .O(XLXN_68));
+   NAND3  XLXI_37 (.I0(XLXN_66), 
+                  .I1(XLXN_67), 
+                  .I2(XLXN_68), 
+                  .O(M));
+endmodule

@@ -1,0 +1,1124 @@
+;;============================================================================
+;; File: software.psm
+;; This is the PicoBlaze example game program for EE178 Lab #8.
+;; No guarantee this is bug-free but it is a playable example.
+;;============================================================================
+
+;;============================================================================
+;; Ports and related constants.
+;;============================================================================
+
+CONSTANT stax            , 00 ; port for 8-bit start-x
+CONSTANT stay            , 01 ; port for 8-bit start-y
+CONSTANT endx            , 02 ; port for 8-bit end-x
+CONSTANT endy            , 03 ; port for 8-bit end-y
+CONSTANT busy            , 04 ; port for 8-bit busy
+CONSTANT beam            , 05 ; port for 8-bit beam
+CONSTANT mode            , 06 ; port for 8-bit mode
+CONSTANT prng            , 07 ; port for 8-bit prng
+CONSTANT leds_lo         , 08 ; port for 8-bit led data out
+CONSTANT leds_hi         , 09 ; port for 8-bit led data out
+CONSTANT qssd_lo         , 0a ; port for 8-bit qssd data out
+CONSTANT qssd_hi         , 0b ; port for 8-bit qssd data out
+CONSTANT qssd_dp         , 0c ; port for 8-bit qssd data out
+CONSTANT switches_lo     , 0d ; port for 8-bit switch input
+CONSTANT switches_hi     , 0e ; port for 8-bit switch input
+CONSTANT buttons         , 0f ; port for 8-bit button input
+
+CONSTANT busy_go         , 01 ; go command and busy status
+
+CONSTANT beam_hi         , 0f ; beam high intensity
+CONSTANT beam_md         , 07 ; beam med intensity
+CONSTANT beam_lo         , 03 ; beam low intensity
+
+CONSTANT mode_hld        , 00 ; mode hold framebuffer
+CONSTANT mode_clr        , 01 ; mode clear framebuffer
+CONSTANT mode_lin        , 02 ; mode linear decay
+CONSTANT mode_exp        , 03 ; mode exponential decay
+
+CONSTANT buttons_ct      , 10 ; center
+CONSTANT buttons_up      , 08 ; up
+CONSTANT buttons_dn      , 04 ; down
+CONSTANT buttons_lf      , 02 ; left
+CONSTANT buttons_rt      , 01 ; right
+
+;;============================================================================
+;; Game state declarations.
+;;============================================================================
+
+NAMEREG s0, gs_major
+CONSTANT gs_major_attrone, 00 ; state assignment
+CONSTANT gs_major_attrtwo, 01 ; state assignment
+CONSTANT gs_major_playing, 02 ; state assignment
+CONSTANT gs_major_gameend, 03 ; state assignment
+
+NAMEREG s1, gs_minor
+CONSTANT gs_minor_begins , 00 ; counter initialize
+CONSTANT gs_minor_twosec , 78 ; frame count about 2.0 secs
+CONSTANT gs_minor_onesec , 3c ; frame count about 1.0 secs
+CONSTANT gs_minor_getrdy , 1e ; frame count about 0.5 secs
+
+NAMEREG s2, gs_ballx
+NAMEREG s3, gs_bally
+NAMEREG s4, gs_balldx
+NAMEREG s5, gs_balldy
+CONSTANT gs_ball_xdim    , 08 ; it's this plus 1
+CONSTANT gs_ball_ydim    , 08 ; it's this plus 1
+CONSTANT gs_ball_speed   , 03 ; pixels per frame
+
+NAMEREG s6, gs_padlx
+CONSTANT gs_padly        , d0 ; paddle y location
+CONSTANT gs_padl_xdim    , 20 ; it's this plus 1
+CONSTANT gs_padl_ydim    , 08 ; it's this plus 1
+CONSTANT gs_padl_speed   , 04 ; pixels per frame
+
+;;============================================================================
+;; Global variables.
+;;============================================================================
+
+NAMEREG s7, resvd1            ; reserved
+NAMEREG s8, resvd2            ; reserved
+
+NAMEREG s9, xpos              ; for drawing routines
+NAMEREG sA, ypos              ; for drawing routines
+NAMEREG sB, alien_projx
+NAMEREG sC, alien_projy
+NAMEREG sD, btnsamp           ; button sample
+NAMEREG sE, deltax
+NAMEREG sF, scratch           ; for scratch
+
+CONSTANT col1		, 19 ; decimal 25
+CONSTANT col2		, 28 ; decimal 40
+CONSTANT col3		, 32 ; decimal 50
+CONSTANT col4		, 41 ; decimal 65
+CONSTANT col5		, 4b ; decimal 75
+CONSTANT col6		, 5a ; decimal 90
+CONSTANT col7		, 64 ; decimal 100
+CONSTANT col8		, 73 ; decimal 115
+CONSTANT col9		, 7d ; decimal 125
+CONSTANT col10		, 8c ; decimal 140
+CONSTANT col11		, 96 ; decimal 150
+CONSTANT col12		, a5 ; decimal 165
+CONSTANT col13		, af ; decimal 175
+CONSTANT col14		, be ; decimal 190
+
+CONSTANT ramshiftx	, 01 ; address for +1 or -1 for delta x
+CONSTANT ramshifty	, 02 ; address for delta y
+CONSTANT ramwait	, 03 ; address for wait for aliens
+CONSTANT ramprojx1	, 04 ; address for x1 for alien projectile
+CONSTANT ramprojx2	, 05 ; address for x2 for alien projectile
+CONSTANT ramprojy1	, 06 ; address for y1 for alien projectile
+CONSTANT ramprojy2	, 07 ; address for y2 for alien projectile
+CONSTANT ramrandom	, 08 ; address for random number
+CONSTANT ramenable	, 09 ; address for enable projectile value
+CONSTANT ramdownen	, 0a ; address for enable left side down shift
+CONSTANT ramprojwait, 0b ; address for wait for projectiles
+CONSTANT ramprojdeltawait, 0c ; address for proj delta y wait
+CONSTANT ramdeltaxen, 0d ; address for enable delta x
+CONSTANT ramdeltaycount	, 0e ; address for delta y count
+
+CONSTANT row1		, 19 ; decimal 25
+CONSTANT waittime	, 06
+CONSTANT projwaittime	, 01
+CONSTANT bottom_border1	, fa
+CONSTANT bottom_border2	, fb
+CONSTANT deltaxen	, 01 
+
+;;============================================================================
+;; Other stuff.
+;;============================================================================
+
+CONSTANT minusone        , ff ; minusone
+CONSTANT minusmax        , 80 ; minus 128
+CONSTANT plusmax         , 7f ; plus 127
+CONSTANT zero            , 00 ; zero
+CONSTANT one             , 01 ; one
+
+;;============================================================================
+;; Boot.
+;; This performs one-time initialization of the hardware and the game state.
+;;============================================================================
+
+         boot: CALL hw_init                        ; initial hardware setup
+               CALL gs_init                        ; set initial game state
+		LOAD scratch, row1
+		STORE scratch, ramshifty
+		LOAD scratch, zero
+		STORE scratch, ramwait							; zero out wait
+		LOAD scratch, zero
+		STORE scratch, 06			; zero out alien_projy
+		LOAD scratch, 00
+		STORE scratch, ramdownen
+		STORE scratch, ramprojwait
+		STORE scratch, ramprojdeltawait
+		STORE scratch, ramdeltaycount
+		LOAD scratch, 01
+		STORE scratch, ramdeltaxen
+               ENABLE INTERRUPT                    ; enable vblnk interrupt
+
+;;============================================================================
+;; Main.
+;; This is an empty loop, does nothing, waiting for interrupts to occur.
+;;============================================================================
+
+         main: JUMP main                           ; empty loop, does nothing
+
+;;============================================================================
+;; Interrupt.
+;; This is the main game logic.  At each interrupt, the procedure is to read
+;; the user input, calculate the next game state, and then draw the game
+;; state on the display.
+;;============================================================================
+
+          isr: CALL user_input                     ; get the user input
+               CALL calc_next_gs                   ; calculate next state
+               CALL draw_gs                        ; draw the state
+               RETURNI ENABLE                      ; return with enable
+
+;;============================================================================
+;; Subroutine: hw_init
+;; This puts the hardware into a known, initial state.  This includes a wait
+;; to make sure the line drawing harware is idle (a wait loop which is also
+;; called from other routines, as a subroutine).
+;;============================================================================
+
+      hw_init: LOAD scratch, zero                  ; going to use lot of zero
+               OUTPUT scratch, leds_lo             ; turn off lo leds
+               OUTPUT scratch, leds_hi             ; turn off hi leds
+               OUTPUT scratch, qssd_lo             ; zeroize qssd lo
+               OUTPUT scratch, qssd_hi             ; zeroize qssd hi
+               OUTPUT scratch, qssd_dp             ; turn off qssd dots
+               LOAD scratch, mode_exp              ; load desired mode
+               OUTPUT scratch, mode                ; program the framebuffer
+               LOAD scratch, beam_hi               ; load desired beam
+               OUTPUT scratch, beam                ; program the framebuffer
+ hw_init_wait: INPUT scratch, busy                 ; get framebuffer busy
+               COMPARE scratch, busy_go            ; check framebuffer busy
+               JUMP Z, hw_init_wait                ; back to wait if busy
+               RETURN                              ; return
+
+;;============================================================================
+;; Subroutine: gs_init
+;; This puts the game into a known, initial state.  I've assigned all of the
+;; game state to a known value -- although some of these assignments do not
+;; really matter based on design of the game state machine.
+;;============================================================================
+
+      gs_init: LOAD gs_major, gs_major_attrone     ; start in attract mdoe
+               LOAD gs_minor, gs_minor_begins      ; start with counter zero
+               LOAD gs_ballx, zero                 ; doesn't really matter
+               LOAD gs_bally, zero                 ; doesn't really matter
+               LOAD gs_padlx, zero                 ; doesn't really matter
+               LOAD gs_balldx, zero                ; doesn't really matter
+               LOAD gs_balldy, zero                ; doesn't really matter
+               RETURN                              ; return
+
+;;============================================================================
+;; Subroutine: user_input
+;; This samples the user inputs required for this game (which happens to be
+;; only the buttons, but this could is extended to the switches as well).
+;; This subroutine calls an example of how to use the RAM scratchpad, by
+;; implementing access of a 256x8 array using switches, button, and qssd.
+;; The call to the ram_example routine (and ram_example routine itself)
+;; can be entirely removed as it is not needed in this game.
+;;============================================================================
+
+   user_input: INPUT btnsamp, buttons              ; sample button hardware
+               RETURN                              ; return      
+
+;;============================================================================
+;; Subroutine: calc_next_gs
+;; This logic calculates the next state of the game, given the sampled user
+;; inputs and the current state of the game.
+;;============================================================================
+
+ calc_next_gs: COMPARE gs_major, gs_major_attrone  ; are we in attrone?
+               JUMP Z, calc_attrone                ; do ns calc for attrone
+               COMPARE gs_major, gs_major_attrtwo  ; are we in attrtwo?
+               JUMP Z, calc_attrtwo                ; do ns calc for attrtwo
+               COMPARE gs_major, gs_major_playing  ; are we in playing?
+               JUMP Z, calc_playing                ; do ns calc for playing
+               COMPARE gs_major, gs_major_gameend  ; are we in gameend?
+               JUMP Z, calc_gameend                ; do ns calc for gameend
+               RETURN                              ; return
+
+ calc_attrone: TEST btnsamp, buttons_ct
+               JUMP NZ, goto_playing
+               COMPARE gs_minor, gs_minor_twosec
+               JUMP Z, goto_attrtwo
+               ADD gs_minor, one
+               RETURN
+
+ calc_attrtwo: TEST btnsamp, buttons_ct
+               JUMP NZ, goto_playing
+               COMPARE gs_minor, gs_minor_onesec
+               JUMP Z, goto_attrone
+               ADD gs_minor, one
+               RETURN
+
+ calc_playing: 
+               RETURN
+
+
+ calc_gameend: COMPARE gs_minor, gs_minor_onesec
+               JUMP Z, goto_attrone
+               ADD gs_minor, one
+               RETURN
+
+ goto_attrone: LOAD gs_major, gs_major_attrone
+               LOAD gs_minor, gs_minor_begins
+               RETURN
+
+ goto_attrtwo: LOAD gs_major, gs_major_attrtwo
+               LOAD gs_minor, gs_minor_begins
+               RETURN
+
+ goto_playing: LOAD gs_major, gs_major_playing
+               LOAD gs_minor, gs_minor_begins
+               ; get a seed for initial ballx
+               INPUT gs_ballx, prng
+               ; start ball somewhere in the
+               ; horizontal center of screen
+               SRX gs_ballx
+               SRX gs_ballx
+               ADD gs_ballx, plusmax
+               ; get a seed for initial bally
+               INPUT gs_bally, prng
+               ; start ball somewhere in the
+               ; vertical center of screen
+               SRX gs_bally
+               SRX gs_bally
+               ADD gs_bally, plusmax
+               ; start paddle at the horizontal
+               ; center of the screen
+               LOAD gs_padlx, gs_padl_xdim
+               SRX gs_padlx
+               XOR gs_padlx, minusone
+               ADD gs_padlx, one
+               ADD gs_padlx, minusmax
+               ; initial direction for ballx
+               ; desire to start at +1 or -1
+    balldxsta: INPUT gs_balldx, prng
+               TEST gs_balldx, minusmax
+               JUMP Z, balldxpos
+    balldxneg: LOAD gs_balldx, minusone
+               JUMP balldysta
+    balldxpos: LOAD gs_balldx, one
+               ; initial direction for bally
+               ; desire to start at +1 or -1
+    balldysta: INPUT gs_balldy, prng
+               TEST gs_balldy, minusmax
+               JUMP Z, balldypos
+    balldyneg: LOAD gs_balldy, minusone
+               JUMP ballddone
+    balldypos: LOAD gs_balldy, one
+    ballddone: RETURN
+
+ goto_gameend: LOAD gs_major, gs_major_gameend
+               LOAD gs_minor, gs_minor_begins
+               RETURN
+
+;;============================================================================
+;; Subroutine: draw_gs
+;; This uses the current game state as input, and draws it on the display.
+;; This subroutine calls an example of how to output debug or diagnostic info
+;; using the leds.  The call to the draw_gs_debug routine (and draw_gs_debug
+;; routine itself) can be entirely remove as it is required to play the game.
+;;============================================================================
+
+      draw_gs: CALL draw_gs_debug                  ; for debug info display
+               COMPARE gs_major, gs_major_attrone  ; are we in attrone?
+               JUMP Z, draw_attrone                ; do drawing for attrone
+               COMPARE gs_major, gs_major_attrtwo  ; are we in attrtwo?
+               JUMP Z, draw_attrtwo                ; do drawing for attrtwo
+               COMPARE gs_major, gs_major_playing  ; are we in playing?
+               JUMP Z, draw_aliens                ; do drawing for playing
+               COMPARE gs_major, gs_major_gameend  ; are we in gameend?
+               JUMP Z, draw_gameend                ; do drawing for gameend
+               RETURN                              ; return
+
+draw_gs_debug: OUTPUT gs_major, leds_hi            ; debug display on leds
+               OUTPUT gs_minor, leds_lo            ; debug display on leds
+               RETURN                              ; return
+
+ draw_aliens:  	LOAD xpos, col1 ; Row #1-1
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+               	CALL moveto
+               	LOAD xpos, col2
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 01
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col3 ; Row #1-2
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+               	CALL moveto
+               	LOAD xpos, col4
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 02
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col5 ; Row #1-3
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+               	CALL moveto
+               	LOAD xpos, col6
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 03
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col7 ; Row #1-4
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+               	CALL moveto
+               	LOAD xpos, col8
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 04
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col9 ; Row #1-5
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+               	CALL moveto
+               	LOAD xpos, col10
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 05
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col11 ; Row #1-6
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+               	CALL moveto
+               	LOAD xpos, col12
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 06
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col13 ; Row #1-7
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+               	CALL moveto
+               	LOAD xpos, col14
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 07
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col1 ; Row #2-1
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+               	CALL moveto
+               	LOAD xpos, col2
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 08
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col3 ; Row #2-2
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+               	CALL moveto
+               	LOAD xpos, col4
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 09
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col5 ; Row #2-3
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+               	CALL moveto
+               	LOAD xpos, col6
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 0a
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col7 ; Row #2-4
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+               	CALL moveto
+               	LOAD xpos, col8
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 0b
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col9 ; Row #2-5
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+               	CALL moveto
+               	LOAD xpos, col10
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 0c
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col11 ; Row #2-6
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+               	CALL moveto
+               	LOAD xpos, col12
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 0d
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col13 ; Row #2-7
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+               	CALL moveto
+               	LOAD xpos, col14
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 0a
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 0e
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col1 ; Row #3-1
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+               	CALL moveto
+               	LOAD xpos, col2
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 0f
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col3 ; Row #3-2
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+               	CALL moveto
+               	LOAD xpos, col4
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 10
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col5 ; Row #3-3
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+               	CALL moveto
+               	LOAD xpos, col6
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 11
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col7 ; Row #3-4
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+               	CALL moveto
+               	LOAD xpos, col8
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 12
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col9 ; Row #3-5
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+               	CALL moveto
+               	LOAD xpos, col10
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 13
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col11 ; Row #3-6
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+               	CALL moveto
+               	LOAD xpos, col12
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 14
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+				LOAD xpos, col13 ; Row #3-7
+				ADD xpos, deltax
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+               	CALL moveto
+               	LOAD xpos, col14
+				ADD xpos, deltax
+				STORE xpos, ramprojx1
+				FETCH ypos, ramshifty
+				ADD ypos, 14
+				STORE ypos, ramprojy1
+               	CALL drawto
+				FETCH scratch, ramrandom
+				COMPARE scratch, 15
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+		
+				COMPARE ypos, cd
+				CALL Z, gameover
+
+				FETCH scratch, ramwait 			; wait counter for updating aliens
+				COMPARE scratch, waittime
+				CALL Z, shift
+				FETCH scratch, ramwait
+				ADD scratch, 01				; add to wait counter
+				STORE scratch, ramwait
+				
+				FETCH scratch, ramprojwait
+				COMPARE scratch, 78
+				CALL Z, shoot_again
+				FETCH scratch, ramprojwait
+				ADD scratch, 01
+				STORE scratch, ramprojwait
+				
+				FETCH scratch, ramprojdeltawait
+				ADD scratch, one
+				STORE scratch, ramprojdeltawait
+				
+               	RETURN
+				
+proj_prepare:	FETCH scratch, ramprojx2
+				COMPARE scratch, zero
+				CALL NZ, proj_check1
+				LOAD scratch, zero
+				STORE scratch, ramprojdeltawait
+				RETURN
+				
+shoot_again:	INPUT scratch, prng
+				SR0 scratch
+				SR0 scratch
+				SR0 scratch
+				SR0 scratch
+				STORE scratch, ramrandom
+				LOAD scratch, 00
+				STORE scratch, ramprojwait
+				RETURN
+
+proj_check1:	FETCH scratch, ramprojy2
+				COMPARE scratch, bottom_border1
+				CALL NZ, proj_check2			;update alien projectile
+				RETURN
+				
+proj_check2:	FETCH scratch, ramprojy2
+				COMPARE scratch, bottom_border2
+				CALL NZ, alien_shoot
+				RETURN
+
+gameover:		LOAD gs_major, gs_major_gameend
+              	LOAD gs_minor, gs_minor_begins
+				LOAD scratch, row1 ; reset row coordinates
+				STORE scratch, 02
+				RETURN
+				
+aproj_start1:	FETCH scratch, ramprojx1
+				SUB scratch, 07
+				STORE scratch, ramprojx2
+				FETCH scratch, ramprojy1
+				STORE scratch, ramprojy2
+				LOAD scratch, 00
+				STORE scratch, ramrandom
+				RETURN
+				
+alien_shoot:	FETCH alien_projx, ramprojx2
+				FETCH alien_projy, ramprojy2
+				CALL aprojmoveto
+				FETCH alien_projx, ramprojx2
+				FETCH alien_projy, ramprojy2
+				ADD alien_projy, 05
+				CALL aprojdrawto
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, projdeltay
+				RETURN
+				
+projdeltay:		FETCH scratch, ramprojy2
+				ADD scratch, 02
+				STORE scratch, ramprojy2
+				RETURN
+
+shift:			FETCH scratch, ramdownen
+				COMPARE scratch, one
+				CALL Z, left_down
+				COMPARE xpos, e6
+				CALL Z, shift_down
+				COMPARE xpos, col14
+				CALL Z, alien_right
+				COMPARE xpos, e6
+				CALL Z, alien_left
+				CALL shift_sideways
+				LOAD scratch, 00
+				STORE scratch, ramwait
+				RETURN
+
+left_down:		COMPARE xpos, col14
+				CALL Z, shift_down
+				RETURN
+
+shift_sideways: FETCH scratch, ramshiftx
+				OUTPUT scratch, qssd_hi
+				ADD deltax, scratch
+				RETURN
+
+shift_down:		FETCH scratch, ramshifty
+				ADD scratch, 01
+				STORE scratch, ramshifty
+				FETCH scratch, ramdeltaycount
+				ADD scratch, 01
+				STORE scratch, ramdeltaycount
+				OUTPUT scratch, qssd_lo
+				COMPARE scratch, 0a
+				CALL Z, deltax_en
+				CALL NZ, deltax_dis
+				LOAD scratch, 01
+				STORE scratch, ramdownen
+				RETURN
+			
+deltax_en:		LOAD scratch, one
+				STORE scratch, ramdeltaxen
+				RETURN
+
+deltax_dis:		LOAD scratch, zero
+				STORE scratch, ramdeltaxen
+				RETURN
+			
+neutral_deltax:	LOAD scratch, 00
+				STORE scratch, ramshiftx
+				RETURN
+
+alien_right: 	FETCH scratch, ramdeltaxen
+				COMPARE scratch, deltaxen
+				CALL NZ, neutral_deltax
+				CALL Z, pos_deltax
+				RETURN
+
+pos_deltax:		LOAD scratch, 01
+				STORE scratch, ramshiftx
+				LOAD scratch, zero
+				STORE scratch, ramdeltaycount
+				RETURN
+
+alien_left: 	FETCH scratch, ramdeltaxen
+				COMPARE scratch, deltaxen
+				CALL NZ, neutral_deltax
+				CALL Z, neg_deltax
+				RETURN
+
+neg_deltax:		LOAD scratch, FF
+				STORE scratch, ramshiftx
+				LOAD scratch, zero
+				STORE scratch, ramdeltaycount
+				RETURN
+
+ draw_attrone: LOAD xpos, 28 ; draw letter b
+               LOAD ypos, 50
+               CALL moveto
+               LOAD xpos, 28
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 48
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 48
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 28
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58 ; draw letter o
+               LOAD ypos, 70
+               CALL moveto
+               LOAD xpos, 58
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 88 ; draw letter n
+               LOAD ypos, 90
+               CALL moveto
+               LOAD xpos, 88
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, b8 ; draw letter g
+               LOAD ypos, b0
+               CALL moveto
+               LOAD xpos, d8
+               LOAD ypos, b0
+               CALL drawto
+               LOAD xpos, d8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, b8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, b8
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, d8
+               LOAD ypos, 90
+               CALL drawto
+               RETURN
+
+ draw_attrtwo: LOAD xpos, 78 ; draw letter e
+               LOAD ypos, 90
+               CALL moveto
+               LOAD xpos, 58
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 58
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, a8 ; draw letter c
+               LOAD ypos, 70
+               CALL moveto
+               LOAD xpos, 88
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 88
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 90
+               CALL drawto
+               RETURN
+
+ draw_playing: LOAD xpos, gs_ballx ; draw ball
+               LOAD ypos, gs_bally
+               CALL moveto
+               LOAD xpos, gs_ballx
+               LOAD ypos, gs_bally
+               ADD ypos, gs_ball_ydim
+               CALL drawto
+               LOAD xpos, gs_ballx
+               LOAD ypos, gs_bally
+               ADD xpos, gs_ball_xdim
+               ADD ypos, gs_ball_ydim
+               CALL drawto
+               LOAD xpos, gs_ballx
+               LOAD ypos, gs_bally
+               ADD xpos, gs_ball_xdim
+               CALL drawto
+               LOAD xpos, gs_ballx
+               LOAD ypos, gs_bally
+               CALL drawto
+               LOAD xpos, gs_padlx ; draw padl
+               LOAD ypos, gs_padly
+               CALL moveto
+               LOAD xpos, gs_padlx
+               LOAD ypos, gs_padly
+               ADD ypos, gs_padl_ydim
+               CALL drawto
+               LOAD xpos, gs_padlx
+               LOAD ypos, gs_padly
+               ADD xpos, gs_padl_xdim
+               ADD ypos, gs_padl_ydim
+               CALL drawto
+               LOAD xpos, gs_padlx
+               LOAD ypos, gs_padly
+               ADD xpos, gs_padl_xdim
+               CALL drawto
+               LOAD xpos, gs_padlx
+               LOAD ypos, gs_padly
+               CALL drawto
+               RETURN
+
+ draw_gameend: LOAD xpos, 48 ; draw letter d
+               LOAD ypos, 50
+               CALL moveto
+               LOAD xpos, 48
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 28
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 28
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 48
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58 ; draw letter o
+               LOAD ypos, 70
+               CALL moveto
+               LOAD xpos, 58
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 88 ; draw letter n
+               LOAD ypos, 90
+               CALL moveto
+               LOAD xpos, 88
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, d8 ; draw letter e
+               LOAD ypos, 90
+               CALL moveto
+               LOAD xpos, b8
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, b8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, d8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, b8
+               LOAD ypos, 90
+               CALL drawto
+               RETURN
+
+;;============================================================================
+;; Subroutine: moveto and drawto
+;; The moveto routine uses the global variables xpos and ypos, and the drawto
+;; routine uses these global variables as well as the endpoint coordinates in
+;; the display controller.  Moveto simply copies xpos and ypos into endpoint
+;; coordinates in the display controller, it does not draw anything.  The
+;; drawto routine copies endpoint coordinates to startpoint coordinates (does
+;; not matter if the endpoint was from an actual draw, or simply an update
+;; by moveto) and then copies xpos and ypos into endpoint coordinates, then
+;; starts a linedraw.
+;;============================================================================
+  aprojmoveto: OUTPUT alien_projx, endx                   ; copy global to hardware
+               OUTPUT alien_projy, endy                   ; copy global to hardware
+               RETURN   
+
+  aprojdrawto: INPUT scratch, endx                 ; read hardware
+               OUTPUT scratch, stax                ; write hardware
+               OUTPUT alien_projx, endx                   ; copy global to hardware
+               INPUT scratch, endy                 ; read hardware
+               OUTPUT scratch, stay                ; write hardware
+               OUTPUT alien_projy, endy                   ; copy global to hardware
+               LOAD scratch, busy_go               ; prepare the command
+               OUTPUT scratch, busy                ; send the command
+               CALL hw_init_wait                   ; wait line draw done
+               RETURN    
+			   
+       moveto: OUTPUT xpos, endx                   ; copy global to hardware
+               OUTPUT ypos, endy                   ; copy global to hardware
+               RETURN                              ; return
+
+       drawto: INPUT scratch, endx                 ; read hardware
+               OUTPUT scratch, stax                ; write hardware
+               OUTPUT xpos, endx                   ; copy global to hardware
+               INPUT scratch, endy                 ; read hardware
+               OUTPUT scratch, stay                ; write hardware
+               OUTPUT ypos, endy                   ; copy global to hardware
+               LOAD scratch, busy_go               ; prepare the command
+               OUTPUT scratch, busy                ; send the command
+               CALL hw_init_wait                   ; wait line draw done
+               RETURN                              ; return
+
+;;============================================================================
+;; Interrupt - Vector.
+;;============================================================================
+
+               ADDRESS 7FF                         ; must be located here
+   isr_vector: JUMP isr                            ; always jump to isr
+
+;;============================================================================
+;;
+;;============================================================================

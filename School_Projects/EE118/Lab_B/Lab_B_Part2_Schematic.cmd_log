@@ -1,0 +1,5 @@
+xst -intstyle ise -ifn "C:/Users/Justin/Lab_B/Lab_B_Part2_Schematic.xst" -ofn "C:/Users/Justin/Lab_B/Lab_B_Part2_Schematic.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -i -p xc7a100t-csg324-2L Lab_B_Part2_Schematic.ngc Lab_B_Part2_Schematic.ngd  
+map -intstyle ise -p xc7a100t-csg324-2L -w -logic_opt off -ol high -t 1 -xt 0 -register_duplication off -r 4 -mt off -ir off -pr off -lc off -power off -o Lab_B_Part2_Schematic_map.ncd Lab_B_Part2_Schematic.ngd Lab_B_Part2_Schematic.pcf 
+par -w -intstyle ise -ol high -mt off Lab_B_Part2_Schematic_map.ncd Lab_B_Part2_Schematic.ncd Lab_B_Part2_Schematic.pcf 
+trce -intstyle ise -v 3 -s 2L -n 3 -fastpaths -xml Lab_B_Part2_Schematic.twx Lab_B_Part2_Schematic.ncd -o Lab_B_Part2_Schematic.twr Lab_B_Part2_Schematic.pcf 

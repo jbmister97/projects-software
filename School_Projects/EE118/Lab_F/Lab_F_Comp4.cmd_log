@@ -1,0 +1,14 @@
+xst -intstyle ise -ifn "C:/Users/Justin/Lab_F/Lab_F_Comp4.xst" -ofn "C:/Users/Justin/Lab_F/Lab_F_Comp4.syr" 
+xst -intstyle ise -ifn "C:/Users/Justin/Lab_F/Lab_F_Comp4.xst" -ofn "C:/Users/Justin/Lab_F/Lab_F_Comp4.syr" 
+xst -intstyle ise -ifn "C:/Users/Justin/Lab_F/Lab_F_Comp4.xst" -ofn "C:/Users/Justin/Lab_F/Lab_F_Comp4.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -i -p xc7a100t-csg324-3 Lab_F_Comp4.ngc Lab_F_Comp4.ngd  
+map -intstyle ise -p xc7a100t-csg324-3 -w -logic_opt off -ol high -t 1 -xt 0 -register_duplication off -r 4 -mt off -ir off -pr off -lc off -power off -o Lab_F_Comp4_map.ncd Lab_F_Comp4.ngd Lab_F_Comp4.pcf 
+par -w -intstyle ise -ol high -mt off Lab_F_Comp4_map.ncd Lab_F_Comp4.ncd Lab_F_Comp4.pcf 
+trce -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml Lab_F_Comp4.twx Lab_F_Comp4.ncd -o Lab_F_Comp4.twr Lab_F_Comp4.pcf 
+xst -intstyle ise -ifn "C:/Users/Justin/Lab_F/Lab_F_Comp4.xst" -ofn "C:/Users/Justin/Lab_F/Lab_F_Comp4.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc Lab_F_Comp4.ucf -p xc7a100t-csg324-3 Lab_F_Comp4.ngc Lab_F_Comp4.ngd  
+map -intstyle ise -p xc7a100t-csg324-3 -w -logic_opt off -ol high -t 1 -xt 0 -register_duplication off -r 4 -mt off -ir off -pr off -lc off -power off -o Lab_F_Comp4_map.ncd Lab_F_Comp4.ngd Lab_F_Comp4.pcf 
+par -w -intstyle ise -ol high -mt off Lab_F_Comp4_map.ncd Lab_F_Comp4.ncd Lab_F_Comp4.pcf 
+trce -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml Lab_F_Comp4.twx Lab_F_Comp4.ncd -o Lab_F_Comp4.twr Lab_F_Comp4.pcf -ucf Lab_F_Comp4.ucf 
+bitgen -intstyle ise -f Lab_F_Comp4.ut Lab_F_Comp4.ncd 
+bitgen -intstyle ise -f Lab_F_Comp4.ut Lab_F_Comp4.ncd 

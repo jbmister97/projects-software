@@ -1,0 +1,1597 @@
+                ;;============================================================================
+                ;; File: software.psm
+                ;; This is the PicoBlaze example game program for EE178 Lab #8.
+                ;; No guarantee this is bug-free but it is a playable example.
+                ;;============================================================================
+                ;;============================================================================
+                ;; Ports and related constants.
+                ;;============================================================================
+                CONSTANT stax, 00                  ; port for 8-bit start-x
+                CONSTANT stay, 01                  ; port for 8-bit start-y
+                CONSTANT endx, 02                  ; port for 8-bit end-x
+                CONSTANT endy, 03                  ; port for 8-bit end-y
+                CONSTANT busy, 04                  ; port for 8-bit busy
+                CONSTANT beam, 05                  ; port for 8-bit beam
+                CONSTANT mode, 06                  ; port for 8-bit mode
+                CONSTANT prng, 07                  ; port for 8-bit prng
+                CONSTANT leds_lo, 08               ; port for 8-bit led data out
+                CONSTANT leds_hi, 09               ; port for 8-bit led data out
+                CONSTANT qssd_lo, 0A               ; port for 8-bit qssd data out
+                CONSTANT qssd_hi, 0B               ; port for 8-bit qssd data out
+                CONSTANT qssd_dp, 0C               ; port for 8-bit qssd data out
+                CONSTANT switches_lo, 0D           ; port for 8-bit switch input
+                CONSTANT switches_hi, 0E           ; port for 8-bit switch input
+                CONSTANT buttons, 0F               ; port for 8-bit button input
+                CONSTANT busy_go, 01               ; go command and busy status
+                CONSTANT beam_hi, 0F               ; beam high intensity
+                CONSTANT beam_md, 07               ; beam med intensity
+                CONSTANT beam_lo, 03               ; beam low intensity
+                CONSTANT mode_hld, 00              ; mode hold framebuffer
+                CONSTANT mode_clr, 01              ; mode clear framebuffer
+                CONSTANT mode_lin, 02              ; mode linear decay
+                CONSTANT mode_exp, 03              ; mode exponential decay
+                CONSTANT buttons_ct, 10            ; center
+                CONSTANT buttons_up, 08            ; up
+                CONSTANT buttons_dn, 04            ; down
+                CONSTANT buttons_lf, 02            ; left
+                CONSTANT buttons_rt, 01            ; right
+                ;;============================================================================
+                ;; Game state declarations.
+                ;;============================================================================
+                NAMEREG s0, gs_major
+                CONSTANT gs_major_attrone, 00      ; state assignment
+                CONSTANT gs_major_attrtwo, 01      ; state assignment
+                CONSTANT gs_major_playing, 02      ; state assignment
+                CONSTANT gs_major_gameend, 03      ; state assignment
+                NAMEREG s1, gs_minor
+                CONSTANT gs_minor_begins, 00       ; counter initialize
+                CONSTANT gs_minor_twosec, 78       ; frame count about 2.0 secs
+                CONSTANT gs_minor_onesec, 3C       ; frame count about 1.0 secs
+                CONSTANT gs_minor_getrdy, 1E       ; frame count about 0.5 secs
+                ;; For bullet  ~~~~~MODIFY FOR USER BULLET~~~~~
+                NAMEREG s2, gs_ballx
+                NAMEREG s3, gs_bally
+                CONSTANT gs_ball_ydim, 03          ; it's this plus 1   ;; Length of bullet (used later in draw_gs)
+                CONSTANT gs_ball_speed, 02         ; pixels per frame (speed of bullet)
+                ;; For spaceship  ~~~~~MODIFY FOR SPACE SHIP~~~~~
+                NAMEREG s6, gs_padlx
+                CONSTANT gs_padly, E5              ; spaceship y-location (unsigned)
+                CONSTANT gs_padl_xdim, 16          ; added to x-location of spaceship to draw width of spaceship
+                CONSTANT gs_padl_ydim, 08          ; added to y-location of spaceship to draw height of spaceship
+                CONSTANT gs_padl_xdim1, 06         ; for the spaceship gun
+                CONSTANT gs_padl_xdimmid, 0A       ; for center of spaceship
+                CONSTANT gs_padl_xdim2, 10         ; for the spaceship gun
+                CONSTANT gs_padl_ydim1, 03         ; for the spaceship gun
+                CONSTANT gs_padlyfull, 20          ; distance between bottom and top of spaceship
+                CONSTANT gs_padl_speed, 04         ; pixels per frame (speed of space ship)
+                ;;============================================================================
+                ;; Global variables.
+                ;;============================================================================
+                NAMEREG s7, loopvar                ; reserved
+                NAMEREG s8, loopvar2               ; reserved
+                NAMEREG s9, xpos                   ; for drawing routines
+                NAMEREG sA, ypos                   ; for drawing routines
+                NAMEREG sB, alien_projx
+                NAMEREG sC, alien_projy
+                NAMEREG sD, btnsamp                ; button sample
+                NAMEREG sE, deltax
+                NAMEREG sF, scratch                ; for scratch
+                ;; FOR ALIEN COLUMNS
+                CONSTANT col1, 15'd                ; decimal 15
+                CONSTANT col2, 35'd                ; decimal 35
+                CONSTANT col3, 55'd                ; decimal 55
+                CONSTANT col4, 75'd                ; decimal 115
+                CONSTANT col5, 95'd                ; decimal 145
+                CONSTANT col6, 115'd               ; decimal 90
+                CONSTANT col7, 135'd               ; decimal 100
+                CONSTANT col8, 155'd               ; decimal 115
+                CONSTANT col9, 7D                  ; decimal 125
+                CONSTANT col10, 8C                 ; decimal 140
+                CONSTANT col11, 96                 ; decimal 150
+                CONSTANT col12, A5                 ; decimal 165
+                CONSTANT col13, AF                 ; decimal 175
+                CONSTANT col14, BE                 ; decimal 190
+                ;; FOR ALIENS
+                CONSTANT ramshiftx, 01             ; address for +1 or -1 for delta x
+                CONSTANT ramalieny, 02             ; address for alien y coordinate
+                CONSTANT ramwait, 03               ; address for wait for aliens
+                CONSTANT ramprojx1, 04             ; address for x1 for alien projectile
+                CONSTANT ramprojx2, 05             ; address for x2 for alien projectile
+                CONSTANT ramprojy1, 06             ; address for y1 for alien projectile
+                CONSTANT ramprojy2, 07             ; address for y2 for alien projectile
+                CONSTANT ramrandom, 08             ; address for random number
+                CONSTANT ramenable, 09             ; address for enable projectile value
+                CONSTANT ramdownen, 0A             ; address for enable left side down shift
+                CONSTANT ramprojwait, 0B           ; address for wait for projectiles
+                CONSTANT ramprojdeltawait, 0C      ; address for proj delta y wait
+                CONSTANT ramdeltaxen, 0D           ; address for enable delta x
+                CONSTANT ramdeltaycount, 0E        ; address for delta y count
+                CONSTANT ramalienx, 0F             ; address for alien x coordinate
+                CONSTANT ramalienlives1, 10        ; address for first row of alien lives
+                CONSTANT ramhitboxx, 11            ; address for hitbox x coordinate
+                CONSTANT ramhitboxy, 12            ; address for hitbox y coordinate
+                CONSTANT ramshipbullettip, 13      ; address for tip of ship's bullet
+                CONSTANT ramalienhit, 14           ; address for if an alien is hit
+                CONSTANT ramshiphitboxx, 15        ; address for ship hitbox start x coordinate
+                CONSTANT ramshiphitboxy, 16        ; address for ship hitbox start y coordinate
+                CONSTANT ramshiplife, 17           ; address for ship's life
+                CONSTANT ramalienlives2, 18        ; address for second row of alien lives
+                CONSTANT ramalienlives3, 19        ; address for third row of alien lives
+                CONSTANT row1, 19                  ; decimal 25
+                CONSTANT deltarow2, 0F
+                CONSTANT waittime, 04
+                CONSTANT projwaittime, 01
+                CONSTANT bottom_border1, FA
+                CONSTANT bottom_border2, FB
+                CONSTANT bottom_border3, FC
+                CONSTANT bottom_border4, FD
+                CONSTANT bottom_border5, FE
+                CONSTANT bottom_border6, FF
+                CONSTANT deltaxen, 01
+                ;;============================================================================
+                ;; Other stuff.
+                ;;============================================================================
+                CONSTANT minusone, FF              ; minusone
+                CONSTANT minusmax, 80              ; minus 128
+                CONSTANT plusmax, 7F               ; plus 127
+                CONSTANT zero, 00                  ; zero
+                CONSTANT one, 01                   ; one
+                ;;============================================================================
+                ;; Boot.
+                ;; This performs one-time initialization of the hardware and the game state.
+                ;;============================================================================
+          boot: CALL hw_init                       ; initial hardware setup
+                CALL gs_init                       ; set initial game state
+                CALL reset_bullet
+                LOAD scratch, row1
+                STORE scratch, ramalieny
+                LOAD scratch, zero
+                LOAD scratch, zero
+                LOAD scratch, 00
+                STORE scratch, ramdownen
+                STORE scratch, ramprojwait
+                STORE scratch, ramprojdeltawait
+                STORE scratch, ramdeltaycount
+                STORE scratch, ramwait             ; zero out wait
+                STORE scratch, ramprojy1           ; zero out alien_projy
+                LOAD scratch, 01
+                STORE scratch, ramdeltaxen
+                STORE scratch, ramshiplife
+                LOAD scratch, FF
+                STORE scratch, ramalienlives1      ; initialize alien lives
+                STORE scratch, ramalienlives2
+                STORE scratch, ramalienlives3
+                ENABLE INTERRUPT                   ; enable vblnk interrupt
+                ;;============================================================================
+                ;; Main.
+                ;; This is an empty loop, does nothing, waiting for interrupts to occur.
+                ;;============================================================================
+          main: JUMP main                          ; empty loop, does nothing
+                ;;============================================================================
+                ;; Interrupt.
+                ;; This is the main game logic.  At each interrupt, the procedure is to read
+                ;; the user input, calculate the next game state, and then draw the game
+                ;; state on the display.
+                ;;============================================================================
+           isr: CALL user_input                    ; get the user input
+                CALL calc_next_gs                  ; calculate next state
+                CALL draw_gs                       ; draw the state
+                RETURNI ENABLE                     ; return with enable
+                ;;============================================================================
+                ;; Subroutine: hw_init
+                ;; This puts the hardware into a known, initial state.  This includes a wait
+                ;; to make sure the line drawing harware is idle (a wait loop which is also
+                ;; called from other routines, as a subroutine).
+                ;;============================================================================
+       hw_init: LOAD scratch, zero                 ; going to use lot of zero
+                OUTPUT scratch, leds_lo            ; turn off lo leds
+                OUTPUT scratch, leds_hi            ; turn off hi leds
+                OUTPUT scratch, qssd_lo            ; zeroize qssd lo
+                OUTPUT scratch, qssd_hi            ; zeroize qssd hi
+                OUTPUT scratch, qssd_dp            ; turn off qssd dots
+                LOAD scratch, mode_exp             ; load desired mode
+                OUTPUT scratch, mode               ; program the framebuffer
+                LOAD scratch, beam_hi              ; load desired beam
+                OUTPUT scratch, beam               ; program the framebuffer
+  hw_init_wait: INPUT scratch, busy                ; get framebuffer busy
+                COMPARE scratch, busy_go           ; check framebuffer busy
+                JUMP Z, hw_init_wait               ; back to wait if busy
+                RETURN                             ; return
+                ;;============================================================================
+                ;; Subroutine: gs_init
+                ;; This puts the game into a known, initial state.  I've assigned all of the
+                ;; game state to a known value -- although some of these assignments do not
+                ;; really matter based on design of the game state machine.
+                ;;============================================================================
+       gs_init: LOAD gs_major, gs_major_attrone    ; start in attract mdoe
+                LOAD gs_minor, gs_minor_begins     ; start with counter zero
+                RETURN                             ; return
+                ;;============================================================================
+                ;; Subroutine: user_input
+                ;; This samples the user inputs required for this game (which happens to be
+                ;; only the buttons, but this could is extended to the switches as well).
+                ;; This subroutine calls an example of how to use the RAM scratchpad, by
+                ;; implementing access of a 256x8 array using switches, button, and qssd.
+                ;; The call to the ram_example routine (and ram_example routine itself)
+                ;; can be entirely removed as it is not needed in this game.
+                ;;============================================================================
+    user_input: INPUT btnsamp, buttons             ; sample button hardware
+                RETURN                             ; return
+                ;;============================================================================
+                ;; Subroutine: calc_next_gs
+                ;; This logic calculates the next state of the game, given the sampled user
+                ;; inputs and the current state of the game.
+                ;;============================================================================
+  calc_next_gs: COMPARE gs_major, gs_major_attrone ; are we in attrone?
+                JUMP Z, calc_attrone               ; do ns calc for attrone
+                COMPARE gs_major, gs_major_attrtwo ; are we in attrtwo?
+                JUMP Z, calc_attrtwo               ; do ns calc for attrtwo
+                COMPARE gs_major, gs_major_playing ; are we in playing?
+                JUMP Z, calc_playing               ; do ns calc for playing
+                COMPARE gs_major, gs_major_gameend ; are we in gameend?
+                JUMP Z, calc_gameend               ; do ns calc for gameend
+                RETURN                             ; return
+  calc_attrone: TEST btnsamp, buttons_ct
+                JUMP NZ, goto_playing
+                COMPARE gs_minor, gs_minor_twosec
+                JUMP Z, goto_attrtwo
+                ADD gs_minor, one
+                RETURN 
+  calc_attrtwo: TEST btnsamp, buttons_ct
+                JUMP NZ, goto_playing
+                COMPARE gs_minor, gs_minor_onesec
+                JUMP Z, goto_attrone
+                ADD gs_minor, one
+                RETURN 
+                ;; Gameplay state
+  calc_playing: 
+                CALL upd_padl                      ;; Unconditional CALL to subroutine upd_padl
+                CALL upd_ball
+                LOAD loopvar, gs_ball_speed
+                ;; Do something similar to above except for when alien's bullet hits spaceship or when all aliens are gone
+  keep_playing: 
+                RETURN 
+      upd_padl: ;; This section loads a zero to the scratch register and checks for button press by
+                ;; modifying the scratch register respectfully to the input
+                ;; Then, a COMPARE instruction is used to jump to the section which defines what happens during button press
+                ;; LIGHT AND RIGHT BUTTONS TO MOVE LEFT AND RIGHT
+                LOAD scratch, zero                 ;; LOAD zero to scratch register
+                TEST btnsamp, buttons_lf           ;; If left button is pressed/held
+                SUBCY scratch, zero                ;; Subtracts zero from scratch register if left button is pressed/held (scratch = -1)
+                TEST btnsamp, buttons_rt           ;; If right button is pressed/held
+                ADDCY scratch, zero                ;; Adds zero from to scratch register if right button is pressed/held (scratch = 1)
+                COMPARE scratch, minusone          ;; If scratch = -1, execute next instruction
+                CALL Z, upd_padl_lt                ;; Calls subroutine upd_padl_lt if zero flag state is specified (section that defines what happens when left button is pressed/held)
+                COMPARE scratch, one               ;; If scratch = 1, execute next instruction
+                CALL Z, upd_padl_rt                ;; Calls subroutine upd_padl_rt if zero flag state is specified (section that defines what happens when right button is pressed/held)
+                ;; DOWN BUTTON TO RESTART GAME
+                COMPARE btnsamp, buttons_dn        ;; If down button is pressesd/held
+                ;CALL reset_bullet
+                JUMP Z, goto_gameend               ;; Go to goto_gameend state (end game/restart)
+                RETURN 
+                ;; Subroutine that defines what happens when the left button is pressed/held
+   upd_padl_lt: SUB gs_padlx, gs_padl_speed        ;; Subtracts 4 pixels per frame
+                RETURN NC                          ;; If button is no longer pressed/held, return
+                LOAD gs_padlx, zero
+                RETURN 
+                ;; Subroutine that defines what happens when the right button is pressed/held
+   upd_padl_rt: ADD gs_padlx, gs_padl_speed        ;; Adds 4 pixels per frame
+                LOAD scratch, gs_padlx             ;; Load contents of gs_padlx to scratch related
+                ;; Checks that the spaceship doesn't move past the screen
+                ADD scratch, gs_padl_xdim
+                RETURN NC
+                LOAD gs_padlx, minusone
+                SUB gs_padlx, gs_padl_xdim
+                RETURN 
+                ;; ~~~~~DESCRIBES THE BEHAVIOR OF THE BULLET (SPACESHIP)~~~~~
+      upd_ball: 
+                ;LOAD loopvar, gs_ball_speed
+                LOAD scratch, gs_padly
+                SUB scratch, gs_padl_ydim1
+                COMPARE gs_bally, scratch
+                JUMP C, fired
+                LOAD scratch, zero                 ;; LOAD zero to scratch register
+                TEST btnsamp, buttons_lf           ;; If left button is pressed/held
+                SUBCY scratch, zero                ;; Subtracts zero from scratch register if left button is pressed/held (scratch = -1)
+                TEST btnsamp, buttons_rt           ;; If right button is pressed/held
+                ADDCY scratch, zero                ;; Adds zero from to scratch register if right button is pressed/held (scratch = 1)
+                COMPARE scratch, minusone          ;; If scratch = -1, execute next instruction
+                CALL Z, move_bullet                ;; Calls subroutine move_left if zero flag state is specified (section that defines what happens when left button is pressed/held)
+                COMPARE scratch, one               ;; If scratch = 1, execute next instruction
+                CALL Z, move_bullet                ;; Calls subroutine move_right if zero flag state is specified (section that defines what happens when right button
+                TEST btnsamp, buttons_up
+                RETURN Z
+                SUBCY gs_bally, 00
+                JUMP keep_playing
+         fired: SUB loopvar, one
+                JUMP C, upd_padl
+                SUB gs_bally, 05
+                COMPARE gs_bally, zero
+                JUMP Z, reset_bullet
+                RETURN 
+      skip_hit: JUMP fired
+                ;; Moves bullet with respect to the x-position of the spaceship
+   move_bullet: ;;COMPARE btnsamp, button_up
+                ;;JUMP Z, bullet_release
+                LOAD scratch, gs_padlx
+                ADD scratch, gs_padl_xdimmid
+                LOAD gs_ballx, scratch
+                RETURN 
+  reset_bullet: ;; Resets bullet back to middle of spaceship
+                LOAD gs_ballx, gs_padlx
+                ADD gs_ballx, gs_padl_xdimmid
+                LOAD scratch, gs_padly
+                SUB scratch, gs_padlyfull
+                LOAD gs_bally, gs_padly
+                RETURN 
+  calc_gameend: COMPARE gs_minor, gs_minor_onesec
+                JUMP Z, goto_attrone
+                ADD gs_minor, one
+                RETURN 
+  goto_attrone: LOAD gs_major, gs_major_attrone
+                LOAD gs_minor, gs_minor_begins
+                RETURN 
+  goto_attrtwo: LOAD gs_major, gs_major_attrtwo
+                LOAD gs_minor, gs_minor_begins
+                RETURN 
+  goto_playing: LOAD gs_major, gs_major_playing
+                LOAD gs_minor, gs_minor_begins
+     ballddone: RETURN 
+  goto_gameend: LOAD gs_major, gs_major_gameend
+                LOAD gs_minor, gs_minor_begins
+                RETURN 
+                ;;============================================================================
+                ;; Subroutine: draw_gs
+                ;; This uses the current game state as input, and draws it on the display.
+                ;; This subroutine calls an example of how to output debug or diagnostic info
+                ;; using the leds.  The call to the draw_gs_debug routine (and draw_gs_debug
+                ;; routine itself) can be entirely remove as it is required to play the game.
+                ;;============================================================================
+       draw_gs: CALL draw_gs_debug                 ; for debug info display
+                COMPARE gs_major, gs_major_attrone ; are we in attrone?
+                JUMP Z, draw_attrone               ; do drawing for attrone
+                COMPARE gs_major, gs_major_attrtwo ; are we in attrtwo?
+                JUMP Z, draw_attrtwo               ; do drawing for attrtwo
+                COMPARE gs_major, gs_major_playing ; are we in playing?
+                JUMP Z, draw_playing               ; do drawing for playing
+                COMPARE gs_major, gs_major_gameend ; are we in gameend?
+                JUMP Z, draw_gameend               ; do drawing for gameend
+                RETURN                             ; return
+ draw_gs_debug: OUTPUT gs_major, leds_hi           ; debug display on leds
+                OUTPUT gs_minor, leds_lo           ; debug display on leds
+                RETURN                             ; return
+  draw_playing: CALL draw_ship
+                CALL draw_aliens
+     draw_ship: LOAD xpos, gs_ballx                ; draw bullet
+                LOAD ypos, gs_bally
+                CALL moveto
+                LOAD xpos, gs_ballx
+                LOAD ypos, gs_bally
+                ADD ypos, gs_ball_ydim
+                STORE ypos, ramshipbullettip
+                CALL drawto
+                ;; Draws spaceship
+                LOAD xpos, gs_padlx                ; draw padl
+                ADD xpos, 0A
+                LOAD ypos, gs_padly                ;; go do padl pos on screen
+                CALL moveto
+                SUB ypos, 2'd
+                CALL drawto
+                SUB xpos, 1'd
+                CALL drawto
+                ADD ypos, 1'd
+                CALL drawto
+                SUB xpos, 2'd
+                CALL drawto
+                SUB ypos, 3'd
+                CALL drawto
+                SUB xpos, 4'd
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                ADD ypos, 4'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                SUB ypos, 1'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                SUB ypos, 6'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                ADD ypos, 4'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                SUB ypos, 2'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                SUB ypos, 7'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                SUB ypos, 3'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                ADD ypos, 3'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                ADD ypos, 7'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                ADD ypos, 2'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                SUB ypos, 4'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                ADD ypos, 6'd
+                CALL drawto
+                ADD xpos, 1'd
+                STORE xpos, ramshiphitboxx         ; hitbox 1 start coordinates near back of ship
+                STORE ypos, ramshiphitboxy
+                CALL drawto
+                ADD ypos, 1'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                SUB ypos, 3'd
+                CALL drawto
+                ADD xpos, 1'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                SUB xpos, 4'd
+                CALL drawto
+                ADD ypos, 3'd
+                CALL drawto
+                SUB xpos, 2'd
+                CALL drawto
+                SUB ypos, 1'd
+                CALL drawto
+                SUB xpos, 1'd
+                CALL drawto
+                ADD ypos, 2'd
+                CALL drawto
+                SUB xpos, 1'd
+                CALL drawto
+                CALL checkshiphity                 ; check if ship got hit
+                RETURN 
+   draw_aliens: 
+                ;====================================================================================================================
+                ;=====================  START   A L I E N    C O D E     =======================================
+     alien_1_1: FETCH scratch, ramalienlives1      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 01
+                JUMP Z, alien_1_2
+                LOAD xpos, col1
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien1
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 01
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_1_2: FETCH scratch, ramalienlives1      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 02
+                JUMP Z, alien_1_3
+                LOAD xpos, col2
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien2
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 02
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_1_3: FETCH scratch, ramalienlives1      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 04
+                JUMP Z, alien_1_4
+                LOAD xpos, col3
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien3
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 03
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_1_4: FETCH scratch, ramalienlives1      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 08
+                JUMP Z, alien_1_5
+                LOAD xpos, col4
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien4
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 04
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_1_5: FETCH scratch, ramalienlives1      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 10
+                JUMP Z, alien_1_6
+                LOAD xpos, col5
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien5
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 05
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_1_6: FETCH scratch, ramalienlives1      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 20
+                JUMP Z, alien_1_7
+                LOAD xpos, col6
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien6
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 06
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_1_7: FETCH scratch, ramalienlives1      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 40
+                JUMP Z, alien_1_8
+                LOAD xpos, col7
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien7
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 07
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_1_8: 
+                LOAD xpos, col8
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                FETCH scratch, ramalienlives1      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 80
+                JUMP Z, end_row_1
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien8
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 08
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     end_row_1: COMPARE ypos, CD                   ; check if first row of aliens reached bottom
+                CALL Z, gameover
+     alien_2_1: FETCH scratch, ramalienlives2      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 01
+                JUMP Z, alien_2_2
+                LOAD xpos, col1
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                ADD ypos, 15'd
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien9
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 09
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_2_2: FETCH scratch, ramalienlives2      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 02
+                JUMP Z, alien_2_3
+                LOAD xpos, col2
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                ADD ypos, 15'd
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien10
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 0A
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_2_3: FETCH scratch, ramalienlives2      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 04
+                JUMP Z, alien_2_4
+                LOAD xpos, col3
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                ADD ypos, 15'd
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien11
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 0B
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_2_4: FETCH scratch, ramalienlives2      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 08
+                JUMP Z, alien_2_5
+                LOAD xpos, col4
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                ADD ypos, 15'd
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien12
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 0C
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_2_5: FETCH scratch, ramalienlives2      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 10
+                JUMP Z, alien_2_6
+                LOAD xpos, col5
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                ADD ypos, 15'd
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien13
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 0D
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_2_6: FETCH scratch, ramalienlives2      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 20
+                JUMP Z, alien_2_7
+                LOAD xpos, col6
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                ADD ypos, 15'd
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien14
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 0E
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_2_7: FETCH scratch, ramalienlives2      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 40
+                JUMP Z, alien_2_8
+                LOAD xpos, col7
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                ADD ypos, 15'd
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien15
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 0F
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     alien_2_8: 
+                LOAD xpos, col8
+                ADD xpos, deltax
+                FETCH ypos, ramalieny
+                ADD ypos, 15'd
+                FETCH scratch, ramalienlives2      ; check if alien is alive (if it is not then skip it)
+                TEST scratch, 80
+                JUMP Z, end_row_2
+                CALL moveto
+                ADD xpos, 10'd
+                STORE xpos, ramhitboxx             ; store hitbox x value
+                STORE ypos, ramhitboxy             ; store hitbox y value
+                STORE xpos, ramprojx1              ; projectile x coordinate
+                STORE ypos, ramprojy1              ; projectile y coordinate
+                CALL drawto
+                SUB ypos, 5'd
+                CALL drawto
+                SUB xpos, 10'd
+                CALL drawto
+                ADD ypos, 5'd
+                CALL drawto
+                CALL check_hity                    ; check if alien was hit
+                FETCH scratch, ramalienhit         ; remove from alien lives if hit
+                COMPARE scratch, 01
+                CALL Z, remove_alien16
+                FETCH scratch, ramrandom           ; check if chosen to shoot projetile, if chosen then start projectile
+                COMPARE scratch, 10
+                CALL Z, aproj_start1
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, proj_prepare
+     end_row_2: COMPARE ypos, CD                   ; check if second row of aliens reached bottom
+                CALL Z, gameover
+                ;====================================================================================================================
+                ;==========================================  END   A L I E N    C O D E     =========================================
+ end_of_aliens: FETCH scratch, ramwait             ; wait counter for updating aliens
+                COMPARE scratch, waittime
+                CALL Z, shift
+                FETCH scratch, ramwait
+                ADD scratch, 01                    ; add to wait counter
+                STORE scratch, ramwait
+                FETCH scratch, ramprojwait         ; generate new random number and shoot another projectile
+                COMPARE scratch, 50
+                CALL Z, shoot_again
+                FETCH scratch, ramprojwait
+                ADD scratch, 01
+                STORE scratch, ramprojwait
+                FETCH scratch, ramprojdeltawait    ; increment counter for projectiles
+                ADD scratch, one
+                STORE scratch, ramprojdeltawait
+                FETCH scratch, ramalienlives1      ; check if all aliens are dead, end game if they are
+                OUTPUT scratch, qssd_hi
+                COMPARE scratch, 00
+                RETURN NZ
+                FETCH scratch, ramalienlives2
+                OUTPUT scratch, qssd_lo
+                COMPARE scratch, 00
+                RETURN NZ
+                CALL gameover
+                RETURN 
+    check_hity: FETCH scratch, ramhitboxy
+                COMPARE scratch, gs_bally
+                CALL Z, check_hitx
+                SUB scratch, 01
+                COMPARE scratch, gs_bally
+                CALL Z, check_hitx
+                SUB scratch, 01
+                COMPARE scratch, gs_bally
+                CALL Z, check_hitx
+                SUB scratch, 01
+                COMPARE scratch, gs_bally
+                CALL Z, check_hitx
+                SUB scratch, 01
+                COMPARE scratch, gs_bally
+                CALL Z, check_hitx
+                RETURN 
+    check_hitx: FETCH scratch, ramhitboxx
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                SUB scratch, 01
+                COMPARE scratch, gs_ballx
+                CALL Z, alien_hit
+                RETURN 
+     alien_hit: LOAD scratch, 01
+                STORE scratch, ramalienhit
+                CALL reset_bullet
+                RETURN 
+ remove_alien1: FETCH scratch, ramalienlives1      ; remove first row alien lives
+                XOR scratch, 01
+                STORE scratch, ramalienlives1
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+ remove_alien2: FETCH scratch, ramalienlives1
+                XOR scratch, 02
+                STORE scratch, ramalienlives1
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+ remove_alien3: FETCH scratch, ramalienlives1
+                XOR scratch, 04
+                STORE scratch, ramalienlives1
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+ remove_alien4: FETCH scratch, ramalienlives1
+                XOR scratch, 08
+                STORE scratch, ramalienlives1
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+ remove_alien5: FETCH scratch, ramalienlives1
+                XOR scratch, 10
+                STORE scratch, ramalienlives1
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+ remove_alien6: FETCH scratch, ramalienlives1
+                XOR scratch, 20
+                STORE scratch, ramalienlives1
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+ remove_alien7: FETCH scratch, ramalienlives1
+                XOR scratch, 40
+                STORE scratch, ramalienlives1
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+ remove_alien8: FETCH scratch, ramalienlives1
+                XOR scratch, 80
+                STORE scratch, ramalienlives1
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+ remove_alien9: FETCH scratch, ramalienlives2      ; remove second row alien lives
+                XOR scratch, 01
+                STORE scratch, ramalienlives2
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+remove_alien10: FETCH scratch, ramalienlives2
+                XOR scratch, 02
+                STORE scratch, ramalienlives2
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+remove_alien11: FETCH scratch, ramalienlives2
+                XOR scratch, 04
+                STORE scratch, ramalienlives2
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+remove_alien12: FETCH scratch, ramalienlives2
+                XOR scratch, 08
+                STORE scratch, ramalienlives2
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+remove_alien13: FETCH scratch, ramalienlives2
+                XOR scratch, 10
+                STORE scratch, ramalienlives2
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+remove_alien14: FETCH scratch, ramalienlives2
+                XOR scratch, 20
+                STORE scratch, ramalienlives2
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+remove_alien15: FETCH scratch, ramalienlives2
+                XOR scratch, 40
+                STORE scratch, ramalienlives2
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+remove_alien16: FETCH scratch, ramalienlives2
+                XOR scratch, 80
+                STORE scratch, ramalienlives2
+                LOAD scratch, zero
+                STORE scratch, ramalienhit
+                RETURN 
+  proj_prepare: FETCH scratch, ramprojx2
+                COMPARE scratch, zero
+                CALL NZ, proj_check1
+                LOAD scratch, zero
+                STORE scratch, ramprojdeltawait
+                RETURN 
+   shoot_again: INPUT scratch, prng
+                SR0 scratch
+                SR0 scratch
+                SR0 scratch
+                SR0 scratch
+                STORE scratch, ramrandom
+                LOAD scratch, 00
+                STORE scratch, ramprojwait
+                RETURN 
+   proj_check1: FETCH scratch, ramprojy2           ; check if it hits bottom border lines
+                COMPARE scratch, bottom_border1
+                CALL NZ, proj_check2
+                RETURN 
+   proj_check2: COMPARE scratch, bottom_border2
+                CALL NZ, proj_check3
+                RETURN 
+   proj_check3: COMPARE scratch, bottom_border3
+                CALL NZ, proj_check4
+                RETURN 
+   proj_check4: COMPARE scratch, bottom_border4
+                CALL NZ, proj_check5
+                RETURN 
+   proj_check5: COMPARE scratch, bottom_border5
+                CALL NZ, proj_check6
+                RETURN 
+   proj_check6: COMPARE scratch, bottom_border6
+                CALL NZ, alien_shoot
+                RETURN 
+ checkshiphity: FETCH ypos, ramshiphitboxy
+                FETCH scratch, ramprojy2
+                ADD scratch, 05
+                COMPARE ypos, scratch
+                CALL Z, checkshiphitx
+                SUB ypos, 01
+                COMPARE ypos, scratch
+                CALL Z, checkshiphitx
+                SUB ypos, 01
+                COMPARE ypos, scratch
+                CALL Z, checkshiphitx
+                SUB ypos, 01
+                COMPARE ypos, scratch
+                CALL Z, checkshiphitx
+                SUB ypos, 01
+                COMPARE ypos, scratch
+                CALL Z, checkshiphitx
+                SUB ypos, 01
+                COMPARE ypos, scratch
+                CALL Z, checkshiphitx
+                RETURN 
+ checkshiphitx: FETCH xpos, ramshiphitboxx
+                FETCH scratch, ramprojx2
+                COMPARE xpos, scratch
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                SUB xpos, 01
+                COMPARE xpos, scratch
+                CALL Z, gameover
+                RETURN 
+      gameover: LOAD gs_major, gs_major_gameend
+                LOAD gs_minor, gs_minor_begins
+                CALL reset                         ; reset all needed values
+                RETURN 
+         reset: LOAD scratch, row1                 ; reset row coordinates
+                STORE scratch, 02
+                LOAD scratch, 01
+                STORE scratch, ramshiplife         ; restore player ship life
+                LOAD deltax, 00                    ; reset alien coordinates
+                LOAD scratch, FF                   ; restore alien lives
+                STORE scratch, ramalienlives1
+                STORE scratch, ramalienlives2
+                CALL reset_bullet
+                LOAD scratch, 00
+                STORE scratch, ramprojx2
+                STORE scratch, ramprojy2
+                STORE scratch, ramprojwait
+                STORE scratch, ramdownen
+                RETURN 
+  aproj_start1: FETCH scratch, ramprojx1
+                SUB scratch, 02
+                STORE scratch, ramprojx2
+                FETCH scratch, ramprojy1
+                STORE scratch, ramprojy2
+                LOAD scratch, 00
+                STORE scratch, ramrandom
+                RETURN 
+   alien_shoot: FETCH alien_projx, ramprojx2
+                FETCH alien_projy, ramprojy2
+                CALL aprojmoveto
+                FETCH alien_projx, ramprojx2
+                FETCH alien_projy, ramprojy2
+                ADD alien_projy, 05
+                CALL aprojdrawto
+                FETCH scratch, ramprojdeltawait
+                COMPARE scratch, projwaittime
+                CALL Z, projdeltay
+                RETURN 
+    projdeltay: FETCH scratch, ramprojy2
+                ADD scratch, 06
+                STORE scratch, ramprojy2
+                RETURN 
+         shift: FETCH scratch, ramdownen
+                COMPARE scratch, one
+                CALL Z, left_down
+                COMPARE xpos, E6
+                CALL Z, shift_down
+                COMPARE xpos, col8
+                CALL Z, alien_right
+                COMPARE xpos, E6
+                CALL Z, alien_left
+                CALL shift_sideways
+                LOAD scratch, 00
+                STORE scratch, ramwait
+                RETURN 
+     left_down: COMPARE xpos, col8
+                CALL Z, shift_down
+                RETURN 
+shift_sideways: FETCH scratch, ramshiftx
+                ADD deltax, scratch
+                RETURN 
+    shift_down: FETCH scratch, ramalieny
+                ADD scratch, 01
+                STORE scratch, ramalieny
+                FETCH scratch, ramdeltaycount
+                ADD scratch, 01
+                STORE scratch, ramdeltaycount
+                COMPARE scratch, 0A
+                CALL Z, deltax_en
+                CALL NZ, deltax_dis
+                LOAD scratch, 01
+                STORE scratch, ramdownen
+                RETURN 
+     deltax_en: LOAD scratch, one
+                STORE scratch, ramdeltaxen
+                RETURN 
+    deltax_dis: LOAD scratch, zero
+                STORE scratch, ramdeltaxen
+                RETURN 
+neutral_deltax: LOAD scratch, 00
+                STORE scratch, ramshiftx
+                RETURN 
+   alien_right: FETCH scratch, ramdeltaxen
+                COMPARE scratch, deltaxen
+                CALL NZ, neutral_deltax
+                CALL Z, pos_deltax
+                RETURN 
+    pos_deltax: LOAD scratch, 01
+                STORE scratch, ramshiftx
+                LOAD scratch, zero
+                STORE scratch, ramdeltaycount
+                RETURN 
+    alien_left: FETCH scratch, ramdeltaxen
+                COMPARE scratch, deltaxen
+                CALL NZ, neutral_deltax
+                CALL Z, neg_deltax
+                RETURN 
+    neg_deltax: LOAD scratch, FF
+                STORE scratch, ramshiftx
+                LOAD scratch, zero
+                STORE scratch, ramdeltaycount
+                RETURN 
+  draw_attrone: LOAD xpos, 68'd                    ; draw letter S
+                LOAD ypos, 68'd
+                CALL moveto
+                LOAD xpos, 51'd
+                LOAD ypos, 74'd
+                CALL drawto
+                LOAD xpos, 68'd
+                LOAD ypos, 88'd
+                CALL drawto
+                LOAD xpos, 51'd
+                LOAD ypos, 102'd
+                CALL drawto
+                LOAD xpos, 85'd                    ; draw letter P
+                LOAD ypos, 68'd
+                CALL moveto
+                LOAD xpos, 102'd
+                LOAD ypos, 76'd
+                CALL drawto
+                LOAD xpos, 85'd
+                LOAD ypos, 85'd
+                CALL drawto
+                LOAD xpos, 85'd
+                LOAD ypos, 102'd
+                CALL drawto
+                LOAD xpos, 85'd
+                LOAD ypos, 68'd
+                CALL drawto
+                LOAD xpos, 115'd                   ; draw letter A
+                LOAD ypos, 102'd
+                CALL moveto
+                LOAD xpos, 127'd
+                LOAD ypos, 68'd
+                CALL drawto
+                LOAD xpos, 138'd
+                LOAD ypos, 102'd
+                CALL drawto
+                LOAD xpos, 136'd
+                LOAD ypos, 85'd
+                CALL moveto
+                LOAD xpos, 119'd
+                LOAD ypos, 85'd
+                CALL drawto
+                LOAD xpos, 170'd                   ; draw letter C
+                LOAD ypos, 68'd
+                CALL moveto
+                LOAD xpos, 153'd
+                LOAD ypos, 85'd
+                CALL drawto
+                LOAD xpos, 170'd
+                LOAD ypos, 102'd
+                CALL drawto
+                LOAD xpos, 204'd                   ; draw letter E
+                LOAD ypos, 68'd
+                CALL moveto
+                LOAD xpos, 187'd
+                LOAD ypos, 68'd
+                CALL drawto
+                LOAD xpos, 187'd
+                LOAD ypos, 102'd
+                CALL drawto
+                LOAD xpos, 204'd
+                LOAD ypos, 102'd
+                CALL drawto
+                LOAD xpos, 195'd
+                LOAD ypos, 85'd
+                CALL moveto
+                LOAD xpos, 187'd
+                LOAD ypos, 85'd
+                CALL drawto
+                RETURN 
+  draw_attrtwo: LOAD xpos, 34'd                    ; draw letter I
+                LOAD ypos, 136'd
+                CALL moveto
+                LOAD xpos, 34'd
+                LOAD ypos, 170'd
+                CALL drawto
+                LOAD xpos, 51'd                    ; draw letter N
+                LOAD ypos, 170'd
+                CALL moveto
+                LOAD xpos, 51'd
+                LOAD ypos, 136'd
+                CALL drawto
+                LOAD xpos, 68'd
+                LOAD ypos, 170'd
+                CALL drawto
+                LOAD xpos, 68'd
+                LOAD ypos, 136'd
+                CALL drawto
+                LOAD xpos, 76'd                    ; draw letter V
+                LOAD ypos, 136'd
+                CALL moveto
+                LOAD xpos, 85'd
+                LOAD ypos, 170'd
+                CALL drawto
+                LOAD xpos, 93'd
+                LOAD ypos, 136'd
+                CALL drawto
+                LOAD xpos, 102'd                   ;draw letter A
+                LOAD ypos, 170'd
+                CALL moveto
+                LOAD xpos, 110'd
+                LOAD ypos, 136'd
+                CALL drawto
+                LOAD xpos, 119'd
+                LOAD ypos, 170'd
+                CALL drawto
+                LOAD xpos, 113'd
+                LOAD ypos, 153'd
+                CALL moveto
+                LOAD xpos, 108'd
+                LOAD ypos, 153'd
+                CALL drawto
+                LOAD xpos, 136'd                   ; draw letter D
+                LOAD ypos, 136'd
+                CALL moveto
+                LOAD xpos, 136'd
+                LOAD ypos, 170'd
+                CALL drawto
+                LOAD xpos, 153'd
+                LOAD ypos, 153'd
+                CALL drawto
+                LOAD xpos, 136'd
+                LOAD ypos, 136'd
+                CALL drawto
+                LOAD xpos, 180'd                   ; draw letter E
+                LOAD ypos, 136'd
+                CALL moveto
+                LOAD xpos, 164'd
+                LOAD ypos, 136'd
+                CALL drawto
+                LOAD xpos, 164'd
+                LOAD ypos, 170'd
+                CALL drawto
+                LOAD xpos, 180'd
+                LOAD ypos, 170'd
+                CALL drawto
+                LOAD xpos, 175'd
+                LOAD ypos, 153'd
+                CALL moveto
+                LOAD xpos, 164'd
+                LOAD ypos, 153'd
+                CALL drawto
+                LOAD xpos, 187'd                   ; draw letter R
+                LOAD ypos, 170'd
+                CALL moveto
+                LOAD xpos, 187'd
+                LOAD ypos, 136'd
+                CALL drawto
+                LOAD xpos, 204'd
+                LOAD ypos, 148'd
+                CALL drawto
+                LOAD xpos, 187'd
+                LOAD ypos, 155'd
+                CALL drawto
+                LOAD xpos, 204'd
+                LOAD ypos, 170'd
+                CALL drawto
+                LOAD xpos, 229'd                   ; draw letter S
+                LOAD ypos, 136'd
+                CALL moveto
+                LOAD xpos, 221'd
+                LOAD ypos, 149'd
+                CALL drawto
+                LOAD xpos, 238'd
+                LOAD ypos, 158'd
+                CALL drawto
+                LOAD xpos, 221'd
+                LOAD ypos, 170'd
+                CALL drawto
+                RETURN 
+  draw_gameend: LOAD xpos, 48                      ; draw letter d
+                LOAD ypos, 50
+                CALL moveto
+                LOAD xpos, 48
+                LOAD ypos, 90
+                CALL drawto
+                LOAD xpos, 28
+                LOAD ypos, 90
+                CALL drawto
+                LOAD xpos, 28
+                LOAD ypos, 70
+                CALL drawto
+                LOAD xpos, 48
+                LOAD ypos, 70
+                CALL drawto
+                LOAD xpos, 58                      ; draw letter o
+                LOAD ypos, 70
+                CALL moveto
+                LOAD xpos, 58
+                LOAD ypos, 90
+                CALL drawto
+                LOAD xpos, 78
+                LOAD ypos, 90
+                CALL drawto
+                LOAD xpos, 78
+                LOAD ypos, 70
+                CALL drawto
+                LOAD xpos, 58
+                LOAD ypos, 70
+                CALL drawto
+                LOAD xpos, 88                      ; draw letter n
+                LOAD ypos, 90
+                CALL moveto
+                LOAD xpos, 88
+                LOAD ypos, 70
+                CALL drawto
+                LOAD xpos, A8
+                LOAD ypos, 70
+                CALL drawto
+                LOAD xpos, A8
+                LOAD ypos, 90
+                CALL drawto
+                LOAD xpos, D8                      ; draw letter e
+                LOAD ypos, 90
+                CALL moveto
+                LOAD xpos, B8
+                LOAD ypos, 90
+                CALL drawto
+                LOAD xpos, B8
+                LOAD ypos, 70
+                CALL drawto
+                LOAD xpos, D8
+                LOAD ypos, 70
+                CALL drawto
+                LOAD xpos, B8
+                LOAD ypos, 90
+                CALL drawto
+                RETURN 
+                ;;============================================================================
+                ;; Subroutine: moveto and drawto
+                ;; The moveto routine uses the global variables xpos and ypos, and the drawto
+                ;; routine uses these global variables as well as the endpoint coordinates in
+                ;; the display controller.  Moveto simply copies xpos and ypos into endpoint
+                ;; coordinates in the display controller, it does not draw anything.  The
+                ;; drawto routine copies endpoint coordinates to startpoint coordinates (does
+                ;; not matter if the endpoint was from an actual draw, or simply an update
+                ;; by moveto) and then copies xpos and ypos into endpoint coordinates, then
+                ;; starts a linedraw.
+                ;;============================================================================
+   aprojmoveto: OUTPUT alien_projx, endx           ; copy global to hardware
+                OUTPUT alien_projy, endy           ; copy global to hardware
+                RETURN 
+   aprojdrawto: INPUT scratch, endx                ; read hardware
+                OUTPUT scratch, stax               ; write hardware
+                OUTPUT alien_projx, endx           ; copy global to hardware
+                INPUT scratch, endy                ; read hardware
+                OUTPUT scratch, stay               ; write hardware
+                OUTPUT alien_projy, endy           ; copy global to hardware
+                LOAD scratch, busy_go              ; prepare the command
+                OUTPUT scratch, busy               ; send the command
+                CALL hw_init_wait                  ; wait line draw done
+                RETURN 
+        moveto: OUTPUT xpos, endx                  ; copy global to hardware
+                OUTPUT ypos, endy                  ; copy global to hardware
+                RETURN                             ; return
+        drawto: INPUT scratch, endx                ; read hardware
+                OUTPUT scratch, stax               ; write hardware
+                OUTPUT xpos, endx                  ; copy global to hardware
+                INPUT scratch, endy                ; read hardware
+                OUTPUT scratch, stay               ; write hardware
+                OUTPUT ypos, endy                  ; copy global to hardware
+                LOAD scratch, busy_go              ; prepare the command
+                OUTPUT scratch, busy               ; send the command
+                CALL hw_init_wait                  ; wait line draw done
+                RETURN                             ; return
+                ;;============================================================================
+                ;; Interrupt - Vector.
+                ;;============================================================================
+                ADDRESS 7FF                        ; must be located here
+    isr_vector: JUMP isr                           ; always jump to isr
+                ;;============================================================================
+                ;;
+                ;;============================================================================

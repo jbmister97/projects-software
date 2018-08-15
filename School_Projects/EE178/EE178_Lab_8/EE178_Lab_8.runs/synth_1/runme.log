@@ -1,0 +1,937 @@
+
+*** Running vivado
+    with args -log project.vds -m64 -mode batch -messageDb vivado.pb -notrace -source project.tcl
+
+
+****** Vivado v2016.2 (64-bit)
+  **** SW Build 1577090 on Thu Jun  2 16:32:40 MDT 2016
+  **** IP Build 1577682 on Fri Jun  3 12:00:54 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source project.tcl -notrace
+Command: synth_design -top project -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 7768 
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 274.980 ; gain = 67.785
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'project' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/project.v:13]
+INFO: [Synth 8-638] synthesizing module 'vga_example' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/vga_example.v:13]
+INFO: [Synth 8-5534] Detected attribute (* KEEP = "TRUE" *) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/vga_example.v:40]
+INFO: [Synth 8-5534] Detected attribute (* ASYNC_REG = "TRUE" *) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/vga_example.v:40]
+INFO: [Synth 8-638] synthesizing module 'IBUF' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:14145]
+	Parameter CAPACITANCE bound to: DONT_CARE - type: string 
+	Parameter IBUF_DELAY_VALUE bound to: 0 - type: string 
+	Parameter IBUF_LOW_PWR bound to: TRUE - type: string 
+	Parameter IFD_DELAY_VALUE bound to: AUTO - type: string 
+	Parameter IOSTANDARD bound to: DEFAULT - type: string 
+INFO: [Synth 8-256] done synthesizing module 'IBUF' (1#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:14145]
+INFO: [Synth 8-638] synthesizing module 'MMCME2_BASE' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20516]
+	Parameter BANDWIDTH bound to: OPTIMIZED - type: string 
+	Parameter CLKFBOUT_MULT_F bound to: 10.000000 - type: float 
+	Parameter CLKFBOUT_PHASE bound to: 0.000000 - type: float 
+	Parameter CLKIN1_PERIOD bound to: 10.000000 - type: float 
+	Parameter CLKOUT0_DIVIDE_F bound to: 25.000000 - type: float 
+	Parameter CLKOUT0_DUTY_CYCLE bound to: 0.500000 - type: float 
+	Parameter CLKOUT0_PHASE bound to: 0.000000 - type: float 
+	Parameter CLKOUT1_DIVIDE bound to: 1 - type: integer 
+	Parameter CLKOUT1_DUTY_CYCLE bound to: 0.500000 - type: float 
+	Parameter CLKOUT1_PHASE bound to: 0.000000 - type: float 
+	Parameter CLKOUT2_DIVIDE bound to: 1 - type: integer 
+	Parameter CLKOUT2_DUTY_CYCLE bound to: 0.500000 - type: float 
+	Parameter CLKOUT2_PHASE bound to: 0.000000 - type: float 
+	Parameter CLKOUT3_DIVIDE bound to: 1 - type: integer 
+	Parameter CLKOUT3_DUTY_CYCLE bound to: 0.500000 - type: float 
+	Parameter CLKOUT3_PHASE bound to: 0.000000 - type: float 
+	Parameter CLKOUT4_CASCADE bound to: FALSE - type: string 
+	Parameter CLKOUT4_DIVIDE bound to: 1 - type: integer 
+	Parameter CLKOUT4_DUTY_CYCLE bound to: 0.500000 - type: float 
+	Parameter CLKOUT4_PHASE bound to: 0.000000 - type: float 
+	Parameter CLKOUT5_DIVIDE bound to: 1 - type: integer 
+	Parameter CLKOUT5_DUTY_CYCLE bound to: 0.500000 - type: float 
+	Parameter CLKOUT5_PHASE bound to: 0.000000 - type: float 
+	Parameter CLKOUT6_DIVIDE bound to: 1 - type: integer 
+	Parameter CLKOUT6_DUTY_CYCLE bound to: 0.500000 - type: float 
+	Parameter CLKOUT6_PHASE bound to: 0.000000 - type: float 
+	Parameter DIVCLK_DIVIDE bound to: 1 - type: integer 
+	Parameter REF_JITTER1 bound to: 0.010000 - type: float 
+	Parameter STARTUP_WAIT bound to: FALSE - type: string 
+INFO: [Synth 8-256] done synthesizing module 'MMCME2_BASE' (2#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20516]
+INFO: [Synth 8-638] synthesizing module 'BUFH' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:806]
+INFO: [Synth 8-256] done synthesizing module 'BUFH' (3#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:806]
+INFO: [Synth 8-638] synthesizing module 'BUFGCE' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:617]
+	Parameter CE_TYPE bound to: SYNC - type: string 
+	Parameter IS_CE_INVERTED bound to: 1'b0 
+	Parameter IS_I_INVERTED bound to: 1'b0 
+INFO: [Synth 8-256] done synthesizing module 'BUFGCE' (4#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:617]
+INFO: [Synth 8-638] synthesizing module 'ODDR' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:25287]
+	Parameter DDR_CLK_EDGE bound to: OPPOSITE_EDGE - type: string 
+	Parameter INIT bound to: 1'b0 
+	Parameter IS_C_INVERTED bound to: 1'b0 
+	Parameter IS_D1_INVERTED bound to: 1'b0 
+	Parameter IS_D2_INVERTED bound to: 1'b0 
+	Parameter SRTYPE bound to: SYNC - type: string 
+INFO: [Synth 8-256] done synthesizing module 'ODDR' (5#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:25287]
+INFO: [Synth 8-638] synthesizing module 'vga_timing' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #6 Files/vga_timing.v:13]
+INFO: [Synth 8-256] done synthesizing module 'vga_timing' (6#1) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #6 Files/vga_timing.v:13]
+INFO: [Synth 8-638] synthesizing module 'framebuffer' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.runs/synth_1/.Xil/Vivado-3520-AwesomeSauce/realtime/framebuffer_stub.v:6]
+INFO: [Synth 8-256] done synthesizing module 'framebuffer' (7#1) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.runs/synth_1/.Xil/Vivado-3520-AwesomeSauce/realtime/framebuffer_stub.v:6]
+INFO: [Synth 8-226] default block is never used [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/vga_example.v:187]
+INFO: [Synth 8-226] default block is never used [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/vga_example.v:284]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/vga_example.v:303]
+INFO: [Synth 8-638] synthesizing module 'linedraw' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #6 Files/linedraw.v:13]
+	Parameter idle bound to: 2'b00 
+	Parameter run bound to: 2'b01 
+	Parameter done bound to: 2'b10 
+INFO: [Synth 8-256] done synthesizing module 'linedraw' (8#1) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #6 Files/linedraw.v:13]
+INFO: [Synth 8-256] done synthesizing module 'vga_example' (9#1) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/vga_example.v:13]
+INFO: [Synth 8-638] synthesizing module 'quad_seven_seg' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/new/quad_seven_seg.v:9]
+INFO: [Synth 8-226] default block is never used [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/new/quad_seven_seg.v:56]
+INFO: [Synth 8-226] default block is never used [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/new/quad_seven_seg.v:63]
+INFO: [Synth 8-226] default block is never used [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/new/quad_seven_seg.v:70]
+INFO: [Synth 8-226] default block is never used [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/new/quad_seven_seg.v:77]
+INFO: [Synth 8-256] done synthesizing module 'quad_seven_seg' (10#1) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/new/quad_seven_seg.v:9]
+INFO: [Synth 8-638] synthesizing module 'kcpsm6' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/kcpsm6.v:67]
+	Parameter hwbuild bound to: 8'b00000000 
+	Parameter interrupt_vector bound to: 12'b011111111111 
+	Parameter scratch_pad_memory_size bound to: 256 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'LUT6_2' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2' (11#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111100110011110011000000111100000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6' (12#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'XORCY' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:44873]
+INFO: [Synth 8-256] done synthesizing module 'XORCY' (13#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:44873]
+INFO: [Synth 8-638] synthesizing module 'MUXCY' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:21250]
+INFO: [Synth 8-256] done synthesizing module 'MUXCY' (14#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:21250]
+INFO: [Synth 8-638] synthesizing module 'FD' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:3724]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-256] done synthesizing module 'FD' (15#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:3724]
+INFO: [Synth 8-638] synthesizing module 'FDRE' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:3965]
+	Parameter INIT bound to: 1'b0 
+	Parameter IS_C_INVERTED bound to: 1'b0 
+	Parameter IS_D_INVERTED bound to: 1'b0 
+	Parameter IS_R_INVERTED bound to: 1'b0 
+INFO: [Synth 8-256] done synthesizing module 'FDRE' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:3965]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized0' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized0' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized1' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized1' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized2' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized2' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized3' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized3' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized4' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized4' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized5' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized5' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized6' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized6' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized7' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized7' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized8' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized8' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized9' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000001111111111001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized9' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized10' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010101010000000000000000011001100110011001111000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized10' (16#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'FDR' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:3952]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-256] done synthesizing module 'FDR' (17#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:3952]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized0' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000010101001010011010101010101010101010101010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized0' (17#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized1' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000101010001001010010101010101010101010101010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized1' (17#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized2' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000101010001001010010101010101010101010101010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized2' (17#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized3' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000101010001001010010101010101010101010101010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized3' (17#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized4' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000101010001001010010101010101010101010101010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized4' (17#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized11' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1011111110111100100011111000110010110011101100001000001110000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized11' (17#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'RAM256X1S' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:36713]
+	Parameter INIT bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter IS_WCLK_INVERTED bound to: 1'b0 
+INFO: [Synth 8-256] done synthesizing module 'RAM256X1S' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:36713]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized5' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0110100101101001011011101000101011001100110011000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized5' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized12' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized12' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized6' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0110100101101001011011101000101011001100110011000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized6' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized13' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized13' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized7' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0110100101101001011011101000101011001100110011000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized7' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized14' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized14' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized8' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0110100101101001011011101000101011001100110011000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized8' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized15' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized15' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized9' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0110100101101001011011101000101011001100110011000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized9' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized16' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized16' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized10' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0110100101101001011011101000101011001100110011000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized10' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized17' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized17' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized11' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0110100101101001011011101000101011001100110011000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized11' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized18' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized18' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized12' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0110100101101001011011101000101011001100110011000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized12' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized19' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111100000000111100001111000011001100110011001010101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized19' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized13' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b1111111111111111111101010101010100000000000000000000111011101110 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized13' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized14' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000010000011000000000000101100000000110001000000000001001100 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized14' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized15' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000010000000000000000000000000000000000000000100000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized15' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized20' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000000000000000000000000000000000000000000001100101010101010 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized20' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized16' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b1100110000110011111111110000000010000000100000001000000010000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized16' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized21' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0101101000111100111111111111111100000000000000000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized21' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized17' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0111011101110111000000100111011100000000000000000000001000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized17' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized18' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000000000111100000000000000000000000000000010001111111111 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized18' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized22' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111111111111111111111111111100000000000001000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized22' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized19' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b1111111111111111000100000000000000000000000000000010000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized19' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized20' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000001111001010000000000000000000000100001000000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized20' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized21' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0111011100001000000000000000000000000000000000000000111100000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized21' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized22' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b1101000000000000000000000000000000000010000000000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized22' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized23' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000000001001111110011111100000000000100001111011111001110 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized23' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized24' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b1100000011001100000000000000000010100000101010100000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized24' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized25' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b1000000000000000000000000000000000100000000000000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized25' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized26' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0100000000000000000000000000000000000001000000000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized26' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized23' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0000000010000000000000100000000000000000000000000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized23' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized24' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1010110010101100111111110000000011111111000000001111111100000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized24' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized27' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000000000000000000000000010000111011110000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized27' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized25' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b0110100110010110100101100110100110010110011010010110100110010110 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized25' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized26' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111111111111111101010101100110011110000111100001111000011110000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized26' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized28' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0011001100110011101010101100110011110000101010100000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized28' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized29' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b1010001010000000000000000000000000000000111100000000000011110000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized29' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized30' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000000000000000000000000000000000000000000000000000000001 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized30' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6_2__parameterized31' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+	Parameter INIT bound to: 64'b0000000000000000000000000000110100000000000000000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6_2__parameterized31' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20332]
+INFO: [Synth 8-638] synthesizing module 'LUT6__parameterized27' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+	Parameter INIT bound to: 64'b1111101111111111000000000000000000000000000000000000000000000000 
+INFO: [Synth 8-256] done synthesizing module 'LUT6__parameterized27' (18#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:20316]
+INFO: [Synth 8-638] synthesizing module 'RAM32M' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:36731]
+	Parameter INIT_A bound to: 64'b0000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_B bound to: 64'b0000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_C bound to: 64'b0000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_D bound to: 64'b0000000000000000000000000000000000000000000000000000000000000000 
+	Parameter IS_WCLK_INVERTED bound to: 1'b0 
+INFO: [Synth 8-256] done synthesizing module 'RAM32M' (19#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:36731]
+INFO: [Synth 8-256] done synthesizing module 'kcpsm6' (20#1) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/kcpsm6.v:67]
+INFO: [Synth 8-638] synthesizing module 'software' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/software/software.v:54]
+INFO: [Synth 8-638] synthesizing module 'RAMB36E1' [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:42125]
+	Parameter DOA_REG bound to: 0 - type: integer 
+	Parameter DOB_REG bound to: 0 - type: integer 
+	Parameter EN_ECC_READ bound to: FALSE - type: string 
+	Parameter EN_ECC_WRITE bound to: FALSE - type: string 
+	Parameter INITP_00 bound to: 256'b1000010001001000010010101101011101100111001101110101000100001101010010010011010001100011011011011101110101000100001000101010011101110010011101110010110111011101110110001000001011010010001000101010101000101010101010101010001010001010101010100000001000101010 
+	Parameter INITP_01 bound to: 256'b0110011001100110011001100110011001100110101001100110011001100110011001100110011001100110011001100110011001100110011001100110011001100110011001100110011001100110011001100110000100101001000010000010101010101011011101110111011010000010000010000010000010011101 
+	Parameter INITP_02 bound to: 256'b0100110000110100110100110100101001100110011010101010011000010011000011010011010011010010100110011001101010101001100001001100001101001101001101001010011001100110101010100110000100110000110100110100110100101001100110011010101010011000010011000010101001100110 
+	Parameter INITP_03 bound to: 256'b0110101010100110010001001100001101110100110100110100101001100110011010101010011011000000010011010011010011010010100110011001101010101001100001001100001101001101001101001010011001100110101010100110000100110000110100110100110100101001100110011010101010011000 
+	Parameter INITP_04 bound to: 256'b0100101001100110011010101010011001000100110000110100110100110100101001100110011010101010011001000100110000110100110100110100101001100110011010101010011001000100110000110100110100110100101001100110011010101010011001000100110000110100110100110100101001100110 
+	Parameter INITP_05 bound to: 256'b0111010010101101100011011000100100100100110100100100110100110111010011010011010010100110011001101010101001101100000100010011010011010011010010100110011001101010101001100100010011000011010011010011010010100110011001101010101001100100010011000011010011010011 
+	Parameter INITP_06 bound to: 256'b1000001010001000001010001000001010001000001010001000001010001000001010001000001010001000001010001000001010001000001010001000001010001000001010001000001010100010110101110101110101110101110101110101110101110101110101110101110101110100101101011101011101011101 
+	Parameter INITP_07 bound to: 256'b1000101010000010001000101000001011010111010111010111010111010111010111010111010111010111010111010101000010110101110101110101110101110101110101000010110110110110110110110110110110110100101000100101010100101000110100101000100000101000100000101000100000101000 
+	Parameter INITP_08 bound to: 256'b0000100000100000100000100000100000100000100000100000100000100000100000100000100000101000100010111101001010001000101111010010100010100010100010100011110110010010010010010010110110100010110111011101110100101001001011010010010000100000101000100010010010101010 
+	Parameter INITP_09 bound to: 256'b1000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001010000010000010000010000010000010000010000010000010000010 
+	Parameter INITP_0A bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000010101000101000101000101010101010001010001010001010101010000010000010000010000010000010000010000010000010000010000010000010000010000010000010000010000010000010000010000010 
+	Parameter INITP_0B bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INITP_0C bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INITP_0D bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INITP_0E bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INITP_0F bound to: 256'b1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_00 bound to: 256'b1111111100001101000111110000000111111111000001101111111100000011111111110000111011111111000011001111111100001011111111110000101000011111000000000001111100000000000111110000000011111111000000100001111100011001000000000111101000000000001010010000000000011011 
+	Parameter INIT_01 bound to: 256'b1101111100001011110111110000101011011111000010011101111100001000000111110000000010010000000000010000000010010000000000000010111000000000001011000010000000010110100000000000000111111111000110011111111100011000111111110001000000011111111111111111111100010111 
+	Parameter INIT_02 bound to: 256'b0010000000110111110100000000000001010000000000001001110100001111010100000000000000010001000000000001000000000000010100000000000000100000001001011101111100000001100111110000010011011111000001010001111100001111110111110000011000011111000000111101111100001100 
+	Parameter INIT_03 bound to: 256'b1101000100111100011000001000101011011101000100000101000000000000000100010000000100100000100001111101000101111000011000001000101011011101000100000101000000000000001000001000000011010000000000110010000001000011110100000000001000100000001111011101000000000001 
+	Parameter INIT_04 bound to: 256'b0000000001010111110111110000000100000000010100111101111111111111001111110000000011011101000000011011111100000000110111010000001000011111000000000101000000000000000101110000001000000000010111100000000001000111010100000000000000010001000000010010000010000100 
+	Parameter INIT_05 bound to: 256'b1001111100000011000111111110010101010000000000001001011000010110000101101111111111010000000000000001111100010110000011110110000000010110000001000101000000000000000101100000000011010000000000001001011000000100010100000000000000100000100011011101110100000100 
+	Parameter INIT_06 bound to: 256'b1001011100000001001000000100011010110011000000000001000000000000110111010000100000000000011101101101111100000001000000000111011011011111111111110011111100000000110111010000000110111111000000001101110100000010000111110000000010100000011011111100001111110000 
+	Parameter INIT_07 bound to: 256'b0101000000000000000100111110010110011111001000000001111111100101000100100000101000000010011000000101000000000000000000101111000000011111000010100000111101100000001000000110111101010000000000000010000001111010110100110000000010010011000001011010000001000111 
+	Parameter INIT_08 bound to: 256'b0101000000000000000100010000000000010000000000110101000000000000000100010000000000010000000000100101000000000000000100010000000000010000000000010101000000000000000100010000000000010000000000000101000000000000000100010000000100100000100001001101000100111100 
+	Parameter INIT_09 bound to: 256'b0000100100100000000000010000011100000000100111110101000000000000110100010000100011010000000010010101000000000000001001010000000111010000000000110010000010011101110100000000001000100100100111011101000000000001001001000101011111010000000000000000000010011010 
+	Parameter INIT_0A bound to: 256'b0001101000000001000001010100101110011001000000010000010101001011100110100000001000000101010010000001101011100101000110010000101000001001011000000000010101001011111110100001001100011010000000110000101000110000000010010010000000000101010010000000101000110000 
+	Parameter INIT_0B bound to: 256'b1001101000000001000001010100101100011001000000010000010101001011000110100000010000000101010010110001100100000001000001010100101110011010000001010000010101001011100110010000010000000101010010111001101000000011000001010100101110011001000000100000010101001011 
+	Parameter INIT_0C bound to: 256'b1001101000000111000001010100101100011001000000010000010101001011100110100000001000000101010010110001100100000001000001010100101100011010000001000000010101001011000110010000000100000101010010111001101000000110000001010100101100011001000000010000010101001011 
+	Parameter INIT_0D bound to: 256'b0001101000000010000001010100101100011001000000010000010101001011000110100000011100000101010010110001100100000001000001010100101100011010000000110000010101001011000110010000000100000101010010111001101000000011000001010100101100011001000000010000010101001011 
+	Parameter INIT_0E bound to: 256'b0001100100000001000001010100101100011010000000010000010101001011111110100001011011111001000101010001100100000001000001010100101100011010000001100000010101001011000110010000000100000101010010111001101000000100000001010100101100011001000000010000010101001011 
+	Parameter INIT_0F bound to: 256'b1001100100000001000001010100101110011010000000010000010101001011100110010000001000000101010010110001101000000011000001010100101110011001000001000000010101001011000110100000010100000101010010110001100100000001000001010100101110011010000000110000010101001011 
+	Parameter INIT_10 bound to: 256'b1111100100010001000110010000101000000101010010001011101000000010000010011110000000011001000011110010000100100100110111110000000110111111000100000101000000000000000000111011011100000101010010111001100100000001000001010100101100011010000000100000010101001011 
+	Parameter INIT_11 bound to: 256'b1101111100000001101111110000100000000011001101011101111100000001101111110001010000000010111111000000010101001011000110100000010100000101010010111001100100001010000001010100101110011010000001010000010101001011111110100000011011111001000001001111101000010010 
+	Parameter INIT_12 bound to: 256'b1111101000000110111110010000010011111010000100101111100100010001000110010000101000000101010010001011101000000010000010011110000000011001001000110010000101000001110111110000001010111111000100000000001110010101110111110000000110111111000011000000010000000100 
+	Parameter INIT_13 bound to: 256'b1101111100000001101111110000110000000100000001001101111100000010101111110000100000000011001110111101111100000001101111110001010000000010111111000000010101001011000110100000010100000101010010111001100100001010000001010100101110011010000001010000010101001011 
+	Parameter INIT_14 bound to: 256'b0000010101001011100110100000010100000101010010111111101000000110111110010000010011111010000100101111100100010001000110010000101000000101010010001011101000000010000010011110000000011001001101110010000101011110110111110000010010111111000100000000001110010101 
+	Parameter INIT_15 bound to: 256'b1101111100001000101111110001000000000011100101011101111100000001101111110000110000000100000001001101111100000011101111110000100000000011010000011101111100000001101111110001010000000010111111000000010101001011000110100000010100000101010010111001100100001010 
+	Parameter INIT_16 bound to: 256'b0001101000000101000001010100101110011001000010100000010101001011100110100000010100000101010010111111101000000110111110010000010011111010000100101111100100010001000110010000101000000101010010001011101000000010000010011110000000011001010010110010000101111011 
+	Parameter INIT_17 bound to: 256'b0000100111100000000110010101111100100001100110001101111100010000101111110001000000000011100101011101111100000001101111110000110000000100000001001101111100000100101111110000100000000011010001111101111100000001101111110001010000000010111111000000010101001011 
+	Parameter INIT_18 bound to: 256'b1011111100010100000000101111110000000101010010110001101000000101000001010100101110011001000010100000010101001011100110100000010100000101010010111111101000000110111110010000010011111010000100101111100100010001000110010000101000000101010010001011101000000010 
+	Parameter INIT_19 bound to: 256'b0001100100001010000001010100100010111010000000100000100111100000000110010111001100100001101101011101111100100000101111110001000000000011100101011101111100000001101111110000110000000100000001001101111100000101101111110000100000000011010011011101111100000001 
+	Parameter INIT_1A bound to: 256'b1011111100001000000000110101001111011111000000011011111100010100000000101111110000000101010010110001101000000101000001010100101110011001000010100000010101001011100110100000010100000101010010111111101000000110111110010000010011111010000100101111100100010001 
+	Parameter INIT_1B bound to: 256'b1111100100000100111110100001001011111001000100010001100100001010000001010100100010111010000000100000100111100000000110011000011100100001110100101101111101000000101111110001000000000011100101011101111100000001101111110000110000000100000001001101111100000110 
+	Parameter INIT_1C bound to: 256'b1011111100001100000001000000010011011111000001111011111100001000000000110101100111011111000000011011111100010100000000101111110000000101010010110001101000000101000001010100101110011001000010100000010101001011100110100000010100000101010010111111101000000110 
+	Parameter INIT_1D bound to: 256'b1001101000000101000001010100101111111010000001101111100100000100111110100001001011111001000100010001100100001010000001010100100000100001111011111101111110000000101111110001000010111010000000100000100111100000000110011001101100000011100101011101111100000001 
+	Parameter INIT_1E bound to: 256'b1101101011001101000000111001010111011111000000011011111100001100000001000000010011011111000010001011111100001000000000110101111111011111000000011011111100010100000000101111110000000101010010110001101000000101000001010100101110011001000010100000010101001011 
+	Parameter INIT_1F bound to: 256'b1001101000000101000001010100101111111010000001101111100100000100111110100001001011111001000100010001100100001010000001010100100000011010000011111011101000000010000010011110000000011001000011110010001000001111110111110000000110111111000110000000001111110001 
+	Parameter INIT_20 bound to: 256'b1011111100011000000000111001010111011111000000011011111100001100000001000000010011011111000010011011111100001000000000110110010111011111000000011011111100010100000000101111110000000101010010110001101000000101000001010100101110011001000010100000010101001011 
+	Parameter INIT_21 bound to: 256'b1001100100001010000001010100101110011010000001010000010101001011111110100000011011111001000001001111101000010010111110010001000100011001000010100000010101001000000110100000111110111010000000100000100111100000000110010010001100100010001011011101111100000010 
+	Parameter INIT_22 bound to: 256'b0010001001001011110111110000010010111111000110000000001110010101110111110000000110111111000011000000010000000100110111110000101010111111000010000000001101101011110111110000000110111111000101000000001011111100000001010100101100011010000001010000010101001011 
+	Parameter INIT_23 bound to: 256'b0001101000000101000001010100101110011001000010100000010101001011100110100000010100000101010010111111101000000110111110010000010011111010000100101111100100010001000110010000101000000101010010000001101000001111101110100000001000001001111000000001100100110111 
+	Parameter INIT_24 bound to: 256'b0000100111100000000110010100101100100010011010011101111100001000101111110001100000000011100101011101111100000001101111110000110000000100000001001101111100001011101111110000100000000011011100011101111100000001101111110001010000000010111111000000010101001011 
+	Parameter INIT_25 bound to: 256'b0000001011111100000001010100101100011010000001010000010101001011100110010000101000000101010010111001101000000101000001010100101111111010000001101111100100000100111110100001001011111001000100010001100100001010000001010100100000011010000011111011101000000010 
+	Parameter INIT_26 bound to: 256'b0001101000001111101110100000001000001001111000000001100101011111001000101000011111011111000100001011111100011000000000111001010111011111000000011011111100001100000001000000010011011111000011001011111100001000000000110111011111011111000000011011111100010100 
+	Parameter INIT_27 bound to: 256'b1101111100000001101111110001010000000010111111000000010101001011000110100000010100000101010010111001100100001010000001010100101110011010000001010000010101001011111110100000011011111001000001001111101000010010111110010001000100011001000010100000010101001000 
+	Parameter INIT_28 bound to: 256'b0001100100001010000001010100100000011010000011111011101000000010000010011110000000011001011100110010001010100101110111110010000010111111000110000000001110010101110111110000000110111111000011000000010000000100110111110000110110111111000010000000001101111101 
+	Parameter INIT_29 bound to: 256'b1011111100001000000000111000001111011111000000011011111100010100000000101111110000000101010010110001101000000101000001010100101110011001000010100000010101001011100110100000010100000101010010111111101000000110111110010000010011111010000100101111100100010001 
+	Parameter INIT_2A bound to: 256'b1111101000010010111110010001000100011001000010100000010101001000000110100000111110111010000000100000100111100000000110011000011100100010110000111101111101000000101111110001100000000011100101011101111100000001101111110000110000000100000001001101111100001110 
+	Parameter INIT_2B bound to: 256'b0000010000000100110111110000111110111111000010000000001110001001110111110000000110111111000101000000001011111100000001010100101100011010000001010000010101001011100110010000101000000101010010111001101000000101000001010100101111111010000001101111100100000100 
+	Parameter INIT_2C bound to: 256'b1111101000000110111110010000010011111010000100101111100100010001000110010000101000000101010010000010001011100001110111111000000010111111000110000001101000001111101110100000001000001001111000000001100110011011000000111001010111011111000000011011111100001100 
+	Parameter INIT_2D bound to: 256'b1101111100000001101111110000110000000100000001001101111100010000101111110000100000000011100011111101111100000001101111110001010000000010111111000000010101001011000110100000010100000101010010111001100100001010000001010100101110011010000001010000010101001011 
+	Parameter INIT_2E bound to: 256'b1011111100001100111111110000101100011111000000011011111100001011000000111001101111011111010100001011111100001011111111110000001100011111000000011011111100000011000001000001101111011111000001001011111100000011000000111111000111011010110011010000001110010101 
+	Parameter INIT_2F bound to: 256'b1001111100000001000000110000110011001111001100001011111100010010010100000000000000000011111100010101000000000000110111110000000011011111000010101011111100011000010100000000000011011111000000001101111100001011101111110001000011111111000011000001111100000001 
+	Parameter INIT_30 bound to: 256'b1001111100000001000000110011000111001111001000001011111100010001010100000000000000000011000011001100111100110000100111110000000100000011000011001100111100110000100111110000000100000011000011001100111100110000100111110000000100000011000011001100111100110000 
+	Parameter INIT_31 bound to: 256'b1100111100100000100111110000000100000011001100011100111100100000100111110000000100000011001100011100111100100000100111110000000100000011001100011100111100100000100111110000000100000011001100011100111100100000100111110000000100000011001100011100111100100000 
+	Parameter INIT_32 bound to: 256'b0000001100110001110011110010000010011111000000010000001100110001110011110010000010011111000000010000001100110001110011110010000010011111000000010000001100110001110011110010000010011111000000010000001100110001110011110010000010011111000000010000001100110001 
+	Parameter INIT_33 bound to: 256'b1111111100010100000111110000000011111111000100000111111100000010101111110001000001010000000000001111111100010100000111110000000011111111000100000111111100000001101111110001000001010000000000000000000001111010111111110001010000011111000000010101000000000000 
+	Parameter INIT_34 bound to: 256'b1111111100010000011111110001000010111111000100000101000000000000111111110001010000011111000000001111111100010000011111110000100010111111000100000101000000000000111111110001010000011111000000001111111100010000011111110000010010111111000100000101000000000000 
+	Parameter INIT_35 bound to: 256'b1011111100010000010100000000000011111111000101000001111100000000111111110001000001111111010000001011111100010000010100000000000011111111000101000001111100000000111111110001000001111111001000001011111100010000010100000000000011111111000101000001111100000000 
+	Parameter INIT_36 bound to: 256'b1111111100010100000111110000000011111111000110000111111100000010101111110001100001010000000000001111111100010100000111110000000011111111000110000111111100000001101111110001100001010000000000001111111100010100000111110000000011111111000100000111111110000000 
+	Parameter INIT_37 bound to: 256'b1111111100011000011111110001000010111111000110000101000000000000111111110001010000011111000000001111111100011000011111110000100010111111000110000101000000000000111111110001010000011111000000001111111100011000011111110000010010111111000110000101000000000000 
+	Parameter INIT_38 bound to: 256'b1011111100011000010100000000000011111111000101000001111100000000111111110001100001111111010000001011111100011000010100000000000011111111000101000001111100000000111111110001100001111111001000001011111100011000010100000000000011111111000101000001111100000000 
+	Parameter INIT_39 bound to: 256'b0100111100001110010011110000111001001111000011100100111100001110100111110000011101010000000000001111111100001100000111110000000001000011101001001101111100000000101111110000010101010000000000001111111100010100000111110000000011111111000110000111111110000000 
+	Parameter INIT_3A bound to: 256'b0100001110110001110111111111110101010000000000000100001110101110110111111111110001010000000000000100001110101011110111111111101101010000000000000100001110101000110111111111101010111111000001110101000000000000111111110000101100011111000000001111111100001000 
+	Parameter INIT_3B bound to: 256'b1001101000000001000000111100110011001010111100001001101000000001000000111100110011001010111100000001111100000101101111110000011110111010000101100101000000000000010001000000110011011111111111110101000000000000010000111011010011011111111111100101000000000000 
+	Parameter INIT_3C bound to: 256'b1001100100000001110010011111000010111111000001011011100100010101010100000000000000000011110011001100101011110000100110100000000100000011110011001100101011110000100110100000000100000011110011001100101011110000100110100000000100000011110011001100101011110000 
+	Parameter INIT_3D bound to: 256'b1100100111110000100110010000000100000011111100011100100111110000100110010000000100000011111100011100100111110000100110010000000100000011111100011100100111110000100110010000000100000011111100011100100111110000100110010000000100000011111100011100100111110000 
+	Parameter INIT_3E bound to: 256'b0000001111110001110010011111000010011001000000010000001111110001110010011111000010011001000000010000001111110001110010011111000010011001000000010000001111110001110010011111000010011001000000010000001111110001110010011111000010011001000000010000001111110001 
+	Parameter INIT_3F bound to: 256'b1111111100000101000111110000000000000000011110101111111100011000111111110001000000011111111111110001111000000000111111110001011100011111000000011111111100000010000111110001100101010000000000000000001111110101000100010000000000010000000000110101000000000000 
+	Parameter INIT_40 bound to: 256'b1011101100000101000001010011101110111100000001111011101100000101010100000000000011111111000010000001111100000000111111110000011110111111000001101111111100000101100111110000001010111111000001000101000000000000111111110000101011111111000010111111111100000111 
+	Parameter INIT_41 bound to: 256'b0000010000101110110110011110011000000100001010001101111100000001101111110000101001010000000000001111111100000111000111110000011010111111000001110101000000000000000001000001011111011111000000011011111100001100000001010011111000011100000001011011110000000111 
+	Parameter INIT_42 bound to: 256'b0001111100000001101111110000001001010000000000000000111011110000101111110000000101010000000000000000010000101110110110011001101101010000000000001111111100000011000111110000000000000100001010110000010001001101110110011110011000000100010000111101100110011011 
+	Parameter INIT_43 bound to: 256'b0101000000000000111111110000110100011111000000000101000000000000111111110000110100011111000000010101000000000000111111110000101000011111000000010100010000111101000001000011101011011111000010101111111100001110000111110000000110111111000011101111111100000010 
+	Parameter INIT_44 bound to: 256'b0100010001000000110111110000000110111111000011010101000000000000111111110000111000011111000000001111111100000001000111110000000101010000000000000000010001001000010001000100000011011111000000011011111100001101010100000000000011111111000000010001111100000000 
+	Parameter INIT_45 bound to: 256'b0000010101001011000110100101100000011001010001000000010101001011000110100100101000011001001100110000010101001000000110100100010000011001010001000101000000000000111111110000111000011111000000001111111100000001000111111111111101010000000000000000010001010010 
+	Parameter INIT_46 bound to: 256'b0001100101010101000001010100101100011010011001100001100101010101000001010100101100011010010101010001100101010101000001010100101100011010010011000001100101100110000001010100100000011010010001000001100101010101000001010100101100011010011001100001100100110011 
+	Parameter INIT_47 bound to: 256'b0001101001010101000110010111011100000101010010000001101001010101000110011000100000000101010010110001101001100110000110011000101000000101010010110001101001000100000110010111111100000101010010000001101001100110000110010111001100000101010010110001101001000100 
+	Parameter INIT_48 bound to: 256'b0000010101001011000110100100010000011001101110110000010101001000000110100100010000011001110011000000010101001011000110100110011000011001101010100000010101001011000110100101010100011001100110010000010101001000000110100100010000011001101010100000010101001011 
+	Parameter INIT_49 bound to: 256'b0000010101001000000110101000100000011001001000100101000000000000000001010100101100011010010101010001100110111011000001010100100000011010010101010001100111000011000001010100101100011010011001100001100111001100000001010100101100011010011001100001100110111011 
+	Parameter INIT_4A bound to: 256'b0001100101001100000001010100101100011010100010000001100101000100000001010100101100011010101010100001100101000100000001010100101100011010100010000001100100110011000001010100100000011010101010100001100100110011000001010100101100011010101010100001100100100010 
+	Parameter INIT_4B bound to: 256'b0001101010101010000110010111011100000101010010110001101010001000000110010110111000000101010010000001101010101010000110010110011000000101010010110001101010001000000110010101110100000101010010110001101010101010000110010101010100000101010010000001101010001000 
+	Parameter INIT_4C bound to: 256'b0000010101001011000110101001100100011001100110010000010101001011000110101010101000011001100010000000010101001000000110101000100000011001100010000000010101001011000110101001100100011001011011000000010101001000000110101001100100011001011100010000010101001011 
+	Parameter INIT_4D bound to: 256'b0001100110101111000001010100101100011010101010100001100110110100000001010100101100011010101010100001100110100100000001010100101100011010100010000001100110100100000001010100100000011010100010000001100110110100000001010100101100011010100010000001100110001000 
+	Parameter INIT_4E bound to: 256'b0001101010011011000110011011101100000101010010110001101010010100000110011100110000000101010010110001101010001000000110011011101100000101010010000001101010101010000110011011101100000101010010110001101010011001000110011010010000000101010010000001101010011001 
+	Parameter INIT_4F bound to: 256'b0000010101001011000110101010101000011001110111010000010101001011000110101001111000011001111011100000010101001011000110101001010100011001110111010000010101001000000110101000100000011001111001010000010101001011000110101010101000011001110011000000010101001011 
+	Parameter INIT_50 bound to: 256'b0000010101001011000110100111000000011001010010000000010101001011000110100111000000011001001010000000010101001011000110101001000000011001001010000000010101001011000110101001000000011001010010000000010101001000000110100101000000011001010010000101000000000000 
+	Parameter INIT_51 bound to: 256'b0001100110001000000001010100101100011010011100000001100101011000000001010100101100011010011100000001100101111000000001010100101100011010100100000001100101111000000001010100101100011010100100000001100101011000000001010100100000011010011100000001100101011000 
+	Parameter INIT_52 bound to: 256'b0001101010010000000110011011100000000101010010000001101010010000000110011101100000000101010010110001101010010000000110011010100000000101010010110001101001110000000110011010100000000101010010110001101001110000000110011000100000000101010010000001101010010000 
+	Parameter INIT_53 bound to: 256'b1101111100000000100111110000001001010000000000001101110000000011110110110000001001010000000000000000010101001011000110101001000000011001101110000000010101001011000110100111000000011001110110000000010101001011000110100111000000011001101110000000010101001011 
+	Parameter INIT_54 bound to: 256'b1101111100000001100111110000001111011001000000101101111100000000100111110000001001010000000000001101101000000011110110010000001001010000000000000000000000100101110111110000010000011111000000011101110000000011110111110000000110011111000000111101101100000010 
+	Parameter INIT_55 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010000000000000000000000100101110111110000010000011111000000011101101000000011 
+	Parameter INIT_56 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_57 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_58 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_59 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_5A bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_5B bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_5C bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_5D bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_5E bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_5F bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_60 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_61 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_62 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_63 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_64 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_65 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_66 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_67 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_68 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_69 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_6A bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_6B bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_6C bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_6D bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_6E bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_6F bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_70 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_71 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_72 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_73 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_74 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_75 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_76 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_77 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_78 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_79 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_7A bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_7B bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_7C bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_7D bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_7E bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_7F bound to: 256'b0010000000010111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
+	Parameter INIT_A bound to: 36'b000000000000000000000000000000000000 
+	Parameter INIT_B bound to: 36'b000000000000000000000000000000000000 
+	Parameter INIT_FILE bound to: NONE - type: string 
+	Parameter IS_CLKARDCLK_INVERTED bound to: 1'b0 
+	Parameter IS_CLKBWRCLK_INVERTED bound to: 1'b0 
+	Parameter IS_ENARDEN_INVERTED bound to: 1'b0 
+	Parameter IS_ENBWREN_INVERTED bound to: 1'b0 
+	Parameter IS_RSTRAMARSTRAM_INVERTED bound to: 1'b0 
+	Parameter IS_RSTRAMB_INVERTED bound to: 1'b0 
+	Parameter IS_RSTREGARSTREG_INVERTED bound to: 1'b0 
+	Parameter IS_RSTREGB_INVERTED bound to: 1'b0 
+	Parameter RAM_EXTENSION_A bound to: NONE - type: string 
+	Parameter RAM_EXTENSION_B bound to: NONE - type: string 
+	Parameter RAM_MODE bound to: TDP - type: string 
+	Parameter RDADDR_COLLISION_HWCONFIG bound to: DELAYED_WRITE - type: string 
+	Parameter READ_WIDTH_A bound to: 18 - type: integer 
+	Parameter READ_WIDTH_B bound to: 18 - type: integer 
+	Parameter RSTREG_PRIORITY_A bound to: REGCE - type: string 
+	Parameter RSTREG_PRIORITY_B bound to: REGCE - type: string 
+	Parameter SIM_COLLISION_CHECK bound to: ALL - type: string 
+	Parameter SIM_DEVICE bound to: 7SERIES - type: string 
+	Parameter SRVAL_A bound to: 36'b000000000000000000000000000000000000 
+	Parameter SRVAL_B bound to: 36'b000000000000000000000000000000000000 
+	Parameter WRITE_MODE_A bound to: WRITE_FIRST - type: string 
+	Parameter WRITE_MODE_B bound to: WRITE_FIRST - type: string 
+	Parameter WRITE_WIDTH_A bound to: 18 - type: integer 
+	Parameter WRITE_WIDTH_B bound to: 18 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'RAMB36E1' (21#1) [F:/Xilinx/Vivado/2016.2/scripts/rt/data/unisim_comp.v:42125]
+INFO: [Synth 8-256] done synthesizing module 'software' (22#1) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/software/software.v:54]
+INFO: [Synth 8-256] done synthesizing module 'project' (23#1) [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/project.v:13]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:08 . Memory (MB): peak = 312.332 ; gain = 105.137
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:09 . Memory (MB): peak = 312.332 ; gain = 105.137
+---------------------------------------------------------------------------------
+WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'framebuffer' instantiated as 'vga_example_inst/my_framebuffer' [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/sources_1/imports/Lab #8 Files/vga_example.v:142]
+INFO: [Netlist 29-17] Analyzing 191 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.runs/synth_1/.Xil/Vivado-3520-AwesomeSauce/dcp/framebuffer_in_context.xdc] for cell 'vga_example_inst/my_framebuffer'
+Finished Parsing XDC File [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.runs/synth_1/.Xil/Vivado-3520-AwesomeSauce/dcp/framebuffer_in_context.xdc] for cell 'vga_example_inst/my_framebuffer'
+Parsing XDC File [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/constrs_1/imports/Lab #8 Files/project.xdc]
+Finished Parsing XDC File [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/constrs_1/imports/Lab #8 Files/project.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_8/EE178_Lab_8.srcs/constrs_1/imports/Lab #8 Files/project.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/project_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/project_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Timing 38-2] Deriving generated clocks
+Completed Processing XDC Constraints
+
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 132 instances were transformed.
+  BUFGCE => BUFGCTRL: 1 instances
+  FD => FDRE: 48 instances
+  FDR => FDRE: 20 instances
+  LUT6_2 => LUT6_2 (LUT6, LUT5): 50 instances
+  MMCME2_BASE => MMCME2_ADV: 1 instances
+  RAM256X1S => RAM256X1S (RAMS64E, RAMS64E, RAMS64E, RAMS64E, MUXF7, MUXF7, MUXF8): 8 instances
+  RAM32M => RAM32M (RAMS32, RAMS32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32): 4 instances
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 576.141 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:14 ; elapsed = 00:00:17 . Memory (MB): peak = 576.141 ; gain = 368.945
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:14 ; elapsed = 00:00:17 . Memory (MB): peak = 576.141 ; gain = 368.945
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 576.141 ; gain = 368.945
+---------------------------------------------------------------------------------
+INFO: [Synth 8-5546] ROM "vcount" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "b" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "b" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "count2" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "leds" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "leds" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "qssd" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "qssd" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "qssd" won't be mapped to RAM because it is too sparse
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:15 ; elapsed = 00:00:18 . Memory (MB): peak = 576.141 ; gain = 368.945
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     15 Bit       Adders := 1     
+	   2 Input     11 Bit       Adders := 4     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 1     
+	   3 Input      8 Bit       Adders := 2     
+	   2 Input      8 Bit       Adders := 4     
+	   2 Input      4 Bit       Adders := 2     
+	   2 Input      2 Bit       Adders := 1     
++---XORs : 
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	               20 Bit    Registers := 1     
+	               17 Bit    Registers := 1     
+	               16 Bit    Registers := 1     
+	               15 Bit    Registers := 1     
+	               11 Bit    Registers := 4     
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 7     
+	                4 Bit    Registers := 4     
+	                2 Bit    Registers := 3     
+	                1 Bit    Registers := 12    
++---Muxes : 
+	   2 Input     20 Bit        Muxes := 1     
+	   2 Input     16 Bit        Muxes := 1     
+	   2 Input     15 Bit        Muxes := 1     
+	   2 Input     11 Bit        Muxes := 2     
+	   2 Input      9 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 11    
+	   4 Input      8 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 15    
+	   3 Input      4 Bit        Muxes := 2     
+	   4 Input      4 Bit        Muxes := 1     
+	   2 Input      2 Bit        Muxes := 2     
+	   5 Input      2 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 10    
+	   3 Input      1 Bit        Muxes := 1     
+	   7 Input      1 Bit        Muxes := 6     
+	   4 Input      1 Bit        Muxes := 5     
+	  16 Input      1 Bit        Muxes := 7     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module project 
+Detailed RTL Component Info : 
++---Registers : 
+	               20 Bit    Registers := 1     
+	               16 Bit    Registers := 1     
+	                1 Bit    Registers := 1     
++---Muxes : 
+	   2 Input     20 Bit        Muxes := 1     
+	   2 Input     16 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 5     
+	   2 Input      4 Bit        Muxes := 1     
+Module vga_timing 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     11 Bit       Adders := 2     
++---Registers : 
+	               11 Bit    Registers := 2     
++---Muxes : 
+	   2 Input     11 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 2     
+Module linedraw 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 1     
+	   3 Input      8 Bit       Adders := 2     
+	   2 Input      8 Bit       Adders := 4     
++---Registers : 
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 2     
+	                2 Bit    Registers := 1     
++---Muxes : 
+	   2 Input      9 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 6     
+	   2 Input      2 Bit        Muxes := 2     
+	   5 Input      2 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 3     
+Module vga_example 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     11 Bit       Adders := 2     
+	   2 Input      4 Bit       Adders := 2     
++---XORs : 
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	               17 Bit    Registers := 1     
+	               11 Bit    Registers := 2     
+	                8 Bit    Registers := 5     
+	                4 Bit    Registers := 4     
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 11    
++---Muxes : 
+	   4 Input      8 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 14    
+	   3 Input      4 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 4     
+	   3 Input      1 Bit        Muxes := 1     
+	   7 Input      1 Bit        Muxes := 6     
+Module quad_seven_seg 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     15 Bit       Adders := 1     
+	   2 Input      2 Bit       Adders := 1     
++---Registers : 
+	               15 Bit    Registers := 1     
+	                2 Bit    Registers := 1     
++---Muxes : 
+	   2 Input     15 Bit        Muxes := 1     
+	   4 Input      4 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 1     
+	   4 Input      1 Bit        Muxes := 5     
+	  16 Input      1 Bit        Muxes := 7     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 576.141 ; gain = 368.945
+---------------------------------------------------------------------------------
+Start Cross Boundary Optimization
+---------------------------------------------------------------------------------
+INFO: [Synth 8-5546] ROM "vga_example_inst/my_timing/vcount" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "vga_example_inst/b" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "vga_example_inst/b" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "quad_seven_seg_inst/count2" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "leds" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "leds" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "qssd" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "qssd" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "qssd" won't be mapped to RAM because it is too sparse
+---------------------------------------------------------------------------------
+Finished Cross Boundary Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:19 . Memory (MB): peak = 576.141 ; gain = 368.945
+---------------------------------------------------------------------------------
+Finished Parallel Reinference  : Time (s): cpu = 00:00:16 ; elapsed = 00:00:19 . Memory (MB): peak = 576.141 ; gain = 368.945
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Area Optimization
+---------------------------------------------------------------------------------
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\kcpsm6_inst/sync_sleep_flop )
+INFO: [Synth 8-3886] merging instance 'vga_example_inst/framebuffer_pixelpair_out_sel_reg' (FD) to 'vga_example_inst/hcount_delayed_reg[0]'
+WARNING: [Synth 8-3332] Sequential element (kcpsm6_inst/sync_sleep_flop) is unused and will be removed from module project.
+WARNING: [Synth 8-3332] Sequential element (kcpsm6_inst/k_write_strobe_flop) is unused and will be removed from module project.
+WARNING: [Synth 8-3332] Sequential element (kcpsm6_inst/read_strobe_flop) is unused and will be removed from module project.
+WARNING: [Synth 8-3332] Sequential element (vga_example_inst/my_linedraw/err_reg[8]) is unused and will be removed from module project.
+WARNING: [Synth 8-3332] Sequential element (vga_example_inst/framebuffer_pixelpair_out_sel_reg) is unused and will be removed from module project.
+---------------------------------------------------------------------------------
+Finished Area Optimization : Time (s): cpu = 00:00:18 ; elapsed = 00:00:21 . Memory (MB): peak = 576.141 ; gain = 368.945
+---------------------------------------------------------------------------------
+Finished Parallel Area Optimization  : Time (s): cpu = 00:00:18 ; elapsed = 00:00:21 . Memory (MB): peak = 576.141 ; gain = 368.945
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:27 ; elapsed = 00:00:30 . Memory (MB): peak = 576.141 ; gain = 368.945
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:28 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+Finished Parallel Technology Mapping Optimization  : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Static Shift Register Report:
++------------+-------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name | RTL Name                      | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++------------+-------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|project     | vga_example_inst/prng_reg[17] | 3      | 1     | NO           | NO                 | YES               | 1      | 0       | 
+|project     | vga_example_inst/prng_reg[14] | 6      | 1     | NO           | NO                 | YES               | 1      | 0       | 
++------------+-------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++------+--------------+----------+
+|      |BlackBox name |Instances |
++------+--------------+----------+
+|1     |framebuffer   |         1|
++------+--------------+----------+
+
+Report Cell Usage: 
++------+------------+------+
+|      |Cell        |Count |
++------+------------+------+
+|1     |framebuffer |     1|
+|2     |BUFGCE      |     1|
+|3     |BUFH        |     1|
+|4     |CARRY4      |    20|
+|5     |LUT1        |    22|
+|6     |LUT2        |    56|
+|7     |LUT3        |    26|
+|8     |LUT4        |    73|
+|9     |LUT5        |    44|
+|10    |LUT6        |   134|
+|11    |LUT6_2      |    50|
+|12    |MMCME2_BASE |     1|
+|13    |MUXCY       |    29|
+|14    |MUXF7       |     3|
+|15    |ODDR        |     1|
+|16    |RAM256X1S   |     8|
+|17    |RAM32M      |     4|
+|18    |RAMB36E1    |     1|
+|19    |SRL16E      |     2|
+|20    |XORCY       |    27|
+|21    |FD          |    47|
+|22    |FDR         |    18|
+|23    |FDRE        |   216|
+|24    |IBUF        |    22|
+|25    |OBUF        |    43|
++------+------------+------+
+
+Report Instance Areas: 
++------+----------------------+---------------+------+
+|      |Instance              |Module         |Cells |
++------+----------------------+---------------+------+
+|1     |top                   |               |   861|
+|2     |  kcpsm6_inst         |kcpsm6         |   262|
+|3     |  quad_seven_seg_inst |quad_seven_seg |    58|
+|4     |  software_inst       |software       |     1|
+|5     |  vga_example_inst    |vga_example    |   439|
+|6     |    my_linedraw       |linedraw       |   179|
+|7     |    my_timing         |vga_timing     |    85|
++------+----------------------+---------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:29 ; elapsed = 00:00:32 . Memory (MB): peak = 618.348 ; gain = 411.152
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 5 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:17 ; elapsed = 00:00:23 . Memory (MB): peak = 618.348 ; gain = 145.918
+Synthesis Optimization Complete : Time (s): cpu = 00:00:29 ; elapsed = 00:00:33 . Memory (MB): peak = 618.348 ; gain = 411.152
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 229 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 139 instances were transformed.
+  (MUXCY,XORCY) => CARRY4: 10 instances
+  BUFGCE => BUFGCTRL: 1 instances
+  FD => FDRE: 47 instances
+  FDR => FDRE: 18 instances
+  LUT6_2 => LUT6_2 (LUT5, LUT6): 50 instances
+  MMCME2_BASE => MMCME2_ADV: 1 instances
+  RAM256X1S => RAM256X1S (MUXF7, MUXF7, MUXF8, RAMS64E, RAMS64E, RAMS64E, RAMS64E): 8 instances
+  RAM32M => RAM32M (RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMS32, RAMS32): 4 instances
+
+INFO: [Common 17-83] Releasing license: Synthesis
+210 Infos, 6 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 618.348 ; gain = 411.152
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.017 . Memory (MB): peak = 618.348 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Mon Dec 12 21:05:51 2016...

@@ -1,0 +1,30 @@
+Vivado Simulator 2016.2
+Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
+Running: F:/Xilinx/Vivado/2016.2/bin/unwrapped/win64.o/xelab.exe -wto 6b2b52a0fb714914b684a508b73e0404 --debug typical --relax --mt 2 -L xil_defaultlib -L xpm -L blk_mem_gen_v8_3_3 -L unisims_ver -L unimacro_ver -L secureip --snapshot testbench_behav xil_defaultlib.testbench xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-1783] select index 30 into current_contents is out of bounds [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_6/EE178_Lab_6.ip_user_files/ipstatic/blk_mem_gen_v8_3_3/simulation/blk_mem_gen_v8_3.v:2414]
+WARNING: [VRFC 10-1783] select index 62 into current_contents is out of bounds [C:/Users/Justin/Documents/4th School Year/Fall 2016 Semester/EE178/Vivado Projects/EE178_Lab_6/EE178_Lab_6.ip_user_files/ipstatic/blk_mem_gen_v8_3_3/simulation/blk_mem_gen_v8_3.v:2415]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module unisims_ver.IBUF
+Compiling module unisims_ver.MMCME2_ADV(BANDWIDTH="OPTIMIZED"...
+Compiling module unisims_ver.MMCME2_BASE(CLKFBOUT_MULT_F=10.0...
+Compiling module unisims_ver.BUFH
+Compiling module unisims_ver.BUFGCE_default
+Compiling module unisims_ver.ODDR
+Compiling module xil_defaultlib.vga_timing
+Compiling module blk_mem_gen_v8_3_3.blk_mem_gen_v8_3_3_output_stage(...
+Compiling module blk_mem_gen_v8_3_3.blk_mem_gen_v8_3_3_output_stage(...
+Compiling module blk_mem_gen_v8_3_3.blk_mem_gen_v8_3_3_softecc_outpu...
+Compiling module blk_mem_gen_v8_3_3.blk_mem_gen_v8_3_3_mem_module(C_...
+Compiling module blk_mem_gen_v8_3_3.blk_mem_gen_v8_3_3(C_FAMILY="art...
+Compiling module xil_defaultlib.framebuffer
+Compiling module xil_defaultlib.linedraw
+Compiling module xil_defaultlib.vga_example
+Compiling module xil_defaultlib.tiff_writer
+Compiling module xil_defaultlib.testbench
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot testbench_behav

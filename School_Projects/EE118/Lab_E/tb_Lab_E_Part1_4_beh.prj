@@ -1,0 +1,4 @@
+verilog work "Lab_E_part1.v"
+verilog work "Lab_E_Part1_4-bit.v"
+verilog work "tb_Lab_E_Part1_4-bit.v"
+verilog work "D:/14.7/ISE_DS/ISE//verilog/src/glbl.v"

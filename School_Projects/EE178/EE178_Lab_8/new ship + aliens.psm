@@ -1,0 +1,2187 @@
+
+;;============================================================================
+;; File: software.psm
+;; This is the PicoBlaze example game program for EE178 Lab #8.
+;; No guarantee this is bug-free but it is a playable example.
+;;============================================================================
+
+;;============================================================================
+;; Ports and related constants.
+;;============================================================================
+
+CONSTANT stax            , 00 ; port for 8-bit start-x
+CONSTANT stay            , 01 ; port for 8-bit start-y
+CONSTANT endx            , 02 ; port for 8-bit end-x
+CONSTANT endy            , 03 ; port for 8-bit end-y
+CONSTANT busy            , 04 ; port for 8-bit busy
+CONSTANT beam            , 05 ; port for 8-bit beam
+CONSTANT mode            , 06 ; port for 8-bit mode
+CONSTANT prng            , 07 ; port for 8-bit prng
+CONSTANT leds_lo         , 08 ; port for 8-bit led data out
+CONSTANT leds_hi         , 09 ; port for 8-bit led data out
+CONSTANT qssd_lo         , 0a ; port for 8-bit qssd data out
+CONSTANT qssd_hi         , 0b ; port for 8-bit qssd data out
+CONSTANT qssd_dp         , 0c ; port for 8-bit qssd data out
+CONSTANT switches_lo     , 0d ; port for 8-bit switch input
+CONSTANT switches_hi     , 0e ; port for 8-bit switch input
+CONSTANT buttons         , 0f ; port for 8-bit button input
+
+CONSTANT busy_go         , 01 ; go command and busy status
+
+CONSTANT beam_hi         , 0f ; beam high intensity
+CONSTANT beam_md         , 07 ; beam med intensity
+CONSTANT beam_lo         , 03 ; beam low intensity
+
+CONSTANT mode_hld        , 00 ; mode hold framebuffer
+CONSTANT mode_clr        , 01 ; mode clear framebuffer
+CONSTANT mode_lin        , 02 ; mode linear decay
+CONSTANT mode_exp        , 03 ; mode exponential decay
+
+CONSTANT buttons_ct      , 10 ; center
+CONSTANT buttons_up      , 08 ; up
+CONSTANT buttons_dn      , 04 ; down
+CONSTANT buttons_lf      , 02 ; left
+CONSTANT buttons_rt      , 01 ; right
+
+;;============================================================================
+;; Game state declarations.
+;;============================================================================
+
+NAMEREG s0, gs_major
+CONSTANT gs_major_attrone, 00 ; state assignment
+CONSTANT gs_major_attrtwo, 01 ; state assignment
+CONSTANT gs_major_playing, 02 ; state assignment
+CONSTANT gs_major_gameend, 03 ; state assignment
+
+NAMEREG s1, gs_minor
+CONSTANT gs_minor_begins , 00 ; counter initialize
+CONSTANT gs_minor_twosec , 78 ; frame count about 2.0 secs
+CONSTANT gs_minor_onesec , 3c ; frame count about 1.0 secs
+CONSTANT gs_minor_getrdy , 1e ; frame count about 0.5 secs
+
+;; For bullet  ~~~~~MODIFY FOR USER BULLET~~~~~
+NAMEREG s2, gs_ballx
+NAMEREG s3, gs_bally
+NAMEREG s4, gs_balldx										;; DON'T NEED THIS BECAUSE BULLET IS LINEAR
+NAMEREG s5, gs_balldy
+CONSTANT gs_ball_ydim    , 03 ; it's this plus 1			;; Length of bullet (used later in draw_gs)
+
+CONSTANT gs_ball_speed   , 02 ; pixels per frame (speed of bullet)
+
+;; For spaceship		~~~~~MODIFY FOR SPACE SHIP~~~~~
+NAMEREG s6, gs_padlx
+CONSTANT gs_padly        , e5 ; spaceship y-location (unsigned)
+CONSTANT gs_padl_xdim    , 16 ; added to x-location of spaceship to draw width of spaceship 
+CONSTANT gs_padl_ydim    , 08 ; added to y-location of spaceship to draw height of spaceship
+CONSTANT gs_padl_xdim1   , 06 ; for the spaceship gun
+CONSTANT gs_padl_xdimmid , 0b ; for center of spaceship
+CONSTANT gs_padl_xdim2   , 10 ; for the spaceship gun
+CONSTANT gs_padl_ydim1   , 03 ; for the spaceship gun
+CONSTANT gs_padlyfull    , 20 ; distance between bottom and top of spaceship
+CONSTANT gs_padl_speed   , 04 ; pixels per frame (speed of space ship)
+
+;;============================================================================
+;; Global variables.
+;;============================================================================
+
+NAMEREG s7, loopvar            ; reserved
+NAMEREG s8, loopvar2            ; reserved
+
+NAMEREG s9, xpos              ; for drawing routines
+NAMEREG sA, ypos              ; for drawing routines
+NAMEREG sB, alien_projx
+NAMEREG sC, alien_projy
+NAMEREG sD, btnsamp           ; button sample
+NAMEREG sE, deltax
+NAMEREG sF, scratch           ; for scratch
+
+;; FOR ALIEN COLUMNS
+CONSTANT col1		, 19 ; decimal 25
+CONSTANT col2		, 37 ; decimal 55
+CONSTANT col3		, 55 ; decimal 85
+CONSTANT col4		, 73 ; decimal 115
+CONSTANT col5		, 91 ; decimal 145
+CONSTANT col6		, af ; decimal 90
+CONSTANT col7		, 64 ; decimal 100
+CONSTANT col8		, 73 ; decimal 115
+CONSTANT col9		, 7d ; decimal 125
+CONSTANT col10		, 8c ; decimal 140
+CONSTANT col11		, 96 ; decimal 150
+CONSTANT col12		, a5 ; decimal 165
+CONSTANT col13		, af ; decimal 175
+CONSTANT col14		, be ; decimal 190
+
+;; FOR ALIENS
+CONSTANT ramshiftx	, 01 ; address for +1 or -1 for delta x
+CONSTANT ramalieny	, 02 ; address for delta y
+CONSTANT ramwait	, 03 ; address for wait for aliens
+CONSTANT ramprojx1	, 04 ; address for x1 for alien projectile
+CONSTANT ramprojx2	, 05 ; address for x2 for alien projectile
+CONSTANT ramprojy1	, 06 ; address for y1 for alien projectile
+CONSTANT ramprojy2	, 07 ; address for y2 for alien projectile
+CONSTANT ramrandom	, 08 ; address for random number
+CONSTANT ramenable	, 09 ; address for enable projectile value
+CONSTANT ramdownen	, 0a ; address for enable left side down shift
+CONSTANT ramprojwait, 0b ; address for wait for projectiles
+CONSTANT ramprojdeltawait, 0c ; address for proj delta y wait
+CONSTANT ramdeltaxen, 0d ; address for enable delta x
+CONSTANT ramdeltaycount	, 0e ; address for delta y count
+CONSTANT ramalienx	, 0f ; address for alien x coordinate
+CONSTANT ramalienlives1	, 10 ; address for first set of alien lives
+
+CONSTANT row1		, 19 ; decimal 25
+CONSTANT waittime	, 06
+CONSTANT projwaittime	, 01
+CONSTANT bottom_border1	, fa
+CONSTANT bottom_border2	, fb
+CONSTANT deltaxen	, 01 
+
+;;============================================================================
+;; Other stuff.
+;;============================================================================
+
+CONSTANT minusone        , ff ; minusone
+CONSTANT minusmax        , 80 ; minus 128
+CONSTANT plusmax         , 7f ; plus 127
+CONSTANT zero            , 00 ; zero
+CONSTANT one             , 01 ; one
+
+;;============================================================================
+;; Boot.
+;; This performs one-time initialization of the hardware and the game state.
+;;============================================================================
+
+         boot: CALL hw_init                        ; initial hardware setup
+               CALL gs_init                        ; set initial game state
+		LOAD scratch, row1
+		STORE scratch, ramalieny
+		LOAD scratch, zero
+		LOAD scratch, zero
+		LOAD scratch, 00
+		STORE scratch, ramdownen
+		STORE scratch, ramprojwait
+		STORE scratch, ramprojdeltawait
+		STORE scratch, ramdeltaycount
+		STORE scratch, ramwait							; zero out wait
+		STORE scratch, ramprojy1			; zero out alien_projy
+		LOAD scratch, 01
+		STORE scratch, ramdeltaxen
+		LOAD scratch, ff
+		STORE scratch, ramalienlives1
+               ENABLE INTERRUPT                    ; enable vblnk interrupt
+
+;;============================================================================
+;; Main.
+;; This is an empty loop, does nothing, waiting for interrupts to occur.
+;;============================================================================
+
+         main: JUMP main                           ; empty loop, does nothing
+
+;;============================================================================
+;; Interrupt.
+;; This is the main game logic.  At each interrupt, the procedure is to read
+;; the user input, calculate the next game state, and then draw the game
+;; state on the display.
+;;============================================================================
+
+          isr: CALL user_input                     ; get the user input
+               CALL calc_next_gs                   ; calculate next state
+               CALL draw_gs                        ; draw the state
+               RETURNI ENABLE                      ; return with enable
+
+;;============================================================================
+;; Subroutine: hw_init
+;; This puts the hardware into a known, initial state.  This includes a wait
+;; to make sure the line drawing harware is idle (a wait loop which is also
+;; called from other routines, as a subroutine).
+;;============================================================================
+
+      hw_init: LOAD scratch, zero                  ; going to use lot of zero
+               OUTPUT scratch, leds_lo             ; turn off lo leds
+               OUTPUT scratch, leds_hi             ; turn off hi leds
+               OUTPUT scratch, qssd_lo             ; zeroize qssd lo
+               OUTPUT scratch, qssd_hi             ; zeroize qssd hi
+               OUTPUT scratch, qssd_dp             ; turn off qssd dots
+               LOAD scratch, mode_exp              ; load desired mode
+               OUTPUT scratch, mode                ; program the framebuffer
+               LOAD scratch, beam_hi               ; load desired beam
+               OUTPUT scratch, beam                ; program the framebuffer
+ hw_init_wait: INPUT scratch, busy                 ; get framebuffer busy
+               COMPARE scratch, busy_go            ; check framebuffer busy
+               JUMP Z, hw_init_wait                ; back to wait if busy
+               RETURN                              ; return
+
+;;============================================================================
+;; Subroutine: gs_init
+;; This puts the game into a known, initial state.  I've assigned all of the
+;; game state to a known value -- although some of these assignments do not
+;; really matter based on design of the game state machine.
+;;============================================================================
+
+      gs_init: LOAD gs_major, gs_major_attrone     ; start in attract mdoe
+               LOAD gs_minor, gs_minor_begins      ; start with counter zero
+               LOAD gs_ballx, zero                 ; doesn't really matter
+               LOAD gs_bally, zero                 ; doesn't really matter
+               LOAD gs_padlx, zero                 ; doesn't really matter
+               LOAD gs_balldx, zero                ; doesn't really matter
+               LOAD gs_balldy, zero                ; doesn't really matter
+               RETURN                              ; return
+
+;;============================================================================
+;; Subroutine: user_input
+;; This samples the user inputs required for this game (which happens to be
+;; only the buttons, but this could is extended to the switches as well).
+;; This subroutine calls an example of how to use the RAM scratchpad, by
+;; implementing access of a 256x8 array using switches, button, and qssd.
+;; The call to the ram_example routine (and ram_example routine itself)
+;; can be entirely removed as it is not needed in this game.
+;;============================================================================
+
+   user_input: INPUT btnsamp, buttons              ; sample button hardware
+               RETURN                              ; return      
+
+;;============================================================================
+;; Subroutine: calc_next_gs
+;; This logic calculates the next state of the game, given the sampled user
+;; inputs and the current state of the game.
+;;============================================================================
+
+ calc_next_gs: COMPARE gs_major, gs_major_attrone  ; are we in attrone?
+               JUMP Z, calc_attrone                ; do ns calc for attrone
+               COMPARE gs_major, gs_major_attrtwo  ; are we in attrtwo?
+               JUMP Z, calc_attrtwo                ; do ns calc for attrtwo
+               COMPARE gs_major, gs_major_playing  ; are we in playing?
+               JUMP Z, calc_playing                ; do ns calc for playing
+               COMPARE gs_major, gs_major_gameend  ; are we in gameend?
+               JUMP Z, calc_gameend                ; do ns calc for gameend
+               RETURN                              ; return
+
+ calc_attrone: TEST btnsamp, buttons_ct
+               JUMP NZ, goto_playing
+               COMPARE gs_minor, gs_minor_twosec
+               JUMP Z, goto_attrtwo
+               ADD gs_minor, one
+               RETURN
+
+ calc_attrtwo: TEST btnsamp, buttons_ct
+               JUMP NZ, goto_playing
+               COMPARE gs_minor, gs_minor_onesec
+               JUMP Z, goto_attrone
+               ADD gs_minor, one
+               RETURN
+
+			   ;; Gameplay state
+ calc_playing: 
+			   CALL upd_padl									;; Unconditional CALL to subroutine upd_padl
+			   CALL upd_ball			   
+			   LOAD loopvar, gs_ball_speed
+                
+			   ;; Do something similar to above except for when alien's bullet hits spaceship or when all aliens are gone
+keep_playing:			  
+               RETURN
+
+     upd_padl: ;; This section loads a zero to the scratch register and checks for button press by
+			   ;; modifying the scratch register respectfully to the input
+			   ;; Then, a COMPARE instruction is used to jump to the section which defines what happens during button press
+	 
+			   ;; LIGHT AND RIGHT BUTTONS TO MOVE LEFT AND RIGHT
+			   LOAD scratch, zero								;; LOAD zero to scratch register
+               TEST btnsamp, buttons_lf							;; If left button is pressed/held
+               SUBCY scratch, zero								;; Subtracts zero from scratch register if left button is pressed/held (scratch = -1)
+               TEST btnsamp, buttons_rt							;; If right button is pressed/held
+               ADDCY scratch, zero								;; Adds zero from to scratch register if right button is pressed/held (scratch = 1)
+			   COMPARE scratch, minusone						;; If scratch = -1, execute next instruction
+               CALL Z, upd_padl_lt								;; Calls subroutine upd_padl_lt if zero flag state is specified (section that defines what happens when left button is pressed/held)
+               COMPARE scratch, one								;; If scratch = 1, execute next instruction
+               CALL Z, upd_padl_rt								;; Calls subroutine upd_padl_rt if zero flag state is specified (section that defines what happens when right button is pressed/held)
+			   
+			   ;; DOWN BUTTON TO RESTART GAME
+			   COMPARE btnsamp, buttons_dn						;; If down button is pressesd/held
+			   ;CALL reset_bullet
+			   JUMP Z, goto_gameend								;; Go to goto_gameend state (end game/restart)
+    
+			   RETURN
+			   
+			   ;; Subroutine that defines what happens when the left button is pressed/held
+  upd_padl_lt: SUB gs_padlx, gs_padl_speed						;; Subtracts 4 pixels per frame 
+               RETURN NC										;; If button is no longer pressed/held, return 
+               LOAD gs_padlx, zero
+               RETURN
+			   
+			   ;; Subroutine that defines what happens when the right button is pressed/held
+  upd_padl_rt: ADD gs_padlx, gs_padl_speed						;; Adds 4 pixels per frame 
+               LOAD scratch, gs_padlx							;; Load contents of gs_padlx to scratch related
+              
+			   ;; Checks that the spaceship doesn't move past the screen
+     		   ADD scratch, gs_padl_xdim					
+               RETURN NC
+               LOAD gs_padlx, minusone
+               SUB gs_padlx, gs_padl_xdim
+               RETURN
+	
+			   ;; ~~~~~DESCRIBES THE BEHAVIOR OF THE BULLET (SPACESHIP)~~~~~
+     upd_ball:      
+			   ;LOAD loopvar, gs_ball_speed
+			   LOAD scratch, gs_padly
+			   SUB scratch, gs_padl_ydim1
+			   COMPARE gs_bally, scratch
+			   JUMP C, fired
+			   
+			   LOAD scratch, zero								;; LOAD zero to scratch register
+               TEST btnsamp, buttons_lf							;; If left button is pressed/held
+               SUBCY scratch, zero								;; Subtracts zero from scratch register if left button is pressed/held (scratch = -1)
+               TEST btnsamp, buttons_rt							;; If right button is pressed/held
+               ADDCY scratch, zero								;; Adds zero from to scratch register if right button is pressed/held (scratch = 1)
+			   COMPARE scratch, minusone						;; If scratch = -1, execute next instruction
+               CALL Z, move_bullet							    ;; Calls subroutine move_left if zero flag state is specified (section that defines what happens when left button is pressed/held)
+               COMPARE scratch, one								;; If scratch = 1, execute next instruction
+               CALL Z, move_bullet   						    ;; Calls subroutine move_right if zero flag state is specified (section that defines what happens when right button
+			   TEST btnsamp, buttons_up
+			   RETURN Z
+			   SUBCY gs_bally, 00
+			   JUMP keep_playing
+				
+		fired: SUB loopvar, one
+			   JUMP C, upd_padl
+         	   SUB gs_bally, 05
+			   COMPARE gs_bally, zero
+			   JUMP Z, reset_bullet
+			   RETURN
+			   
+skip_hit:	   JUMP fired
+	              		   
+			   ;; Moves bullet with respect to the x-position of the spaceship	   
+move_bullet:   ;;COMPARE btnsamp, button_up
+			   ;;JUMP Z, bullet_release
+			   LOAD scratch, gs_padlx
+			   ADD scratch, gs_padl_xdimmid
+			   LOAD gs_ballx, scratch
+			   RETURN
+			   
+	
+reset_bullet: ;; Resets bullet back to middle of spaceship
+	  	       LOAD gs_ballx, gs_padlx
+			   LOAD scratch, gs_padly 
+			   SUB scratch, gs_padlyfull
+			   LOAD gs_bally, gs_padly
+			   
+			   RETURN
+			   
+ calc_gameend: COMPARE gs_minor, gs_minor_onesec
+               JUMP Z, goto_attrone
+               ADD gs_minor, one
+               RETURN
+
+ goto_attrone: LOAD gs_major, gs_major_attrone
+               LOAD gs_minor, gs_minor_begins
+               RETURN
+
+ goto_attrtwo: LOAD gs_major, gs_major_attrtwo
+               LOAD gs_minor, gs_minor_begins
+               RETURN
+
+ goto_playing: LOAD gs_major, gs_major_playing
+               LOAD gs_minor, gs_minor_begins
+               ; get a seed for initial ballx
+               INPUT gs_ballx, prng
+               ; start ball somewhere in the
+               ; horizontal center of screen
+               SRX gs_ballx
+               SRX gs_ballx
+               ADD gs_ballx, plusmax
+               ; get a seed for initial bally
+               INPUT gs_bally, prng
+               ; start ball somewhere in the
+               ; vertical center of screen
+               SRX gs_bally
+               SRX gs_bally
+               ADD gs_bally, plusmax
+               ; start paddle at the horizontal
+               ; center of the screen
+               LOAD gs_padlx, gs_padl_xdim
+               SRX gs_padlx
+               XOR gs_padlx, minusone
+               ADD gs_padlx, one
+               ADD gs_padlx, minusmax
+               ; initial direction for ballx
+               ; desire to start at +1 or -1
+    
+	balldxsta: INPUT gs_balldx, prng
+               TEST gs_balldx, minusmax
+               JUMP Z, balldxpos
+    balldxneg: LOAD gs_balldx, minusone
+               JUMP balldysta
+    balldxpos: LOAD gs_balldx, one
+               ; initial direction for bally
+               ; desire to start at +1 or -1
+    balldysta: INPUT gs_balldy, prng
+               TEST gs_balldy, minusmax
+               JUMP Z, balldypos
+    balldyneg: LOAD gs_balldy, minusone
+               JUMP ballddone
+    balldypos: LOAD gs_balldy, one
+    ballddone: RETURN
+
+ goto_gameend: LOAD gs_major, gs_major_gameend
+               LOAD gs_minor, gs_minor_begins
+               RETURN
+
+;;============================================================================
+;; Subroutine: draw_gs
+;; This uses the current game state as input, and draws it on the display.
+;; This subroutine calls an example of how to output debug or diagnostic info
+;; using the leds.  The call to the draw_gs_debug routine (and draw_gs_debug
+;; routine itself) can be entirely remove as it is required to play the game.
+;;============================================================================
+
+      draw_gs: CALL draw_gs_debug                  ; for debug info display
+               COMPARE gs_major, gs_major_attrone  ; are we in attrone?
+               JUMP Z, draw_attrone                ; do drawing for attrone
+               COMPARE gs_major, gs_major_attrtwo  ; are we in attrtwo?
+               JUMP Z, draw_attrtwo                ; do drawing for attrtwo
+               COMPARE gs_major, gs_major_playing  ; are we in playing?
+               JUMP Z, draw_playing                ; do drawing for playing
+               COMPARE gs_major, gs_major_gameend  ; are we in gameend?
+               JUMP Z, draw_gameend                ; do drawing for gameend
+               RETURN                              ; return
+
+draw_gs_debug: OUTPUT gs_major, leds_hi            ; debug display on leds
+               OUTPUT gs_minor, leds_lo            ; debug display on leds
+               RETURN                              ; return
+
+draw_playing:  CALL draw_ship
+			   CALL draw_aliens
+			   
+draw_ship:	   LOAD xpos, gs_ballx ; draw bullet
+			   LOAD ypos, gs_bally 
+			   CALL moveto
+			   LOAD xpos, gs_ballx
+			   LOAD ypos, gs_bally
+			   ADD ypos, gs_ball_ydim
+			   CALL drawto
+			   
+			   ;; Draws spaceship
+			   LOAD xpos, gs_padlx ; draw padl 
+               LOAD ypos, gs_padly ;; go do padl pos on screen 
+               CALL moveto
+               ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 2'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB xpos, 2'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 3'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB xpos, 4'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 5'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 4'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 1'd
+			   CALL drawto
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 6'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 4'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 2'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 7'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 3'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 3'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 7'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 2'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 4'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 6'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 3'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 5'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB xpos, 4'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 3'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB xpos, 2'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB ypos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB xpos, 1'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   ADD ypos, 2'd
+			   CALL drawto
+			   ; LOAD xpos, gs_padlx 
+               ; LOAD ypos, gs_padly
+			   SUB xpos, 1'd
+			   CALL drawto
+			   
+               ; ADD ypos, gs_padl_ydim ;; add 08'h to ypos
+               ; CALL drawto			;;draw to that that ypos 
+               ; LOAD xpos, gs_padlx
+               ; LOAD ypos, gs_padly
+               ; ADD xpos, gs_padl_xdim 
+               ; ADD ypos, gs_padl_ydim
+               ; CALL drawto
+               ; LOAD xpos, gs_padlx
+               ; LOAD ypos, gs_padly
+               ; ADD xpos, gs_padl_xdim
+               ; CALL drawto
+               ; LOAD xpos, gs_padlx
+               ; LOAD ypos, gs_padly
+               ; CALL drawto
+
+			   
+			   RETURN
+			   
+ draw_aliens:  	
+				;====================================================================================================================
+               ;=====================  START   A L I E N    C O D E     =======================================
+alien_1_1:	   CALL check_if_alive1
+				LOAD xpos, col1			   
+			   ADD xpos, deltax
+			   STORE xpos, ramalienx
+			   FETCH ypos, ramalieny
+               CALL moveto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx	;========  Bullet Line
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx			   ;====== Bullet Line, get initial bullet coordinates
+			   STORE xpos, ramprojx1
+               FETCH ypos, ramalieny
+			   STORE ypos, ramprojy1
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto			
+			   FETCH scratch, ramrandom
+			   	COMPARE scratch, 01
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+
+alien_1_2:	   CALL check_if_alive2
+				LOAD xpos, col2			   
+			   ADD xpos, deltax
+			   STORE xpos, ramalienx
+			   FETCH ypos, ramalieny
+               CALL moveto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx	;========  Bullet Line
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx			   ;====== Bullet Line, get initial bullet coordinates
+			   STORE xpos, ramprojx1
+               FETCH ypos, ramalieny
+			   STORE ypos, ramprojy1
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto			
+			   FETCH scratch, ramrandom
+			   	COMPARE scratch, 02
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+
+			   
+alien_1_3:	   CALL check_if_alive3
+				LOAD xpos, col3			   
+			   ADD xpos, deltax
+			   STORE xpos, ramalienx
+			   FETCH ypos, ramalieny
+               CALL moveto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx	;========  Bullet Line
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx			   ;====== Bullet Line, get initial bullet coordinates
+			   STORE xpos, ramprojx1
+               FETCH ypos, ramalieny
+			   STORE ypos, ramprojy1
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+			   FETCH scratch, ramrandom
+				COMPARE scratch, 03
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+alien_1_4:	   CALL check_if_alive4
+				LOAD xpos, col4			   
+			   ADD xpos, deltax
+			   STORE xpos, ramalienx
+			   FETCH ypos, ramalieny
+               CALL moveto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx	;========  Bullet Line
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx			   ;====== Bullet Line, get initial bullet coordinates
+			   STORE xpos, ramprojx1
+               FETCH ypos, ramalieny
+			   STORE ypos, ramprojy1
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto			
+			   FETCH scratch, ramrandom
+			   	COMPARE scratch, 04
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+alien_1_5:	   CALL check_if_alive5
+				LOAD xpos, col5			   
+			   ADD xpos, deltax
+			   STORE xpos, ramalienx
+			   FETCH ypos, ramalieny
+               CALL moveto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx	;========  Bullet Line
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx			   ;====== Bullet Line, get initial bullet coordinates
+			   STORE xpos, ramprojx1
+               FETCH ypos, ramalieny
+			   STORE ypos, ramprojy1
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto			
+			   FETCH scratch, ramrandom
+			   	COMPARE scratch, 05
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+				
+alien_1_6:	   LOAD xpos, col6			   
+			   ADD xpos, deltax
+			   CALL check_if_alive6
+			   STORE xpos, ramalienx
+			   FETCH ypos, ramalieny
+               CALL moveto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx	;========  Bullet Line
+               FETCH ypos, ramalieny
+			   SUB xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx			   ;====== Bullet Line, get initial bullet coordinates
+			   STORE xpos, ramprojx1
+               FETCH ypos, ramalieny
+			   STORE ypos, ramprojy1
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 10'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 5'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 8'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 6'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB xpos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   ADD xpos, 4'd
+			   CALL drawto
+               FETCH xpos, ramalienx
+               FETCH ypos, ramalieny
+			   SUB ypos, 2'd
+			   CALL drawto			
+			   FETCH scratch, ramrandom
+			   	COMPARE scratch, 06
+				CALL Z, aproj_start1
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, proj_prepare
+			  
+				COMPARE ypos, cd	; check if first row of aliens reached bottom
+				CALL Z, gameover
+			  
+			   ;====================================================================================================================
+               ;==========================================  END   A L I E N    C O D E     =========================================
+
+end_of_aliens:	FETCH scratch, ramwait 			; wait counter for updating aliens
+				COMPARE scratch, waittime
+				CALL Z, shift
+				FETCH scratch, ramwait
+				ADD scratch, 01				; add to wait counter
+				STORE scratch, ramwait
+				
+				FETCH scratch, ramprojwait	; generate new random number and shoot another projectile
+				COMPARE scratch, 78
+				CALL Z, shoot_again
+				FETCH scratch, ramprojwait
+				ADD scratch, 01
+				STORE scratch, ramprojwait
+				
+				FETCH scratch, ramprojdeltawait	; increment counter for projectiles
+				ADD scratch, one
+				STORE scratch, ramprojdeltawait
+				
+               	RETURN
+				
+check_if_alive1: 	LOAD scratch, ramalienlives1
+					TEST scratch, 01
+					RETURN Z
+					JUMP alien_1_2
+					
+check_if_alive2: 	LOAD scratch, ramalienlives1
+					TEST scratch, 02
+					RETURN Z
+					JUMP alien_1_3
+
+check_if_alive3: 	LOAD scratch, ramalienlives1
+					TEST scratch, 04
+					RETURN Z
+					JUMP alien_1_4
+					
+check_if_alive4: 	LOAD scratch, ramalienlives1
+					TEST scratch, 08
+					RETURN Z
+					JUMP alien_1_5
+					
+check_if_alive5: 	LOAD scratch, ramalienlives1
+					TEST scratch, 10
+					RETURN Z
+					JUMP alien_1_6
+					
+check_if_alive6: 	LOAD scratch, ramalienlives1
+					TEST scratch, 20
+					RETURN Z
+					JUMP end_of_aliens
+				
+proj_prepare:	FETCH scratch, ramprojx2
+				COMPARE scratch, zero
+				CALL NZ, proj_check1
+				LOAD scratch, zero
+				STORE scratch, ramprojdeltawait
+				RETURN
+				
+shoot_again:	INPUT scratch, prng
+				SR0 scratch
+				SR0 scratch
+				SR0 scratch
+				SR0 scratch
+				STORE scratch, ramrandom
+				LOAD scratch, 00
+				STORE scratch, ramprojwait
+				RETURN
+
+proj_check1:	FETCH scratch, ramprojy2
+				COMPARE scratch, bottom_border1
+				CALL NZ, proj_check2			;update alien projectile
+				RETURN
+				
+proj_check2:	FETCH scratch, ramprojy2
+				COMPARE scratch, bottom_border2
+				CALL NZ, alien_shoot
+				RETURN
+
+gameover:		LOAD gs_major, gs_major_gameend
+              	LOAD gs_minor, gs_minor_begins
+				LOAD scratch, row1 ; reset row coordinates
+				STORE scratch, 02
+				RETURN
+				
+aproj_start1:	FETCH scratch, ramprojx1
+				SUB scratch, 02
+				STORE scratch, ramprojx2
+				FETCH scratch, ramprojy1
+				STORE scratch, ramprojy2
+				LOAD scratch, 00
+				STORE scratch, ramrandom
+				RETURN
+				
+alien_shoot:	FETCH alien_projx, ramprojx2
+				FETCH alien_projy, ramprojy2
+				CALL aprojmoveto
+				FETCH alien_projx, ramprojx2
+				FETCH alien_projy, ramprojy2
+				ADD alien_projy, 05
+				CALL aprojdrawto
+				FETCH scratch, ramprojdeltawait
+				COMPARE scratch, projwaittime
+				CALL Z, projdeltay
+				RETURN
+				
+projdeltay:		FETCH scratch, ramprojy2
+				ADD scratch, 02
+				STORE scratch, ramprojy2
+				RETURN
+
+shift:			FETCH scratch, ramdownen
+				COMPARE scratch, one
+				CALL Z, left_down
+				COMPARE xpos, e6
+				CALL Z, shift_down
+				COMPARE xpos, col6
+				CALL Z, alien_right
+				COMPARE xpos, e6
+				CALL Z, alien_left
+				CALL shift_sideways
+				LOAD scratch, 00
+				STORE scratch, ramwait
+				RETURN
+
+left_down:		COMPARE xpos, col6
+				CALL Z, shift_down
+				RETURN
+
+shift_sideways: FETCH scratch, ramshiftx
+				OUTPUT scratch, qssd_hi
+				ADD deltax, scratch
+				RETURN
+
+shift_down:		FETCH scratch, ramalieny
+				ADD scratch, 01
+				STORE scratch, ramalieny
+				FETCH scratch, ramdeltaycount
+				ADD scratch, 01
+				STORE scratch, ramdeltaycount
+				OUTPUT scratch, qssd_lo
+				COMPARE scratch, 0a
+				CALL Z, deltax_en
+				CALL NZ, deltax_dis
+				LOAD scratch, 01
+				STORE scratch, ramdownen
+				RETURN
+			
+deltax_en:		LOAD scratch, one
+				STORE scratch, ramdeltaxen
+				RETURN
+
+deltax_dis:		LOAD scratch, zero
+				STORE scratch, ramdeltaxen
+				RETURN
+			
+neutral_deltax:	LOAD scratch, 00
+				STORE scratch, ramshiftx
+				RETURN
+
+alien_right: 	FETCH scratch, ramdeltaxen
+				COMPARE scratch, deltaxen
+				CALL NZ, neutral_deltax
+				CALL Z, pos_deltax
+				RETURN
+
+pos_deltax:		LOAD scratch, 01
+				STORE scratch, ramshiftx
+				LOAD scratch, zero
+				STORE scratch, ramdeltaycount
+				RETURN
+
+alien_left: 	FETCH scratch, ramdeltaxen
+				COMPARE scratch, deltaxen
+				CALL NZ, neutral_deltax
+				CALL Z, neg_deltax
+				RETURN
+
+neg_deltax:		LOAD scratch, FF
+				STORE scratch, ramshiftx
+				LOAD scratch, zero
+				STORE scratch, ramdeltaycount
+				RETURN
+
+ draw_attrone: LOAD xpos, 28 ; draw letter b
+               LOAD ypos, 50
+               CALL moveto
+               LOAD xpos, 28
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 48
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 48
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 28
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58 ; draw letter o
+               LOAD ypos, 70
+               CALL moveto
+               LOAD xpos, 58
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 88 ; draw letter n
+               LOAD ypos, 90
+               CALL moveto
+               LOAD xpos, 88
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, b8 ; draw letter g
+               LOAD ypos, b0
+               CALL moveto
+               LOAD xpos, d8
+               LOAD ypos, b0
+               CALL drawto
+               LOAD xpos, d8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, b8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, b8
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, d8
+               LOAD ypos, 90
+               CALL drawto
+               RETURN
+
+ draw_attrtwo: LOAD xpos, 78 ; draw letter e
+               LOAD ypos, 90
+               CALL moveto
+               LOAD xpos, 58
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 58
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, a8 ; draw letter c
+               LOAD ypos, 70
+               CALL moveto
+               LOAD xpos, 88
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 88
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 90
+               CALL drawto
+               RETURN
+
+
+ draw_gameend: LOAD xpos, 48 ; draw letter d
+               LOAD ypos, 50
+               CALL moveto
+               LOAD xpos, 48
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 28
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 28
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 48
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58 ; draw letter o
+               LOAD ypos, 70
+               CALL moveto
+               LOAD xpos, 58
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, 78
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 58
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, 88 ; draw letter n
+               LOAD ypos, 90
+               CALL moveto
+               LOAD xpos, 88
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, a8
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, d8 ; draw letter e
+               LOAD ypos, 90
+               CALL moveto
+               LOAD xpos, b8
+               LOAD ypos, 90
+               CALL drawto
+               LOAD xpos, b8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, d8
+               LOAD ypos, 70
+               CALL drawto
+               LOAD xpos, b8
+               LOAD ypos, 90
+               CALL drawto
+               RETURN
+
+;;============================================================================
+;; Subroutine: moveto and drawto
+;; The moveto routine uses the global variables xpos and ypos, and the drawto
+;; routine uses these global variables as well as the endpoint coordinates in
+;; the display controller.  Moveto simply copies xpos and ypos into endpoint
+;; coordinates in the display controller, it does not draw anything.  The
+;; drawto routine copies endpoint coordinates to startpoint coordinates (does
+;; not matter if the endpoint was from an actual draw, or simply an update
+;; by moveto) and then copies xpos and ypos into endpoint coordinates, then
+;; starts a linedraw.
+;;============================================================================
+  aprojmoveto: OUTPUT alien_projx, endx                   ; copy global to hardware
+               OUTPUT alien_projy, endy                   ; copy global to hardware
+               RETURN   
+
+  aprojdrawto: INPUT scratch, endx                 ; read hardware
+               OUTPUT scratch, stax                ; write hardware
+               OUTPUT alien_projx, endx                   ; copy global to hardware
+               INPUT scratch, endy                 ; read hardware
+               OUTPUT scratch, stay                ; write hardware
+               OUTPUT alien_projy, endy                   ; copy global to hardware
+               LOAD scratch, busy_go               ; prepare the command
+               OUTPUT scratch, busy                ; send the command
+               CALL hw_init_wait                   ; wait line draw done
+               RETURN    
+			   
+       moveto: OUTPUT xpos, endx                   ; copy global to hardware
+               OUTPUT ypos, endy                   ; copy global to hardware
+               RETURN                              ; return
+
+       drawto: INPUT scratch, endx                 ; read hardware
+               OUTPUT scratch, stax                ; write hardware
+               OUTPUT xpos, endx                   ; copy global to hardware
+               INPUT scratch, endy                 ; read hardware
+               OUTPUT scratch, stay                ; write hardware
+               OUTPUT ypos, endy                   ; copy global to hardware
+               LOAD scratch, busy_go               ; prepare the command
+               OUTPUT scratch, busy                ; send the command
+               CALL hw_init_wait                   ; wait line draw done
+               RETURN                              ; return
+
+;;============================================================================
+;; Interrupt - Vector.
+;;============================================================================
+
+               ADDRESS 7FF                         ; must be located here
+   isr_vector: JUMP isr                            ; always jump to isr
+
+;;============================================================================
+;;
+;;============================================================================

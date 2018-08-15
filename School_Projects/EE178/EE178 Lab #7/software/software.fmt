@@ -1,0 +1,68 @@
+             ;;============================================================================
+             ;; File: software.psm
+             ;; This is the PicoBlaze program for EE178 Lab #7.
+             ;;============================================================================
+             ;;============================================================================
+             ;; Port address declarations.
+             ;;============================================================================
+             CONSTANT switches_lo, 00 ; port for 8-bit switch input
+             CONSTANT switches_hi, 01 ; port for 8-bit switch input
+             CONSTANT leds_lo, 02     ; port for 8-bit led data out
+             CONSTANT leds_hi, 03     ; port for 8-bit led data out
+             CONSTANT my_sid_lo, 48   ; lo byte of student id (put yours here)
+             CONSTANT my_sid_hi, 32   ; hi byte of student id (put yours here)
+             CONSTANT zero, 00        ; zero
+             CONSTANT one, 01         ; one
+             ;;============================================================================
+             ;; Infinite loop.
+             ;;============================================================================
+       loop: INPUT s0, switches_lo    ; get lo switch values
+             INPUT s1, switches_hi    ; get hi switch values
+             LOAD s2, 00
+             COMPARE s0, my_sid_lo
+             JUMP NZ, count_zeros
+             COMPARE s1, my_sid_hi
+             JUMP NZ, count_zeros
+             JUMP endloop
+add_to_cntr: ADD s2, 01
+             RETURN 
+count_zeros: TEST s0, 01
+             CALL Z, add_to_cntr
+             TEST s0, 02
+             CALL Z, add_to_cntr
+             TEST s0, 04
+             CALL Z, add_to_cntr
+             TEST s0, 08
+             CALL Z, add_to_cntr
+             TEST s0, 10
+             CALL Z, add_to_cntr
+             TEST s0, 20
+             CALL Z, add_to_cntr
+             TEST s0, 40
+             CALL Z, add_to_cntr
+             TEST s0, 80
+             CALL Z, add_to_cntr
+             TEST s1, 01
+             CALL Z, add_to_cntr
+             TEST s1, 02
+             CALL Z, add_to_cntr
+             TEST s1, 04
+             CALL Z, add_to_cntr
+             TEST s1, 08
+             CALL Z, add_to_cntr
+             TEST s1, 10
+             CALL Z, add_to_cntr
+             TEST s1, 20
+             CALL Z, add_to_cntr
+             TEST s1, 40
+             CALL Z, add_to_cntr
+             TEST s1, 80
+             CALL Z, add_to_cntr
+             LOAD s0, s2
+             LOAD s1, 00
+    endloop: OUTPUT s0, leds_lo       ; put lo led values
+             OUTPUT s1, leds_hi       ; put hi led values
+             JUMP loop                ; go back and repeat
+             ;;============================================================================
+             ;;
+             ;;============================================================================
