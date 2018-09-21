@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1537509496 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/Static_Var_Func/main.cpp
+	<iostream>
+	"user.h"
+
+1537509473 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/Static_Var_Func/user.cpp
+	"user.h"
+
+1537509473 /home/justin/projects-software/Personal_Projects/C++_BtoE/Static_Var_Func/user.h
+

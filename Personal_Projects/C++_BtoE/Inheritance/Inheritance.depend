@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1537565847 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/Inheritance/main.cpp
+	<iostream>
+	"point.h"
+
+1537566689 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/Inheritance/point.cpp
+	<iostream>
+	"point.h"
+
+1537566702 /home/justin/projects-software/Personal_Projects/C++_BtoE/Inheritance/point.h
+

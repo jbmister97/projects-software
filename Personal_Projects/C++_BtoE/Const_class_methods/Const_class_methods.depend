@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1537510906 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/Const_class_methods/position.cpp
+	<iostream>
+	"position.h"
+
+1537510906 /home/justin/projects-software/Personal_Projects/C++_BtoE/Const_class_methods/position.h
+
