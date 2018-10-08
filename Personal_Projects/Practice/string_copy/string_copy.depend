@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1538444900 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/string_copy/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1538459315 source:/home/justin/projects-software/Personal_Projects/Practice/string_copy/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

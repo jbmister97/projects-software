@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1538460720 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/test_c/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+
