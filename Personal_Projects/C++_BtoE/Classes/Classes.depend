@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1537507916 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/Classes/main.cpp
+	<iostream>
+	"people.h"
+
+1537505811 /home/justin/projects-software/Personal_Projects/C++_BtoE/Classes/Classes.h
+	<iostream>
+
+1537507918 source:/home/justin/projects-software/Personal_Projects/C++_BtoE/Classes/people.cpp
+	"people.h"
+
+1537507918 /home/justin/projects-software/Personal_Projects/C++_BtoE/Classes/people.h
+	<iostream>
+
