@@ -4,7 +4,7 @@
 
 char * str_rev(char *str) {
     int size = strlen(str);
-    char *str_new = (char *) malloc(size + 1);
+    char *str_new = (char *) malloc(size + 1);      // Add one extra byte for null terminator
     int i = 0, j = size - 1;
     char temp;
 
