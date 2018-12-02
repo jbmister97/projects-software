@@ -77,12 +77,39 @@ void free_list(List_Node * head) {
     }
 }
 
-void insert(List_Node * l, int value) {
+void insert_node(List_Node * l, int value, int n) {
+    List_Node * prev;
+    for(int i = 0; i < n; i++) {
+        if (i < n-1 && l == NULL) {
+            printf("List is too small");
+            return;
+        }
+        prev = l;                                           // Temp for node previous to desired insertion location
+        l = l->next;
+    }
 
+    List_Node * new_node = (List_Node *) malloc(sizeof(List_Node));
+    new_node->value = value;
+    new_node->next = prev->next;
+    prev->next = new_node;
 }
 
-void remove(List_Node * l, int n) {
+void delete_node(List_Node * l, int n) {
+    List_Node * prev;
 
+    for(int i = 0; i < n; i++) {
+        if(i < n-1 && l == NULL) {
+            printf("List is too small");
+            return;
+        }
+        prev = l;
+        l = l->next;
+    }
+    if(l == NULL) {return;}
+
+    List_Node * temp = l;
+    prev->next = l->next;
+    free(temp);
 }
 
 int main()
@@ -96,7 +123,19 @@ int main()
     push_front(list,-1);
     push_front(list,-2);
 
+    insert_node(list,10,7);
+
     List_Node * temp = (List_Node *) malloc(sizeof(List_Node));
+    temp = list;
+    while(temp != NULL) {
+        printf("%d ", temp->value);
+        temp = temp->next;
+    }
+
+    printf("\n");
+
+    delete_node(list,7);
+
     temp = list;
     while(temp != NULL) {
         printf("%d ", temp->value);
