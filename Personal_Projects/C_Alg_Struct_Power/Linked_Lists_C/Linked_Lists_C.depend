@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1543718851 source:/home/justin/projects-software/Personal_Projects/C_Alg_Struct_Power/Linked_Lists_C/main.c
+	<stdio.h>
+	<stdlib.h>
+

@@ -57,6 +57,5 @@ int main(int argc, char *argv[])
         cout << "Could not open " << file << endl;
     }
 
-
     return 0;
 }

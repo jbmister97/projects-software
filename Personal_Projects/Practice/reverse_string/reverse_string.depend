@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1538978573 source:/home/justin/projects-software/Personal_Projects/Practice/reverse_string/main.cpp
+	<iostream>
+	"string.h"
+

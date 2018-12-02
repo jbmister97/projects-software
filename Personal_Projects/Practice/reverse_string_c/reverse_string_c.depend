@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1539101048 source:/home/justin/projects-software/Personal_Projects/Practice/reverse_string_c/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

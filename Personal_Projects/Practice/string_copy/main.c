@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void string_copy(char str1[], char str2[]) {
+void string_copy(char *str1, char *str2) {
     int n1 = strlen(str1);
     int n2 = strlen(str2);
 

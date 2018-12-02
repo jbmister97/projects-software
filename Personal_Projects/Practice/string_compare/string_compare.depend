@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1539116364 source:/home/justin/projects-software/Personal_Projects/Practice/string_compare/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
