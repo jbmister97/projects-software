@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1543794628 source:/home/justin/projects-software/Personal_Projects/C_Alg_Struct_Power/Queue_C/main.c
+1543806540 source:/home/justin/projects-software/Personal_Projects/C_Alg_Struct_Power/Queue_C/main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
