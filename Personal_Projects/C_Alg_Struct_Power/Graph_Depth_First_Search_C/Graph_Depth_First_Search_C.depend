@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1543791650 source:/home/justin/projects-software/Personal_Projects/C_Alg_Struct_Power/Graph_Depth_First_Search_C/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+

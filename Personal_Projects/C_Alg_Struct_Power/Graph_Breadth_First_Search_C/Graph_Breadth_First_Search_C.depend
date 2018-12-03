@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1543795752 source:/home/justin/projects-software/Personal_Projects/C_Alg_Struct_Power/Graph_Breadth_First_Search_C/queue.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"queue.h"
+
+1543795143 /home/justin/projects-software/Personal_Projects/C_Alg_Struct_Power/Graph_Breadth_First_Search_C/queue.h
+
