@@ -1,44 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+//#include <string.h>
 
-char * str_rev(char *str) {
-    int size = strlen(str);
-    char *str_new = (char *) malloc(size + 1);      // Add one extra byte for null terminator
-    int i = 0, j = size - 1;
-    char temp;
+// REVERSE STRING FUNCTION
 
-    while(i < j) {
-        temp = str[i];
-        str[i] = str[j];
-        str[j] = temp;
-        i++;
-        j--;
-    }
-    str[size] = '\0';
-    /*
-    int j = size - 1;
+char * str_rev(char * str) {
+  int length = 0;
+  while(str[length] != '\0') {
+    length++;
+  }
 
-    for(int i = 0; i < size; i++) {
-        str_new[i] = str[j];
-        j--;
-    }
-    str_new[size] = '\0';
-    */
+  char * rev = (char *) malloc(sizeof(char) * length + 1);
 
-    return str_new;
+  int end = length - 1;
+  for(int i = 0; i < length; i++) {
+    rev[i] = str[end];
+    end--;
+  }
+
+  rev[length] = '\0';
+
+  return rev;
 }
 
-int main()
-{
-    char str[] = "Hello there!";
-    //char *str_reversed = str_rev(str);
+int main() {
 
-    //printf("Before: %s After: %s\n", str, str_reversed);
+  //char str1[7] = "Hello!";
+  //char str1[] = "Hello!";
+  char * str1 = "Hello!";                     // String literal (NOT mutable)
+  printf("%s\n",str1);
+  char * rev = str_rev(str1);
 
-    str_rev(str);
-    printf("%s", str);
+  /*
+  for(int i = 0; i < strlen(str1); i++) {
+    str1[i] = rev[i];
+  }
+  */
 
-    //free(str_reversed);
-    return 0;
+  printf("%s\n",rev);
+  return 0;
 }

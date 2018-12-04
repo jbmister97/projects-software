@@ -1,170 +1,108 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-struct List_Node
+// To execute C, please define "int main()"
+
+struct list_node
 {
-    int value;
-    struct List_Node * next;
+  int value;
+  struct list_node * next;
 };
+typedef struct list_node list_node;
 
-typedef struct List_Node List_Node;
-
-List_Node * create_list(int value) {
-    List_Node * new_list = (List_Node *) malloc(sizeof(List_Node));
-    new_list->value = value;
-    new_list->next = NULL;
-    return new_list;
-}
-
-void push_back(List_Node * list, int value) {
-    while(list->next != NULL) {
-        list = list->next;
-    }
-    List_Node * new_node = (List_Node *) malloc(sizeof(List_Node));
-    new_node->next = NULL;
-    new_node->value = value;
-    list->next = new_node;
-}
-
-void push_front(List_Node * list, int value) {
-    List_Node * node = (List_Node *) malloc(sizeof(List_Node));
-    node->next = list->next;
-    node->value = list->value;
-    list->value = value;
-    list->next = node;
-}
-
-int pop_back(List_Node * list) {
-    if(list == NULL) {return 0;}
-    if(list->next == NULL) {
-        int val = list->value;
-        list = NULL;
-        return val;
-    }
-
-    while(list->next->next != NULL) {                                   // Stop at second to last node
-        list = list->next;
-    }
-    List_Node * last = list->next;                                            // Create temp node for last node
-    int value = last->value;
-    free(last);
-    list->next = NULL;                                                  // Break off last node from second to last node                                                // Delete the last node
-    return value;
-}
-
-int pop_front(List_Node * list) {
-    if(list->next == NULL) {
-        int val = list->value;
-        free(list);
-        return val;
-    }
-
-    int value = list->value;
-    List_Node * temp = list->next;
-    list->value = list->next->value;
-    list->next = list->next->next;
-    free(temp);
-    return value;
-}
-
-void free_list(List_Node * head) {
-    List_Node * temp;
-
-    while(head != NULL) {
-        temp = head;
-        head = head->next;
-        free(temp);
-    }
-}
-
-void insert_node(List_Node * l, int value, int n) {
-    List_Node * prev;
-    for(int i = 0; i < n; i++) {
-        if (i < n-1 && l == NULL) {
-            printf("List is too small");
-            return;
-        }
-        prev = l;                                           // Temp for node previous to desired insertion location
-        l = l->next;
-    }
-
-    List_Node * new_node = (List_Node *) malloc(sizeof(List_Node));
-    new_node->value = value;
-    new_node->next = prev->next;
-    prev->next = new_node;
-}
-
-void delete_node(List_Node * l, int n) {
-    List_Node * prev;
-
-    for(int i = 0; i < n; i++) {
-        if(i < n-1 && l == NULL) {
-            printf("List is too small");
-            return;
-        }
-        prev = l;
-        l = l->next;
-    }
-    if(l == NULL) {return;}
-
-    List_Node * temp = l;
-    prev->next = l->next;
-    free(temp);
-}
-
-int main()
+struct list
 {
-    List_Node * list = create_list(1);
-    push_back(list,2);
-    push_back(list,3);
-    push_back(list,4);
+  int count;
+  list_node * head;
+};
+typedef struct list list;
 
-    push_front(list,0);
-    push_front(list,-1);
-    push_front(list,-2);
+list * create_list(void) {
+  list * l = (list *) malloc(sizeof(list));
+  l->count = 0;
+  l->head = NULL;
+  return l;
+}
 
-    insert_node(list,10,7);
+bool list_isempty(list * l) {
+  return l->count == 0 || l->head == NULL;
+}
 
-    List_Node * temp = (List_Node *) malloc(sizeof(List_Node));
-    temp = list;
-    while(temp != NULL) {
-        printf("%d ", temp->value);
-        temp = temp->next;
+void list_push_front(list * l, int value) {
+  list_node * ln = (list_node *) malloc(sizeof(list_node));
+  ln->value = value;
+  ln->next = l->head;
+  l->head = ln;
+  l->count++;
+}
+
+void list_push_back(list * l, int value) {
+  list_node * temp = l->head;
+  while(temp->next != NULL) {
+    temp = temp->next;
+  }
+
+  list_node * ln = (list_node *) malloc(sizeof(list_node));
+  ln->value = value;
+  ln->next = NULL;
+  temp->next = ln;
+  l->count++;
+}
+
+list_node * find_node(list * l, int value) {
+  list_node * temp = l->head;
+  while(temp != NULL) {
+    if(temp->value == value) {return temp;}
+    temp = temp->next;
+  }
+  return NULL;
+}
+
+void remove_node(list * l, int value) {
+  list_node * curr_node = l->head;
+  list_node * prev_node = l->head;
+
+  while(curr_node != NULL){
+    if(curr_node->value == value) {
+      if(prev_node == curr_node) {
+        prev_node = curr_node->next;
+        free(curr_node);
+        l->count--;
+        return;
+      }
+      prev_node->next = curr_node->next;
+      free(curr_node);
+      l->count--;
+      return;
     }
+    prev_node = curr_node;
+    curr_node = curr_node->next;
+  }
+}
 
-    printf("\n");
+int main() {
+  list * l = create_list();
+  list_push_front(l,4);
+  list_push_front(l,3);
+  list_push_front(l,2);
+  list_push_back(l,5);
 
-    delete_node(list,7);
+  list_node * temp = l->head;
+  while(temp != NULL) {
+    printf("%d ", temp->value);
+    temp = temp->next;
+  }
 
-    temp = list;
-    while(temp != NULL) {
-        printf("%d ", temp->value);
-        temp = temp->next;
-    }
+  list_node * fn = find_node(l,3);
+  printf("\nFound node with value %d\n",fn->value);
 
-    /*
-    pop_front(list);
-    pop_front(list);
-    pop_front(list);
-    pop_front(list);
-    pop_front(list);
-    pop_front(list);
-    int y = pop_front(list);
-    printf("%d", y);
-    */
+  remove_node(l,5);
+  temp = l->head;
+  while(temp != NULL) {
+    printf("%d ", temp->value);
+    temp = temp->next;
+  }
 
-    /*
-    pop_back(list);
-    pop_back(list);
-    pop_back(list);
-    pop_back(list);
-    pop_back(list);
-    pop_back(list);
-    int x = pop_back(list);
-    printf("%d",x);
-    */
-
-    free_list(list);
-
-    return 0;
+  return 0;
 }

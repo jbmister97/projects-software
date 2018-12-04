@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1543875353 source:/home/justin/projects-software/Personal_Projects/Practice/dutch_flag_c/main.c
+	<stdio.h>
+	<stdlib.h>
+

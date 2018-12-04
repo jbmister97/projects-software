@@ -2,76 +2,74 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+// Queue based on linked list method
+
 struct queue_node
 {
-    int value;
-    struct queue_node * next;
+  int value;
+  struct queue_node * next;
 };
-
 typedef struct queue_node queue_node;
 
 struct queue
 {
-    queue_node * front;
-    queue_node * back;
-    int size;
+  int count;
+  queue_node * head;
+  queue_node * tail;
 };
-
 typedef struct queue queue;
 
-bool queue_empty(queue * q) {
-    return (q->size == 0) || (q->front == NULL);
-}
-
 queue * create_queue(void) {
-    queue * q = (queue *) malloc(sizeof(queue));
-    q->front = NULL;
-    q->back = NULL;
-    q->size = 0;
-    return q;
+  queue * q = (queue *) malloc(sizeof(queue));
+  q->count = 0;
+  q->head = NULL;
+  q->tail = NULL;
+  return q;
 }
 
-void push_queue(queue * q, int x) {
-    queue_node * qn = (queue_node *) malloc(sizeof(queue_node));
-    qn->value = x;
-    qn->next = NULL;
-    if(queue_empty(q)) {
-        q->front = qn;
-        q->back = qn;
-        q->size++;
-        return;
-    }
-
-    q->back->next = qn;
-    q->back = qn;
-    q->size++;
+bool queue_isempty(queue * q) {
+  return q->count == 0 || q->head == NULL;
 }
 
-int pop_queue(queue * q) {
+void queue_push(queue * q, int value) {
+  queue_node * qn = (queue_node *) malloc(sizeof(queue_node));
+  qn->value = value;
+  qn->next = NULL;
+  if(queue_isempty(q)) {
+    q->head = qn;
+    q->tail = qn;
+    q->count++;
+    return;
+  }
 
-    if(queue_empty(q)) {
-        printf("Queue is empty");
-        return 0;
-    }
-    int val = q->front->value;
-
-    queue_node * temp = q->front;
-    q->front = q->front->next;
-    free(temp);
-    return val;
+  q->tail->next = qn;
+  q->tail = qn;
+  q->count++;
 }
 
-int main()
-{
-    queue * q = create_queue();
+int queue_pop(queue * q) {
+  if(queue_isempty(q)) {
+    printf("Queue is empty!");
+    return -1;
+  }
 
-    push_queue(q,3);
-    push_queue(q,4);
-    push_queue(q,5);
+  int value = q->head->value;
+  queue_node * temp = q->head;
+  q->head = q->head->next;
+  free(temp);
+  q->count--;
+  return value;
+}
 
-    for(int i = 0; i < q->size; i++) {
-        printf("%d ", pop_queue(q));
-    }
+int main() {
+  queue * q = create_queue();
+  queue_push(q,2);
+  queue_push(q,3);
+  queue_push(q,4);
 
-    return 0;
+  while(q->count) {
+    printf("%d ", queue_pop(q));
+  }
+
+  return 0;
 }
