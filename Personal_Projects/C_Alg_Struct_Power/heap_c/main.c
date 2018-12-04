@@ -45,6 +45,7 @@ void insert_max_heap(heap * h, int value) {
     int child_index = h->size;
     while(child_index > 1 && h->arr[child_index] > h->arr[child_index/2]) {
         swap(&h->arr[child_index],&h->arr[child_index/2]);
+        child_index = child_index/2;
     }
 }
 
@@ -53,6 +54,7 @@ void insert_min_heap(heap * h, int value) {
     int child_index = h->size;
     while(child_index > 1 && h->arr[child_index] < h->arr[child_index/2]) {
         swap(&h->arr[child_index],&h->arr[child_index/2]);
+        child_index = child_index/2;
     }
 }
 
@@ -72,7 +74,7 @@ int extract_max_heap(heap * h) {
         if(h->arr[parent_index] > max(h->arr[left_child_index],h->arr[right_child_index])) {
             break;
         }
-        if(h->arr[left_child_index] > h->arr[right_child_index]) {
+        if(h->arr[parent_index] == h->arr[left_child_index] || h->arr[left_child_index] > h->arr[right_child_index]) {
             swap(&h->arr[parent_index],&h->arr[left_child_index]);
             parent_index = left_child_index;
         }
@@ -84,9 +86,61 @@ int extract_max_heap(heap * h) {
 
     return value;
 }
+
+int extract_min_heap(heap * h) {
+    if(heap_empty(h)) {
+        printf("Heap is empty");
+        return -1;
+    }
+
+    int value = h->arr[1];
+    h->arr[1] = h->arr[h->size];
+    h->size--;
+    int parent_index = 1;
+    int left_child_index,right_child_index;
+    do {
+        left_child_index = parent_index * 2;
+        right_child_index = parent_index * 2 + 1;
+        if(h->arr[parent_index] < min(h->arr[left_child_index],h->arr[right_child_index])) {
+            break;
+        }
+        if(h->arr[parent_index] == h->arr[left_child_index] || h->arr[left_child_index] < h->arr[right_child_index]) {
+            swap(&h->arr[parent_index],&h->arr[left_child_index]);
+            parent_index = left_child_index;
+        }
+        else {
+            swap(h->arr[parent_index],h->arr[right_child_index]);
+            parent_index = right_child_index;
+        }
+    } while(parent_index < h->size);
+
+    return value;
+}
+
 int main()
 {
-    heap * h = create_heap(10);
+    heap * max_h = create_heap(10);
+    insert_max_heap(max_h,5);
+    insert_max_heap(max_h,3);
+    insert_max_heap(max_h,9);
+
+    printf("Max heap size: %d\n", max_h->size);
+
+    while(max_h->size > 0) {
+        printf("%d ",extract_max_heap(max_h));
+    }
+    printf("\n");
+
+    heap * min_h = create_heap(10);
+    insert_min_heap(min_h,5);
+    insert_min_heap(min_h,3);
+    insert_min_heap(min_h,9);
+
+    printf("Min heap size: %d\n", min_h->size);
+
+    while(min_h->size > 0) {
+        printf("%d ", extract_min_heap(min_h));
+    }
 
     return 0;
 }
