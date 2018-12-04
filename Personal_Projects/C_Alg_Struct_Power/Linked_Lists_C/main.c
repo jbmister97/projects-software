@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// To execute C, please define "int main()"
+// Singly-Linked List
 
 struct list_node
 {
@@ -50,6 +50,46 @@ void list_push_back(list * l, int value) {
   l->count++;
 }
 
+int list_pop_back(list * l) {
+  list_node * back = l->head;
+  int value;
+  if(list_isempty(l)) {
+    printf("List is empty");
+    return -1;
+  }
+  if(back->next == NULL) {
+    value = back->value;
+    l->head = NULL;
+    free(back);
+    l->count--;
+    return value;
+  }
+
+  while(back->next->next != NULL) {
+    back = back->next;
+  }
+
+  value = back->next->value;
+  list_node * temp = back->next;
+  back->next = NULL;
+  free(temp);
+  l->count--;
+  return value;
+}
+
+int list_pop_front(list * l) {
+  if(l->count == 0) {
+    printf("List is empty");
+    return -1;
+  }
+  int value = l->head->value;
+  list_node * temp = l->head;
+  l->head = l->head->next;
+  free(temp);
+  l->count--;
+  return value;
+}
+
 list_node * find_node(list * l, int value) {
   list_node * temp = l->head;
   while(temp != NULL) {
@@ -66,7 +106,7 @@ void remove_node(list * l, int value) {
   while(curr_node != NULL){
     if(curr_node->value == value) {
       if(prev_node == curr_node) {
-        prev_node = curr_node->next;
+        l->head = curr_node->next;
         free(curr_node);
         l->count--;
         return;
@@ -81,6 +121,28 @@ void remove_node(list * l, int value) {
   }
 }
 
+void insert_node(list * l, list_node * prev, int value){
+  list_node * ln = (list_node *) malloc(sizeof(list_node));
+  ln->value = value;
+  ln->next = prev->next;
+  prev->next = ln;
+  l->count++;
+}
+
+void display_list(list * l) {
+  if(l->count == 0) {
+    printf("List is empty");
+    return;
+  }
+
+  list_node * temp = l->head;
+  while(temp != NULL) {
+    printf("%d ",temp->value);
+    temp = temp->next;
+  }
+  printf("\n");
+}
+
 int main() {
   list * l = create_list();
   list_push_front(l,4);
@@ -88,21 +150,25 @@ int main() {
   list_push_front(l,2);
   list_push_back(l,5);
 
-  list_node * temp = l->head;
-  while(temp != NULL) {
-    printf("%d ", temp->value);
-    temp = temp->next;
-  }
+  display_list(l);
 
   list_node * fn = find_node(l,3);
-  printf("\nFound node with value %d\n",fn->value);
+  printf("Found node with value %d\n",fn->value);
 
-  remove_node(l,5);
-  temp = l->head;
-  while(temp != NULL) {
-    printf("%d ", temp->value);
-    temp = temp->next;
-  }
+  remove_node(l,4);
+  display_list(l);
+
+  insert_node(l,find_node(l,2),7);
+  display_list(l);
+
+  list_pop_front(l);
+  display_list(l);
+  list_pop_front(l);
+  display_list(l);
+  list_pop_back(l);
+  display_list(l);
+  list_pop_back(l);
+  display_list(l);
 
   return 0;
 }
