@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 // Reverse all words in a string but leave the whitespace alone
+
 char * reverse_words(char * str) {
     int length = 0;
     while(str[length] != '\0') {
